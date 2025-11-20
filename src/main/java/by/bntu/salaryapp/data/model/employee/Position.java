@@ -1,5 +1,6 @@
-package by.bntu.salaryapp.data.model;
+package by.bntu.salaryapp.data.model.employee;
 
+import by.bntu.salaryapp.data.model.BaseAuditingEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -13,7 +14,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Position extends BaseAuditingEntity{
+public class Position extends BaseAuditingEntity {
     @NotEmpty
     @Column(nullable = false)
     private String title;

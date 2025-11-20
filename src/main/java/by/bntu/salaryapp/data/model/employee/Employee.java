@@ -1,8 +1,12 @@
-package by.bntu.salaryapp.data.model;
+package by.bntu.salaryapp.data.model.employee;
+import by.bntu.salaryapp.data.model.BaseAuditingEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 import org.springframework.lang.Nullable;
+
+import java.util.HashSet;
+import java.util.Set;
 
 
 @EqualsAndHashCode(callSuper = true)
@@ -12,7 +16,6 @@ import org.springframework.lang.Nullable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString(callSuper = true)
 public class Employee extends BaseAuditingEntity
 {
     @NotEmpty
@@ -24,36 +27,39 @@ public class Employee extends BaseAuditingEntity
     @Nullable
     private String surName;
 
-    //TODO: Position
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinTable(name = "position_id")
-//    private Position position;
-    //TODO: Subject
-//    @ManyToMany(fetch = FetchType.LAZY)
-//    @JoinTable(name = "subject_id")
-//    private Subject subject;
-    //TODO: Qualification
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinTable(name = "qualification_id")
-//    private Qualification qualification;
-    //TODO: Experience
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinTable
-//    private Experience experience;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinTable(name = "position_id")
+    private Position position;
 
-//    @Override
-    //@Transient
-//    public String toString() {
-//        return "Employee{" +
-//                "id='" + id + '\'' +
-//                ", firstName='" + firstName + '\'' +
-//                ", lastName='" + lastName + '\'' +
-//                (surName != null ? ", surName='" + surName + '\'' : "") +
-//                ", qualification='" + qualification.toString() +'\' +
-//                ", subject='" + subject.toString() +'\' +
-//                ", position='" + position.toString() +'\' +
-//                ", experience='" + experience.toString() +'\' +
-//                '}';
-//    }
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "employee_subject",
+            joinColumns = @JoinColumn(name = "employee_id"),
+            inverseJoinColumns = @JoinColumn(name = "subject_id")
+    )
+    private Set<Subject> subject = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinTable(name = "qualification_id")
+    private Qualification qualification;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinTable
+    private Experience experience;
+
+    @Override
+    @Transient
+    public String toString() {
+        return "Employee{" +
+                "id='" + id + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                (surName != null ? ", surName='" + surName + '\'' : "") +
+                ", qualification='" + qualification.toString() +'\'' +
+                ", subject='" + subject.toString() +'\'' +
+                ", position='" + position.toString() +'\'' +
+                ", experience='" + experience.toString() +'\'' +
+                '}';
+    }
 
 }

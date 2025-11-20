@@ -1,14 +1,23 @@
-package by.bntu.salaryapp.data.model;
+package by.bntu.salaryapp.data.model.user;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Data
+@Entity
+@Table(name = "roles")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Role implements GrantedAuthority {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(length = 16)
     private String name;
 
@@ -17,12 +26,14 @@ public class Role implements GrantedAuthority {
         return name;
     }
 
-    public Role() {
-    }
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "role_permissions",
+            joinColumns = @JoinColumn(name = "role_name"),
+            inverseJoinColumns = @JoinColumn(name = "permission_name")
+    )
+    private Set<Permission> permissions = new HashSet<>();
 
-    public Role(String name) {
-        this.name = name;
-    }
 
     @Override
     public boolean equals(Object o) {

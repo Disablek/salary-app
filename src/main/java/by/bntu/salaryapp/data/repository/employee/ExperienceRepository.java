@@ -1,4 +1,4 @@
-package by.bntu.salaryapp.data.repository.interfaces.employee;
+package by.bntu.salaryapp.data.repository.employee;
 
 import by.bntu.salaryapp.data.model.employee.Experience;
 import org.springframework.data.jpa.repository.JpaRepository;

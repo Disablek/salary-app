@@ -1,4 +1,5 @@
-package by.bntu.salaryapp.data.model;
+package by.bntu.salaryapp.data.model.employee;
+import by.bntu.salaryapp.data.model.BaseAuditingEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;

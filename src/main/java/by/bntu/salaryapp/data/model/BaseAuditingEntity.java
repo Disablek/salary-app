@@ -1,7 +1,10 @@
-package gt.app.domain;
+package by.bntu.salaryapp.data.model;
 
+import by.bntu.salaryapp.data.model.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -12,11 +15,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 
+@EqualsAndHashCode(callSuper = true)
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-@Getter
-@Setter
-abstract class BaseAuditingEntity extends BaseEntity {
+@Data
+public abstract class BaseAuditingEntity extends BaseEntity {
 
     private static final long serialVersionUID = 4681401402666658611L;
 
@@ -24,7 +27,7 @@ abstract class BaseAuditingEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by_user_id", updatable = false)
     @JsonIgnore//ignore completely to avoid StackOverflow exception by User.createdByUser logic, use DTO
-    private AppUser createdByUser;
+    private User createdByUser;
 
     @CreationTimestamp
     @Column(name = "created_date", nullable = false)
@@ -34,7 +37,7 @@ abstract class BaseAuditingEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "last_modified_by_user_id")
     @JsonIgnore//ignore completely to avoid StackOverflow exception by User.lastModifiedByUser logic, use DTO
-    private AppUser lastModifiedByUser;
+    private User lastModifiedByUser;
 
     @UpdateTimestamp
     @Column(name = "last_modified_date")
