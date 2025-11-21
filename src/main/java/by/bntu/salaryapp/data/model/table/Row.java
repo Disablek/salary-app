@@ -19,7 +19,7 @@ import java.util.Set;
 public class Row extends BaseAuditingEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "table_id")
-    private Table table;
+    private DataTable table;
 
     @Nullable
     @ManyToOne(fetch = FetchType.LAZY)

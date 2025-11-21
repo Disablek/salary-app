@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.31.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1763746216261-1" author="disable">
+        <createTable tableName="cells">
+            <column name="id" type="uuid">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_cells"/>
+            </column>
+            <column name="created_by_user_id" type="UUID"/>
+            <column name="created_date" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by_user_id" type="UUID"/>
+            <column name="last_modified_date" type="DATETIME"/>
+            <column name="column_id" type="uuid"/>
+            <column name="value" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1763746216261-2" author="disable">
+        <createTable tableName="coefficients">
+            <column name="id" type="uuid">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_coefficients"/>
+            </column>
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="is_active" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1763746216261-3" author="disable">
+        <createTable tableName="coefficients_rule">
+            <column name="id" type="uuid">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_coefficientsrule"/>
+            </column>
+            <column name="min_value" type="DOUBLE"/>
+            <column name="max_value" type="DOUBLE"/>
+            <column name="match_key" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1763746216261-4" author="disable">
+        <createTable tableName="columns">
+            <column name="id" type="uuid">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_columns"/>
+            </column>
+            <column name="created_by_user_id" type="UUID"/>
+            <column name="created_date" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by_user_id" type="UUID"/>
+            <column name="last_modified_date" type="DATETIME"/>
+            <column name="table_id" type="uuid"/>
+            <column name="key" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="VARCHAR(255)"/>
+            <column name="data_type" type="VARCHAR(255)"/>
+            <column name="coefficient_id" type="uuid"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1763746216261-5" author="disable">
+        <createTable tableName="employee_subject">
+            <column name="employee_id" type="uuid">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_employee_subject"/>
+            </column>
+            <column name="subject_id" type="uuid">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_employee_subject"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1763746216261-6" author="disable">
+        <createTable tableName="employees">
+            <column name="id" type="uuid">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_employees"/>
+            </column>
+            <column name="created_by_user_id" type="UUID"/>
+            <column name="created_date" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by_user_id" type="UUID"/>
+            <column name="last_modified_date" type="DATETIME"/>
+            <column name="first_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sur_name" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1763746216261-7" author="disable">
+        <createTable tableName="employees_experience">
+            <column name="employee_id" type="uuid">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_employees_experience"/>
+            </column>
+            <column name="experience_id" type="uuid"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1763746216261-8" author="disable">
+        <createTable tableName="experiences">
+            <column name="id" type="uuid">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_experiences"/>
+            </column>
+            <column name="created_by_user_id" type="UUID"/>
+            <column name="created_date" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by_user_id" type="UUID"/>
+            <column name="last_modified_date" type="DATETIME"/>
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1763746216261-9" author="disable">
+        <createTable tableName="permissions">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_permissions"/>
+            </column>
+            <column name="name" type="VARCHAR(16)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1763746216261-10" author="disable">
+        <createTable tableName="position_id">
+            <column name="employee_id" type="uuid">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_position_id"/>
+            </column>
+            <column name="position_id" type="uuid"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1763746216261-11" author="disable">
+        <createTable tableName="positions">
+            <column name="id" type="uuid">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_positions"/>
+            </column>
+            <column name="created_by_user_id" type="UUID"/>
+            <column name="created_date" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by_user_id" type="UUID"/>
+            <column name="last_modified_date" type="DATETIME"/>
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="code" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1763746216261-12" author="disable">
+        <createTable tableName="qualification_id">
+            <column name="employee_id" type="uuid">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_qualification_id"/>
+            </column>
+            <column name="qualification_id" type="uuid"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1763746216261-13" author="disable">
+        <createTable tableName="qualifications">
+            <column name="id" type="uuid">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_qualifications"/>
+            </column>
+            <column name="created_by_user_id" type="UUID"/>
+            <column name="created_date" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by_user_id" type="UUID"/>
+            <column name="last_modified_date" type="DATETIME"/>
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1763746216261-14" author="disable">
+        <createTable tableName="role_permissions">
+            <column name="permission_id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_role_permissions"/>
+            </column>
+            <column name="role_id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_role_permissions"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1763746216261-15" author="disable">
+        <createTable tableName="roles">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_roles"/>
+            </column>
+            <column name="name" type="VARCHAR(16)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1763746216261-16" author="disable">
+        <createTable tableName="rows">
+            <column name="id" type="uuid">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_rows"/>
+            </column>
+            <column name="created_by_user_id" type="UUID"/>
+            <column name="created_date" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by_user_id" type="UUID"/>
+            <column name="last_modified_date" type="DATETIME"/>
+            <column name="table_id" type="uuid"/>
+            <column name="employee_id" type="uuid"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1763746216261-17" author="disable">
+        <createTable tableName="subjects">
+            <column name="id" type="uuid">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_subjects"/>
+            </column>
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1763746216261-18" author="disable">
+        <createTable tableName="tables">
+            <column name="id" type="uuid">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_tables"/>
+            </column>
+            <column name="created_by_user_id" type="UUID"/>
+            <column name="created_date" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by_user_id" type="UUID"/>
+            <column name="last_modified_date" type="DATETIME"/>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1763746216261-19" author="disable">
+        <createTable tableName="user_roles">
+            <column name="role_id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user_roles"/>
+            </column>
+            <column name="user_id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_user_roles"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1763746216261-20" author="disable">
+        <createTable tableName="users">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_users"/>
+            </column>
+            <column name="first_name" type="VARCHAR(255)"/>
+            <column name="last_name" type="VARCHAR(255)"/>
+            <column name="surname" type="VARCHAR(255)"/>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="username" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1763746216261-21" author="disable">
+        <addUniqueConstraint columnNames="email" constraintName="uc_users_email" tableName="users"/>
+    </changeSet>
+    <changeSet id="1763746216261-22" author="disable">
+        <addUniqueConstraint columnNames="username" constraintName="uc_users_username" tableName="users"/>
+    </changeSet>
+    <changeSet id="1763746216261-23" author="disable">
+        <addForeignKeyConstraint baseColumnNames="column_id" baseTableName="cells" constraintName="FK_CELLS_ON_COLUMN"
+                                 referencedColumnNames="id" referencedTableName="columns"/>
+    </changeSet>
+    <changeSet id="1763746216261-24" author="disable">
+        <addForeignKeyConstraint baseColumnNames="created_by_user_id" baseTableName="cells"
+                                 constraintName="FK_CELLS_ON_CREATED_BY_USER" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1763746216261-25" author="disable">
+        <addForeignKeyConstraint baseColumnNames="last_modified_by_user_id" baseTableName="cells"
+                                 constraintName="FK_CELLS_ON_LAST_MODIFIED_BY_USER" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1763746216261-26" author="disable">
+        <addForeignKeyConstraint baseColumnNames="coefficient_id" baseTableName="columns"
+                                 constraintName="FK_COLUMNS_ON_COEFFICIENT" referencedColumnNames="id"
+                                 referencedTableName="coefficients"/>
+    </changeSet>
+    <changeSet id="1763746216261-27" author="disable">
+        <addForeignKeyConstraint baseColumnNames="created_by_user_id" baseTableName="columns"
+                                 constraintName="FK_COLUMNS_ON_CREATED_BY_USER" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1763746216261-28" author="disable">
+        <addForeignKeyConstraint baseColumnNames="last_modified_by_user_id" baseTableName="columns"
+                                 constraintName="FK_COLUMNS_ON_LAST_MODIFIED_BY_USER" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1763746216261-29" author="disable">
+        <addForeignKeyConstraint baseColumnNames="table_id" baseTableName="columns" constraintName="FK_COLUMNS_ON_TABLE"
+                                 referencedColumnNames="id" referencedTableName="tables"/>
+    </changeSet>
+    <changeSet id="1763746216261-30" author="disable">
+        <addForeignKeyConstraint baseColumnNames="created_by_user_id" baseTableName="employees"
+                                 constraintName="FK_EMPLOYEES_ON_CREATED_BY_USER" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1763746216261-31" author="disable">
+        <addForeignKeyConstraint baseColumnNames="last_modified_by_user_id" baseTableName="employees"
+                                 constraintName="FK_EMPLOYEES_ON_LAST_MODIFIED_BY_USER" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1763746216261-32" author="disable">
+        <addForeignKeyConstraint baseColumnNames="created_by_user_id" baseTableName="experiences"
+                                 constraintName="FK_EXPERIENCES_ON_CREATED_BY_USER" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1763746216261-33" author="disable">
+        <addForeignKeyConstraint baseColumnNames="last_modified_by_user_id" baseTableName="experiences"
+                                 constraintName="FK_EXPERIENCES_ON_LAST_MODIFIED_BY_USER" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1763746216261-34" author="disable">
+        <addForeignKeyConstraint baseColumnNames="created_by_user_id" baseTableName="positions"
+                                 constraintName="FK_POSITIONS_ON_CREATED_BY_USER" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1763746216261-35" author="disable">
+        <addForeignKeyConstraint baseColumnNames="last_modified_by_user_id" baseTableName="positions"
+                                 constraintName="FK_POSITIONS_ON_LAST_MODIFIED_BY_USER" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1763746216261-36" author="disable">
+        <addForeignKeyConstraint baseColumnNames="created_by_user_id" baseTableName="qualifications"
+                                 constraintName="FK_QUALIFICATIONS_ON_CREATED_BY_USER" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1763746216261-37" author="disable">
+        <addForeignKeyConstraint baseColumnNames="last_modified_by_user_id" baseTableName="qualifications"
+                                 constraintName="FK_QUALIFICATIONS_ON_LAST_MODIFIED_BY_USER" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1763746216261-38" author="disable">
+        <addForeignKeyConstraint baseColumnNames="created_by_user_id" baseTableName="rows"
+                                 constraintName="FK_ROWS_ON_CREATED_BY_USER" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1763746216261-39" author="disable">
+        <addForeignKeyConstraint baseColumnNames="employee_id" baseTableName="rows" constraintName="FK_ROWS_ON_EMPLOYEE"
+                                 referencedColumnNames="id" referencedTableName="employees"/>
+    </changeSet>
+    <changeSet id="1763746216261-40" author="disable">
+        <addForeignKeyConstraint baseColumnNames="last_modified_by_user_id" baseTableName="rows"
+                                 constraintName="FK_ROWS_ON_LAST_MODIFIED_BY_USER" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1763746216261-41" author="disable">
+        <addForeignKeyConstraint baseColumnNames="table_id" baseTableName="rows" constraintName="FK_ROWS_ON_TABLE"
+                                 referencedColumnNames="id" referencedTableName="tables"/>
+    </changeSet>
+    <changeSet id="1763746216261-42" author="disable">
+        <addForeignKeyConstraint baseColumnNames="created_by_user_id" baseTableName="tables"
+                                 constraintName="FK_TABLES_ON_CREATED_BY_USER" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1763746216261-43" author="disable">
+        <addForeignKeyConstraint baseColumnNames="last_modified_by_user_id" baseTableName="tables"
+                                 constraintName="FK_TABLES_ON_LAST_MODIFIED_BY_USER" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1763746216261-44" author="disable">
+        <addForeignKeyConstraint baseColumnNames="employee_id" baseTableName="employees_experience"
+                                 constraintName="fk_empexp_on_employee" referencedColumnNames="id"
+                                 referencedTableName="employees"/>
+    </changeSet>
+    <changeSet id="1763746216261-45" author="disable">
+        <addForeignKeyConstraint baseColumnNames="experience_id" baseTableName="employees_experience"
+                                 constraintName="fk_empexp_on_experience" referencedColumnNames="id"
+                                 referencedTableName="experiences"/>
+    </changeSet>
+    <changeSet id="1763746216261-46" author="disable">
+        <addForeignKeyConstraint baseColumnNames="employee_id" baseTableName="employee_subject"
+                                 constraintName="fk_empsub_on_employee" referencedColumnNames="id"
+                                 referencedTableName="employees"/>
+    </changeSet>
+    <changeSet id="1763746216261-47" author="disable">
+        <addForeignKeyConstraint baseColumnNames="subject_id" baseTableName="employee_subject"
+                                 constraintName="fk_empsub_on_subject" referencedColumnNames="id"
+                                 referencedTableName="subjects"/>
+    </changeSet>
+    <changeSet id="1763746216261-48" author="disable">
+        <addForeignKeyConstraint baseColumnNames="employee_id" baseTableName="position_id"
+                                 constraintName="fk_posid_on_employee" referencedColumnNames="id"
+                                 referencedTableName="employees"/>
+    </changeSet>
+    <changeSet id="1763746216261-49" author="disable">
+        <addForeignKeyConstraint baseColumnNames="position_id" baseTableName="position_id"
+                                 constraintName="fk_posid_on_position" referencedColumnNames="id"
+                                 referencedTableName="positions"/>
+    </changeSet>
+    <changeSet id="1763746216261-50" author="disable">
+        <addForeignKeyConstraint baseColumnNames="employee_id" baseTableName="qualification_id"
+                                 constraintName="fk_quaid_on_employee" referencedColumnNames="id"
+                                 referencedTableName="employees"/>
+    </changeSet>
+    <changeSet id="1763746216261-51" author="disable">
+        <addForeignKeyConstraint baseColumnNames="qualification_id" baseTableName="qualification_id"
+                                 constraintName="fk_quaid_on_qualification" referencedColumnNames="id"
+                                 referencedTableName="qualifications"/>
+    </changeSet>
+    <changeSet id="1763746216261-52" author="disable">
+        <addForeignKeyConstraint baseColumnNames="permission_id" baseTableName="role_permissions"
+                                 constraintName="fk_rolper_on_permission" referencedColumnNames="id"
+                                 referencedTableName="permissions"/>
+    </changeSet>
+    <changeSet id="1763746216261-53" author="disable">
+        <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="role_permissions"
+                                 constraintName="fk_rolper_on_role" referencedColumnNames="id"
+                                 referencedTableName="roles"/>
+    </changeSet>
+    <changeSet id="1763746216261-54" author="disable">
+        <addForeignKeyConstraint baseColumnNames="role_id" baseTableName="user_roles" constraintName="fk_userol_on_role"
+                                 referencedColumnNames="id" referencedTableName="roles"/>
+    </changeSet>
+    <changeSet id="1763746216261-55" author="disable">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_roles" constraintName="fk_userol_on_user"
+                                 referencedColumnNames="id" referencedTableName="users"/>
+    </changeSet>
+
+</databaseChangeLog>

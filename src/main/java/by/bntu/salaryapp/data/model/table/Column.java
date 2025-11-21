@@ -17,7 +17,7 @@ import lombok.*;
 public class Column extends BaseAuditingEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "table_id")
-    private by.bntu.salaryapp.data.model.table.Table mainTable;
+    private DataTable mainTable;
 
     @NotNull
     private String key;

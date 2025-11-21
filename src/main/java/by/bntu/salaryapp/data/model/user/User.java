@@ -22,7 +22,8 @@ import java.util.UUID;
 @Builder
 public class User implements UserDetails {
     @Id
-    @JdbcTypeCode(SqlTypes.BINARY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JdbcTypeCode(SqlTypes.UUID)
     private UUID id;
 
     @NotEmpty
@@ -57,7 +58,7 @@ public class User implements UserDetails {
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_name")
+            inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles = new HashSet<>();
 

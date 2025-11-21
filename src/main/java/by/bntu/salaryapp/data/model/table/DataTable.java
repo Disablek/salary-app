@@ -15,7 +15,7 @@ import java.util.*;
 @Builder
 @EqualsAndHashCode(callSuper = true)
 @jakarta.persistence.Table(name= "tables")
-public class Table extends BaseAuditingEntity {
+public class DataTable extends BaseAuditingEntity {
     @NotNull
     private String name;
     @NotEmpty

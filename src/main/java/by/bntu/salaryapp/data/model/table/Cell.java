@@ -18,7 +18,7 @@ public class Cell extends BaseAuditingEntity {
     private Row row;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "column_key", referencedColumnName = "key", nullable = false)
+    @JoinColumn(name = "column_id")
     private Column columnKey;
 
     @Nullable
