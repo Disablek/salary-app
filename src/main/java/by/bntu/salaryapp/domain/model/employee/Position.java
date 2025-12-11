@@ -18,6 +18,7 @@ public class Position extends BaseAuditingEntity {
     @NotEmpty
     @Column(nullable = false)
     private String title;
+
     @NotEmpty
     @Column(nullable = false)
     private Integer code;

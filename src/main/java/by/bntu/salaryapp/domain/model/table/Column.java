@@ -25,10 +25,9 @@ public class Column extends BaseAuditingEntity {
     private String title;
 
     @Enumerated(EnumType.STRING)
-    private ColumnDataType dataType; //enum
+    private ColumnDataType dataType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "coefficient_id")
     private Coefficient coefficient;
-
 }

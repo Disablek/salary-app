@@ -1,30 +1,30 @@
 package by.bntu.salaryapp.domain.model.table.coefficient;
 
 import by.bntu.salaryapp.domain.model.BaseEntity;
-import by.bntu.salaryapp.domain.common.enums.MatchType;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.math.BigDecimal;
+
+@Entity
+@Table(name = "coefficient_rules")
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "coefficientsRule")
 @Builder
 public class CoefficientRule extends BaseEntity {
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinTable(name = "coefficients")
+    @JoinColumn(name = "coefficient_id", nullable = false)
+    @ToString.Exclude @EqualsAndHashCode.Exclude
     private Coefficient coefficient;
 
-    @Nullable
-    private Double minValue;
-    @Nullable
-    private Double maxValue;
+    @NotNull
+    private Integer matchValue;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
-    private MatchType matchKey;
+    private BigDecimal multiplier;
 }
+

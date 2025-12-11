@@ -21,14 +21,16 @@ public class Employee extends BaseAuditingEntity
     @NotEmpty
     @Column(nullable = false)
     private String firstName;
+
     @NotEmpty
     @Column(nullable = false)
     private String lastName;
+
     @Nullable
     private String surName;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinTable(name = "position_id")
+    @JoinColumn(name = "position_id")
     private Position position;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -40,11 +42,11 @@ public class Employee extends BaseAuditingEntity
     private Set<Subject> subject = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinTable(name = "qualification_id")
+    @JoinColumn(name = "qualification_id")
     private Qualification qualification;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinTable
+    @JoinColumn(name = "experience_id")
     private Experience experience;
 
     @Override

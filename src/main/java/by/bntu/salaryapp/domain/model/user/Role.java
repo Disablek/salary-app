@@ -1,5 +1,6 @@
 package by.bntu.salaryapp.domain.model.user;
 
+import by.bntu.salaryapp.domain.model.BaseAuditingEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -10,19 +11,13 @@ import org.springframework.security.core.GrantedAuthority;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 @Data
 @Entity
 @Table(name = "roles")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Role implements GrantedAuthority {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private UUID id;
-
+public class Role extends BaseAuditingEntity implements GrantedAuthority {
     @NotNull
     @NotEmpty
     @Column(length = 16)

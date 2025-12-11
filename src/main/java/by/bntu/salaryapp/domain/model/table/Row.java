@@ -27,7 +27,7 @@ public class Row extends BaseAuditingEntity {
     private Employee employee;
 
     @Nullable
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "cells")
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cell_id")
     private Set<Cell> cells = new HashSet<>();
 }

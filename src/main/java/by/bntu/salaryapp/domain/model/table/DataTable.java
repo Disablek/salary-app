@@ -14,14 +14,19 @@ import java.util.*;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = true)
-@jakarta.persistence.Table(name= "tables")
+@Table(name= "tables")
 public class DataTable extends BaseAuditingEntity {
     @NotNull
     private String name;
+
     @NotEmpty
     private String description;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "columns")
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "column_id")
     private Set<Column> type = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "row_id")
+    private Set<Row> rows = new HashSet<>();
 }

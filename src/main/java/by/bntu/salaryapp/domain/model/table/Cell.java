@@ -14,7 +14,7 @@ import lombok.*;
 @Builder
 public class Cell extends BaseAuditingEntity {
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinTable(name = "rows")
+    @JoinColumn(name = "row_id")
     private Row row;
 
     @ManyToOne(fetch = FetchType.LAZY)

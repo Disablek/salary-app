@@ -1,38 +1,31 @@
 package by.bntu.salaryapp.domain.model.user;
 
-import jakarta.annotation.Nullable;
+import by.bntu.salaryapp.domain.model.BaseAuditingEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
+
 
 @Data
 @Entity
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "users")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class User implements UserDetails {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JdbcTypeCode(SqlTypes.UUID)
-    private UUID id;
-
+public class User extends BaseAuditingEntity implements UserDetails {
     @NotEmpty
     private String firstName;
 
     @NotEmpty
     private String lastName;
 
-    @Nullable
     @NotEmpty
     private String surname;
 
@@ -51,6 +44,7 @@ public class User implements UserDetails {
                 "username='" + username + '\'' +
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", email='" + lastName + '\'' +
                 '}';
     }
 
