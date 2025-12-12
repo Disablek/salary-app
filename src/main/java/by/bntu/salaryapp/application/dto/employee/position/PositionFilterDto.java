@@ -1,4 +1,4 @@
-package by.bntu.salaryapp.application.dto.employee.employee;
+package by.bntu.salaryapp.application.dto.employee.position;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,28 +7,17 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmployeeFilterDto {
+public class PositionFilterDto {
     private UUID id;
 
-    private String firstName;
+    private String title;
 
-    private String lastName;
-
-    private String surName;
-
-    private UUID position_id;
-
-    private Set<UUID> subjects_id;
-
-    private UUID qualification_id;
-
-    private UUID experience_id;
+    private Integer code;
 
     @CreatedBy
     private UUID createdBy;

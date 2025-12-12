@@ -39,7 +39,7 @@ public class Employee extends BaseAuditingEntity
             joinColumns = @JoinColumn(name = "employee_id"),
             inverseJoinColumns = @JoinColumn(name = "subject_id")
     )
-    private Set<Subject> subject = new HashSet<>();
+    private Set<Subject> subjects = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "qualification_id")
@@ -58,7 +58,7 @@ public class Employee extends BaseAuditingEntity
                 ", lastName='" + lastName + '\'' +
                 (surName != null ? ", surName='" + surName + '\'' : "") +
                 ", qualification='" + qualification.toString() +'\'' +
-                ", subject='" + subject.toString() +'\'' +
+                ", subject='" + subjects.toString() +'\'' +
                 ", position='" + position.toString() +'\'' +
                 ", experience='" + experience.toString() +'\'' +
                 '}';

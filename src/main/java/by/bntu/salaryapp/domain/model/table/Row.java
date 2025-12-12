@@ -21,12 +21,10 @@ public class Row extends BaseAuditingEntity {
     @JoinColumn(name = "table_id")
     private DataTable table;
 
-    @Nullable
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
-    @Nullable
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "cell_id")
     private Set<Cell> cells = new HashSet<>();

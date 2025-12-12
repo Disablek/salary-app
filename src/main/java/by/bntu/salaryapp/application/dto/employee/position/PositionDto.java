@@ -1,5 +1,7 @@
-package by.bntu.salaryapp.application.dto.employee.employee;
+package by.bntu.salaryapp.application.dto.employee.position;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,26 +11,19 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 import java.util.UUID;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class EmployeeDtoOutput {
-    private String firstName;
+@AllArgsConstructor
+public class PositionDto {
+    private UUID id;
 
-    private String lastName;
+    @NotEmpty(message = "Название должности не должно быть пустым")
+    private String title;
 
-    private String surName;
-
-    private UUID position_id;
-
-    private Set<UUID> subjects_id;
-
-    private UUID qualification_id;
-
-    private UUID experience_id;
+    @Positive
+    private Integer code;
 
     @CreatedBy
     private UUID createdBy;

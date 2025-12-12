@@ -1,7 +1,6 @@
 package by.bntu.salaryapp.domain.model.table;
 
 import by.bntu.salaryapp.domain.model.BaseAuditingEntity;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,7 +20,6 @@ public class Cell extends BaseAuditingEntity {
     @JoinColumn(name = "column_id")
     private Column columnKey;
 
-    @Nullable
     private String value;
 
     @Transient

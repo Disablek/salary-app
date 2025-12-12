@@ -68,5 +68,4 @@ public class User extends BaseAuditingEntity implements UserDetails {
         }
         return auths;
     }
-
 }
