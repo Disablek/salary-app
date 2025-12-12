@@ -1,13 +1,12 @@
-package by.bntu.salaryapp.infrastructure.persistence.specifications.employee;
+package by.bntu.salaryapp.infrastructure.persistence.specifications.employee.employee;
 
-import by.bntu.salaryapp.application.dto.employee.employee.EmployeeFilterDto;
 import by.bntu.salaryapp.domain.model.employee.Employee;
 import by.bntu.salaryapp.domain.model.user.User;
 import jakarta.persistence.criteria.*;
 import org.jspecify.annotations.NonNull;
 import org.springframework.data.jpa.domain.Specification;
 
-public record EmployeeAccessibleBySpecification(EmployeeFilterDto filter, User currentUser)
+public record EmployeeAccessibleBySpecification(User currentUser)
         implements Specification<Employee> {
 
     @Override
@@ -44,3 +43,4 @@ public record EmployeeAccessibleBySpecification(EmployeeFilterDto filter, User c
         return cb.disjunction();
     }
 }
+//TODO: Удалить

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.31.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1765573619241-3" author="disable">
+        <addColumn tableName="coefficient_rules">
+            <column name="created_by_user_id" type="uuid"/>
+            <column name="created_date" type="DATETIME"/>
+            <column name="last_modified_by_user_id" type="uuid"/>
+            <column name="last_modified_date" type="DATETIME"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1765573619241-4" author="disable">
+        <addColumn tableName="coefficients">
+            <column name="created_by_user_id" type="uuid"/>
+            <column name="created_date" type="DATETIME"/>
+            <column name="last_modified_by_user_id" type="uuid"/>
+            <column name="last_modified_date" type="DATETIME"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1765573619241-6" author="disable">
+        <addNotNullConstraint columnName="created_date" tableName="coefficient_rules"/>
+    </changeSet>
+    <changeSet id="1765573619241-8" author="disable">
+        <addNotNullConstraint columnName="created_date" tableName="coefficients"/>
+    </changeSet>
+    <changeSet id="1765573619241-13" author="disable">
+        <addForeignKeyConstraint baseColumnNames="created_by_user_id" baseTableName="coefficients"
+                                 constraintName="FK_COEFFICIENTS_ON_CREATED_BY_USER" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1765573619241-14" author="disable">
+        <addForeignKeyConstraint baseColumnNames="last_modified_by_user_id" baseTableName="coefficients"
+                                 constraintName="FK_COEFFICIENTS_ON_LAST_MODIFIED_BY_USER" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1765573619241-15" author="disable">
+        <addForeignKeyConstraint baseColumnNames="created_by_user_id" baseTableName="coefficient_rules"
+                                 constraintName="FK_COEFFICIENT_RULES_ON_CREATED_BY_USER" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1765573619241-16" author="disable">
+        <addForeignKeyConstraint baseColumnNames="last_modified_by_user_id" baseTableName="coefficient_rules"
+                                 constraintName="FK_COEFFICIENT_RULES_ON_LAST_MODIFIED_BY_USER"
+                                 referencedColumnNames="id" referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1765573619241-1" author="disable">
+        <dropColumn columnName="match_value" tableName="coefficient_rules"/>
+    </changeSet>
+    <changeSet id="1765573619241-2" author="disable">
+        <addColumn tableName="coefficient_rules">
+            <column name="match_value" type="VARCHAR(255)">
+                <constraints nullable="false" validateNullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

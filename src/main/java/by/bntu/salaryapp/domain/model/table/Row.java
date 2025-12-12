@@ -25,7 +25,6 @@ public class Row extends BaseAuditingEntity {
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cell_id")
+    @OneToMany(mappedBy = "row", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Cell> cells = new HashSet<>();
 }

@@ -4,7 +4,10 @@ import by.bntu.salaryapp.domain.common.enums.CoefficientType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -23,5 +26,19 @@ public class CoefficientFilterDto {
 
     private CoefficientType type;
 
-    private Set<UUID> rulesId = new HashSet<>();
+    private Set<UUID> coefficientRulesIds = new HashSet<>();
+
+    @CreatedBy
+    private UUID createdBy;
+
+    @LastModifiedBy
+    private UUID updatedBy;
+
+    private LocalDateTime createdAtFrom;
+
+    private LocalDateTime createdAtTo;
+
+    private LocalDateTime updatedAtFrom;
+
+    private LocalDateTime updatedAtTo;
 }

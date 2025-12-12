@@ -13,4 +13,4 @@ public interface CoefficientRuleRepository extends JpaRepository<CoefficientRule
 
     Set<CoefficientRule> findByCoefficientId(UUID coefficientId);
 
-    Set<CoefficientRule> findByMatchValue(Integer matchValue);}
+    Set<CoefficientRule> findByMatchValue(String matchValue);}

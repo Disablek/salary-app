@@ -10,7 +10,7 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.ArrayList;
 import java.util.List;
 
-public record EmployeeFilterSpecification(EmployeeFilterDto filter)
+public record EmployeeSpecification(EmployeeFilterDto filter)
         implements Specification<Employee> {
 
     @Override
@@ -82,6 +82,6 @@ public record EmployeeFilterSpecification(EmployeeFilterDto filter)
 
     // Так называемая Фэбрик
     public static Specification<Employee> by(EmployeeFilterDto filterDto) {
-        return new EmployeeFilterSpecification(filterDto);
+        return new EmployeeSpecification(filterDto);
     }
 }

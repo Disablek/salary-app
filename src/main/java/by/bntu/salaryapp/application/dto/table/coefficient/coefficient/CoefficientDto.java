@@ -29,5 +29,17 @@ public class CoefficientDto {
 
     private CoefficientType type;
 
-    private Set<UUID> rulesId = new HashSet<>();
+    private Set<UUID> coefficientRulesIds = new HashSet<>();
+
+    @CreatedBy
+    private UUID createdBy;
+
+    @LastModifiedBy
+    private UUID updatedBy;
+
+    @CreatedDate
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
 }

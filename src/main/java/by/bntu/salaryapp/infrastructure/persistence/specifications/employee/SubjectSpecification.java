@@ -1,8 +1,8 @@
-package by.bntu.salaryapp.infrastructure.persistence.specifications.experience;
+package by.bntu.salaryapp.infrastructure.persistence.specifications.employee;
 
-import by.bntu.salaryapp.application.dto.employee.experience.ExperienceDTO;
-import by.bntu.salaryapp.application.dto.employee.experience.ExperienceFilterDto;
-import by.bntu.salaryapp.domain.model.employee.Experience;
+import by.bntu.salaryapp.application.dto.employee.subject.SubjectFilterDto;
+import by.bntu.salaryapp.domain.model.employee.Qualification;
+import by.bntu.salaryapp.domain.model.employee.Subject;
 import by.bntu.salaryapp.domain.model.user.User;
 import jakarta.persistence.criteria.*;
 import org.jspecify.annotations.NonNull;
@@ -11,10 +11,9 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.ArrayList;
 import java.util.List;
 
-public record ExperienceFilterSpecification(ExperienceFilterDto filter) implements Specification<Experience> {
-
+public record SubjectSpecification(SubjectFilterDto filter) implements Specification<Subject> {
     @Override
-    public Predicate toPredicate(@NonNull Root<Experience> root,
+    public Predicate toPredicate(@NonNull Root<Subject> root,
                                  CriteriaQuery<?> query,
                                  @NonNull CriteriaBuilder criteriaBuilder) {
         if (filter == null) { return criteriaBuilder.conjunction(); }
@@ -25,15 +24,15 @@ public record ExperienceFilterSpecification(ExperienceFilterDto filter) implemen
             predicates.add(criteriaBuilder.equal(root.get("id"), filter.getId()));
         }
         if (filter.getTitle() != null) {
-            predicates.add(criteriaBuilder.equal(root.get("title"), "%" + filter.getTitle().toLowerCase() + "%"));
+            predicates.add(criteriaBuilder.like(root.get("title"), "%" + filter.getTitle() + "%"));
+        }
+        if (filter .getUpdatedBy() != null) {
+            Join<Qualification, User> join = root.join("updatedBy", JoinType.INNER);
+            predicates.add(criteriaBuilder.equal(join.get("updatedBy"), filter.getUpdatedBy()));
         }
         if (filter.getCreatedBy() != null) {
-            Join<Experience, User> join = root.join("createdBy", JoinType.INNER);
+            Join<Qualification, User> join = root.join("createdBy", JoinType.INNER);
             predicates.add(criteriaBuilder.equal(join.get("createdBy"), filter.getCreatedBy()));
-        }
-        if (filter.getUpdatedBy() != null) {
-            Join<Experience, User> join = root.join("updatedBy", JoinType.INNER);
-            predicates.add(criteriaBuilder.equal(join.get("updatedBy"), filter.getUpdatedBy()));
         }
         if (filter.getCreatedAtFrom() != null) {
             predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("createdAt"), filter.getCreatedAtFrom()));

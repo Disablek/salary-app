@@ -1,6 +1,6 @@
 package by.bntu.salaryapp.domain.model.table.coefficient;
 
-import by.bntu.salaryapp.domain.model.BaseEntity;
+import by.bntu.salaryapp.domain.model.BaseAuditingEntity;
 import by.bntu.salaryapp.domain.common.enums.CoefficientType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -16,7 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Coefficient extends BaseEntity {
+public class Coefficient extends BaseAuditingEntity {
     @NotNull
     private String title;
 
@@ -30,6 +30,6 @@ public class Coefficient extends BaseEntity {
     private CoefficientType type;
 
     @OneToMany(mappedBy = "coefficient", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private Set<CoefficientRule> rules = new HashSet<>();
+    private Set<CoefficientRule> coefficientRules = new HashSet<>();
 }
 

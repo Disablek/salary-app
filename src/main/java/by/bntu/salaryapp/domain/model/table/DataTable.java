@@ -24,7 +24,7 @@ public class DataTable extends BaseAuditingEntity {
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "column_id")
-    private Set<Column> type = new HashSet<>();
+    private Set<Column> columns = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "row_id")

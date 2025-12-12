@@ -18,7 +18,7 @@ public class Cell extends BaseAuditingEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "column_id")
-    private Column columnKey;
+    private Column column;
 
     private String value;
 
