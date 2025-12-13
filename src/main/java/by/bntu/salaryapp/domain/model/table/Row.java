@@ -2,7 +2,6 @@ package by.bntu.salaryapp.domain.model.table;
 
 import by.bntu.salaryapp.domain.model.BaseAuditingEntity;
 import by.bntu.salaryapp.domain.model.employee.Employee;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -21,7 +21,7 @@ public class DataTableFilterDto {
 
     private String description;
 
-    private Set<UUID> types_id =  new HashSet<>();
+    private Set<UUID> columns_id =  new HashSet<>();
 
     private Set<UUID> rows_id =  new HashSet<>();
 
