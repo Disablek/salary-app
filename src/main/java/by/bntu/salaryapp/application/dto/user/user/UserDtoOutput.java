@@ -34,10 +34,6 @@ public class UserDtoOutput {
     @NotEmpty(message = "Email cannot be empty")
     private String email;
 
-    @Size(min = 8, message = "Password must include at least 8 symbols")
-    @Size(max = 255, message = "The password length must be no more than 255 characters")
-    private String password;
-
     @NotEmpty(message = "Username cannot be empty")
     private String username;
 

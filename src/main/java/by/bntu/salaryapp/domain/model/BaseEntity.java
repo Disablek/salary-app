@@ -2,6 +2,7 @@ package by.bntu.salaryapp.domain.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.UUID;
@@ -14,5 +15,6 @@ public abstract class BaseEntity {
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(columnDefinition = "uuid", updatable = false, nullable = false)
+    @EqualsAndHashCode.Include
     protected UUID id;
 }

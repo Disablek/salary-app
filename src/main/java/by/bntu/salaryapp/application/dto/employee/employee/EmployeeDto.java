@@ -1,5 +1,6 @@
 package by.bntu.salaryapp.application.dto.employee.employee;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,12 +16,8 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EmployeeDtoOutput {
-    private String firstName;
-
-    private String lastName;
-
-    private String surName;
+public class EmployeeDto {
+    private String fullName;
 
     private UUID position_id;
 

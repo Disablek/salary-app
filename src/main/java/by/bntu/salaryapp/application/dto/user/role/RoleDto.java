@@ -9,6 +9,8 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -18,6 +20,8 @@ public class RoleDto {
     private UUID id;
 
     private String name;
+
+    private Set<UUID> permissions_id =  new HashSet<>();
 
     @CreatedBy
     private UUID createdBy;

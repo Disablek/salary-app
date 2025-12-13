@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.31.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1765624018614-53" author="disable">
+        <dropForeignKeyConstraint baseTableName="cells" constraintName="fk_cells_on_created_by_user"/>
+    </changeSet>
+    <changeSet id="1765624018614-54" author="disable">
+        <dropForeignKeyConstraint baseTableName="cells" constraintName="fk_cells_on_last_modified_by_user"/>
+    </changeSet>
+    <changeSet id="1765624018614-55" author="disable">
+        <dropForeignKeyConstraint baseTableName="coefficient_rules"
+                                  constraintName="fk_coefficient_rules_on_created_by_user"/>
+    </changeSet>
+    <changeSet id="1765624018614-56" author="disable">
+        <dropForeignKeyConstraint baseTableName="coefficient_rules"
+                                  constraintName="fk_coefficient_rules_on_last_modified_by_user"/>
+    </changeSet>
+    <changeSet id="1765624018614-57" author="disable">
+        <dropForeignKeyConstraint baseTableName="coefficients" constraintName="fk_coefficients_on_created_by_user"/>
+    </changeSet>
+    <changeSet id="1765624018614-58" author="disable">
+        <dropForeignKeyConstraint baseTableName="coefficients"
+                                  constraintName="fk_coefficients_on_last_modified_by_user"/>
+    </changeSet>
+    <changeSet id="1765624018614-59" author="disable">
+        <dropForeignKeyConstraint baseTableName="columns" constraintName="fk_columns_on_created_by_user"/>
+    </changeSet>
+    <changeSet id="1765624018614-60" author="disable">
+        <dropForeignKeyConstraint baseTableName="columns" constraintName="fk_columns_on_last_modified_by_user"/>
+    </changeSet>
+    <changeSet id="1765624018614-61" author="disable">
+        <dropForeignKeyConstraint baseTableName="employees" constraintName="fk_employees_on_created_by_user"/>
+    </changeSet>
+    <changeSet id="1765624018614-62" author="disable">
+        <dropForeignKeyConstraint baseTableName="employees" constraintName="fk_employees_on_last_modified_by_user"/>
+    </changeSet>
+    <changeSet id="1765624018614-63" author="disable">
+        <dropForeignKeyConstraint baseTableName="experiences" constraintName="fk_experiences_on_created_by_user"/>
+    </changeSet>
+    <changeSet id="1765624018614-64" author="disable">
+        <dropForeignKeyConstraint baseTableName="experiences" constraintName="fk_experiences_on_last_modified_by_user"/>
+    </changeSet>
+    <changeSet id="1765624018614-65" author="disable">
+        <dropForeignKeyConstraint baseTableName="permissions" constraintName="fk_permissions_on_created_by_user"/>
+    </changeSet>
+    <changeSet id="1765624018614-66" author="disable">
+        <dropForeignKeyConstraint baseTableName="permissions" constraintName="fk_permissions_on_last_modified_by_user"/>
+    </changeSet>
+    <changeSet id="1765624018614-67" author="disable">
+        <dropForeignKeyConstraint baseTableName="positions" constraintName="fk_positions_on_created_by_user"/>
+    </changeSet>
+    <changeSet id="1765624018614-68" author="disable">
+        <dropForeignKeyConstraint baseTableName="positions" constraintName="fk_positions_on_last_modified_by_user"/>
+    </changeSet>
+    <changeSet id="1765624018614-69" author="disable">
+        <dropForeignKeyConstraint baseTableName="qualifications" constraintName="fk_qualifications_on_created_by_user"/>
+    </changeSet>
+    <changeSet id="1765624018614-70" author="disable">
+        <dropForeignKeyConstraint baseTableName="qualifications"
+                                  constraintName="fk_qualifications_on_last_modified_by_user"/>
+    </changeSet>
+    <changeSet id="1765624018614-71" author="disable">
+        <dropForeignKeyConstraint baseTableName="roles" constraintName="fk_roles_on_created_by_user"/>
+    </changeSet>
+    <changeSet id="1765624018614-72" author="disable">
+        <dropForeignKeyConstraint baseTableName="roles" constraintName="fk_roles_on_last_modified_by_user"/>
+    </changeSet>
+    <changeSet id="1765624018614-73" author="disable">
+        <dropForeignKeyConstraint baseTableName="rows" constraintName="fk_rows_on_created_by_user"/>
+    </changeSet>
+    <changeSet id="1765624018614-74" author="disable">
+        <dropForeignKeyConstraint baseTableName="rows" constraintName="fk_rows_on_last_modified_by_user"/>
+    </changeSet>
+    <changeSet id="1765624018614-75" author="disable">
+        <dropForeignKeyConstraint baseTableName="tables" constraintName="fk_tables_on_created_by_user"/>
+    </changeSet>
+    <changeSet id="1765624018614-76" author="disable">
+        <dropForeignKeyConstraint baseTableName="tables" constraintName="fk_tables_on_last_modified_by_user"/>
+    </changeSet>
+    <changeSet id="1765624018614-77" author="disable">
+        <dropForeignKeyConstraint baseTableName="users" constraintName="fk_users_on_created_by_user"/>
+    </changeSet>
+    <changeSet id="1765624018614-78" author="disable">
+        <dropForeignKeyConstraint baseTableName="users" constraintName="fk_users_on_last_modified_by_user"/>
+    </changeSet>
+    <changeSet id="1765624018614-1" author="disable">
+        <addColumn tableName="cells">
+            <column name="created_by" type="uuid"/>
+            <column name="updated_by" type="uuid"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1765624018614-2" author="disable">
+        <addColumn tableName="coefficient_rules">
+            <column name="created_by" type="uuid"/>
+            <column name="updated_by" type="uuid"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1765624018614-3" author="disable">
+        <addColumn tableName="coefficients">
+            <column name="created_by" type="uuid"/>
+            <column name="updated_by" type="uuid"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1765624018614-4" author="disable">
+        <addColumn tableName="columns">
+            <column name="created_by" type="uuid"/>
+            <column name="updated_by" type="uuid"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1765624018614-5" author="disable">
+        <addColumn tableName="employees">
+            <column name="created_by" type="uuid"/>
+            <column name="updated_by" type="uuid"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1765624018614-6" author="disable">
+        <addColumn tableName="experiences">
+            <column name="created_by" type="uuid"/>
+            <column name="updated_by" type="uuid"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1765624018614-7" author="disable">
+        <addColumn tableName="permissions">
+            <column name="created_by" type="uuid"/>
+            <column name="updated_by" type="uuid"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1765624018614-8" author="disable">
+        <addColumn tableName="positions">
+            <column name="created_by" type="uuid"/>
+            <column name="updated_by" type="uuid"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1765624018614-9" author="disable">
+        <addColumn tableName="qualifications">
+            <column name="created_by" type="uuid"/>
+            <column name="updated_by" type="uuid"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1765624018614-10" author="disable">
+        <addColumn tableName="roles">
+            <column name="created_by" type="uuid"/>
+            <column name="updated_by" type="uuid"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1765624018614-11" author="disable">
+        <addColumn tableName="rows">
+            <column name="created_by" type="uuid"/>
+            <column name="updated_by" type="uuid"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1765624018614-12" author="disable">
+        <addColumn tableName="tables">
+            <column name="created_by" type="uuid"/>
+            <column name="updated_by" type="uuid"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1765624018614-13" author="disable">
+        <addColumn tableName="users">
+            <column name="created_by" type="uuid"/>
+            <column name="updated_by" type="uuid"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1765624018614-27" author="disable">
+        <addForeignKeyConstraint baseColumnNames="created_by" baseTableName="cells"
+                                 constraintName="FK_CELLS_ON_CREATED_BY" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1765624018614-28" author="disable">
+        <addForeignKeyConstraint baseColumnNames="updated_by" baseTableName="cells"
+                                 constraintName="FK_CELLS_ON_UPDATED_BY" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1765624018614-29" author="disable">
+        <addForeignKeyConstraint baseColumnNames="created_by" baseTableName="coefficients"
+                                 constraintName="FK_COEFFICIENTS_ON_CREATED_BY" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1765624018614-30" author="disable">
+        <addForeignKeyConstraint baseColumnNames="updated_by" baseTableName="coefficients"
+                                 constraintName="FK_COEFFICIENTS_ON_UPDATED_BY" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1765624018614-31" author="disable">
+        <addForeignKeyConstraint baseColumnNames="created_by" baseTableName="coefficient_rules"
+                                 constraintName="FK_COEFFICIENT_RULES_ON_CREATED_BY" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1765624018614-32" author="disable">
+        <addForeignKeyConstraint baseColumnNames="updated_by" baseTableName="coefficient_rules"
+                                 constraintName="FK_COEFFICIENT_RULES_ON_UPDATED_BY" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1765624018614-33" author="disable">
+        <addForeignKeyConstraint baseColumnNames="created_by" baseTableName="columns"
+                                 constraintName="FK_COLUMNS_ON_CREATED_BY" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1765624018614-34" author="disable">
+        <addForeignKeyConstraint baseColumnNames="updated_by" baseTableName="columns"
+                                 constraintName="FK_COLUMNS_ON_UPDATED_BY" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1765624018614-35" author="disable">
+        <addForeignKeyConstraint baseColumnNames="created_by" baseTableName="employees"
+                                 constraintName="FK_EMPLOYEES_ON_CREATED_BY" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1765624018614-36" author="disable">
+        <addForeignKeyConstraint baseColumnNames="updated_by" baseTableName="employees"
+                                 constraintName="FK_EMPLOYEES_ON_UPDATED_BY" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1765624018614-37" author="disable">
+        <addForeignKeyConstraint baseColumnNames="created_by" baseTableName="experiences"
+                                 constraintName="FK_EXPERIENCES_ON_CREATED_BY" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1765624018614-38" author="disable">
+        <addForeignKeyConstraint baseColumnNames="updated_by" baseTableName="experiences"
+                                 constraintName="FK_EXPERIENCES_ON_UPDATED_BY" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1765624018614-39" author="disable">
+        <addForeignKeyConstraint baseColumnNames="created_by" baseTableName="permissions"
+                                 constraintName="FK_PERMISSIONS_ON_CREATED_BY" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1765624018614-40" author="disable">
+        <addForeignKeyConstraint baseColumnNames="updated_by" baseTableName="permissions"
+                                 constraintName="FK_PERMISSIONS_ON_UPDATED_BY" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1765624018614-41" author="disable">
+        <addForeignKeyConstraint baseColumnNames="created_by" baseTableName="positions"
+                                 constraintName="FK_POSITIONS_ON_CREATED_BY" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1765624018614-42" author="disable">
+        <addForeignKeyConstraint baseColumnNames="updated_by" baseTableName="positions"
+                                 constraintName="FK_POSITIONS_ON_UPDATED_BY" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1765624018614-43" author="disable">
+        <addForeignKeyConstraint baseColumnNames="created_by" baseTableName="qualifications"
+                                 constraintName="FK_QUALIFICATIONS_ON_CREATED_BY" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1765624018614-44" author="disable">
+        <addForeignKeyConstraint baseColumnNames="updated_by" baseTableName="qualifications"
+                                 constraintName="FK_QUALIFICATIONS_ON_UPDATED_BY" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1765624018614-45" author="disable">
+        <addForeignKeyConstraint baseColumnNames="created_by" baseTableName="roles"
+                                 constraintName="FK_ROLES_ON_CREATED_BY" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1765624018614-46" author="disable">
+        <addForeignKeyConstraint baseColumnNames="updated_by" baseTableName="roles"
+                                 constraintName="FK_ROLES_ON_UPDATED_BY" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1765624018614-47" author="disable">
+        <addForeignKeyConstraint baseColumnNames="created_by" baseTableName="rows"
+                                 constraintName="FK_ROWS_ON_CREATED_BY" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1765624018614-48" author="disable">
+        <addForeignKeyConstraint baseColumnNames="updated_by" baseTableName="rows"
+                                 constraintName="FK_ROWS_ON_UPDATED_BY" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1765624018614-49" author="disable">
+        <addForeignKeyConstraint baseColumnNames="created_by" baseTableName="tables"
+                                 constraintName="FK_TABLES_ON_CREATED_BY" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1765624018614-50" author="disable">
+        <addForeignKeyConstraint baseColumnNames="updated_by" baseTableName="tables"
+                                 constraintName="FK_TABLES_ON_UPDATED_BY" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1765624018614-51" author="disable">
+        <addForeignKeyConstraint baseColumnNames="created_by" baseTableName="users"
+                                 constraintName="FK_USERS_ON_CREATED_BY" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1765624018614-52" author="disable">
+        <addForeignKeyConstraint baseColumnNames="updated_by" baseTableName="users"
+                                 constraintName="FK_USERS_ON_UPDATED_BY" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+    <changeSet id="1765624018614-79" author="disable">
+        <dropColumn columnName="created_by_user_id" tableName="cells"/>
+
+        <dropColumn columnName="last_modified_by_user_id" tableName="cells"/>
+    </changeSet>
+    <changeSet id="1765624018614-80" author="disable">
+        <dropColumn columnName="created_by_user_id" tableName="coefficient_rules"/>
+
+        <dropColumn columnName="last_modified_by_user_id" tableName="coefficient_rules"/>
+    </changeSet>
+    <changeSet id="1765624018614-81" author="disable">
+        <dropColumn columnName="created_by_user_id" tableName="coefficients"/>
+
+        <dropColumn columnName="last_modified_by_user_id" tableName="coefficients"/>
+    </changeSet>
+    <changeSet id="1765624018614-82" author="disable">
+        <dropColumn columnName="created_by_user_id" tableName="columns"/>
+
+        <dropColumn columnName="last_modified_by_user_id" tableName="columns"/>
+    </changeSet>
+    <changeSet id="1765624018614-83" author="disable">
+        <dropColumn columnName="created_by_user_id" tableName="employees"/>
+
+        <dropColumn columnName="last_modified_by_user_id" tableName="employees"/>
+    </changeSet>
+    <changeSet id="1765624018614-84" author="disable">
+        <dropColumn columnName="created_by_user_id" tableName="experiences"/>
+
+        <dropColumn columnName="last_modified_by_user_id" tableName="experiences"/>
+    </changeSet>
+    <changeSet id="1765624018614-85" author="disable">
+        <dropColumn columnName="created_by_user_id" tableName="permissions"/>
+
+        <dropColumn columnName="last_modified_by_user_id" tableName="permissions"/>
+    </changeSet>
+    <changeSet id="1765624018614-86" author="disable">
+        <dropColumn columnName="created_by_user_id" tableName="positions"/>
+
+        <dropColumn columnName="last_modified_by_user_id" tableName="positions"/>
+    </changeSet>
+    <changeSet id="1765624018614-87" author="disable">
+        <dropColumn columnName="created_by_user_id" tableName="qualifications"/>
+
+        <dropColumn columnName="last_modified_by_user_id" tableName="qualifications"/>
+    </changeSet>
+    <changeSet id="1765624018614-88" author="disable">
+        <dropColumn columnName="created_by_user_id" tableName="roles"/>
+
+        <dropColumn columnName="last_modified_by_user_id" tableName="roles"/>
+    </changeSet>
+    <changeSet id="1765624018614-89" author="disable">
+        <dropColumn columnName="created_by_user_id" tableName="rows"/>
+
+        <dropColumn columnName="last_modified_by_user_id" tableName="rows"/>
+    </changeSet>
+    <changeSet id="1765624018614-90" author="disable">
+        <dropColumn columnName="created_by_user_id" tableName="tables"/>
+
+        <dropColumn columnName="last_modified_by_user_id" tableName="tables"/>
+    </changeSet>
+    <changeSet id="1765624018614-91" author="disable">
+        <dropColumn columnName="created_by_user_id" tableName="users"/>
+
+        <dropColumn columnName="last_modified_by_user_id" tableName="users"/>
+    </changeSet>
+
+</databaseChangeLog>

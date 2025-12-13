@@ -5,39 +5,42 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.Instant;
+import java.io.Serial;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @EqualsAndHashCode(callSuper = true)
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 @Data
-public abstract class BaseAuditingEntity extends BaseEntity {
+public abstract class BaseAuditingEntity extends BaseEntity implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 4681401402666658611L;
 
     @CreatedBy
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "created_by_user_id", updatable = false)
+    @JoinColumn(name = "created_by", updatable = false)
     @JsonIgnore//ignore completely to avoid StackOverflow exception by User.createdByUser logic, use DTO
-    private User createdByUser;
-
-    @CreationTimestamp
-    @Column(name = "created_date", nullable = false)
-    private Instant createdDate;
+    private User createdBy;
 
     @LastModifiedBy
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "last_modified_by_user_id")
+    @JoinColumn(name = "updated_by")
     @JsonIgnore//ignore completely to avoid StackOverflow exception by User.lastModifiedByUser logic, use DTO
-    private User lastModifiedByUser;
+    private User updatedBy;
 
-    @UpdateTimestamp
-    @Column(name = "last_modified_date")
-    private Instant lastModifiedDate;
+    @CreatedDate
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdDate;
+
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 }

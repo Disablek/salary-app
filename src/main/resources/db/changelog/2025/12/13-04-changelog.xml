@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.31.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1765624240061-1" author="disable">
+        <addColumn tableName="cells">
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1765624240061-2" author="disable">
+        <addNotNullConstraint columnName="created_at" tableName="cells"/>
+    </changeSet>
+    <changeSet id="1765624240061-3" author="disable">
+        <addColumn tableName="coefficient_rules">
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1765624240061-4" author="disable">
+        <addNotNullConstraint columnName="created_at" tableName="coefficient_rules"/>
+    </changeSet>
+    <changeSet id="1765624240061-5" author="disable">
+        <addColumn tableName="coefficients">
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1765624240061-6" author="disable">
+        <addNotNullConstraint columnName="created_at" tableName="coefficients"/>
+    </changeSet>
+    <changeSet id="1765624240061-7" author="disable">
+        <addColumn tableName="columns">
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1765624240061-8" author="disable">
+        <addNotNullConstraint columnName="created_at" tableName="columns"/>
+    </changeSet>
+    <changeSet id="1765624240061-9" author="disable">
+        <addColumn tableName="employees">
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1765624240061-10" author="disable">
+        <addNotNullConstraint columnName="created_at" tableName="employees"/>
+    </changeSet>
+    <changeSet id="1765624240061-11" author="disable">
+        <addColumn tableName="experiences">
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1765624240061-12" author="disable">
+        <addNotNullConstraint columnName="created_at" tableName="experiences"/>
+    </changeSet>
+    <changeSet id="1765624240061-13" author="disable">
+        <addColumn tableName="permissions">
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1765624240061-14" author="disable">
+        <addNotNullConstraint columnName="created_at" tableName="permissions"/>
+    </changeSet>
+    <changeSet id="1765624240061-15" author="disable">
+        <addColumn tableName="positions">
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1765624240061-16" author="disable">
+        <addNotNullConstraint columnName="created_at" tableName="positions"/>
+    </changeSet>
+    <changeSet id="1765624240061-17" author="disable">
+        <addColumn tableName="qualifications">
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1765624240061-18" author="disable">
+        <addNotNullConstraint columnName="created_at" tableName="qualifications"/>
+    </changeSet>
+    <changeSet id="1765624240061-19" author="disable">
+        <addColumn tableName="roles">
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1765624240061-20" author="disable">
+        <addNotNullConstraint columnName="created_at" tableName="roles"/>
+    </changeSet>
+    <changeSet id="1765624240061-21" author="disable">
+        <addColumn tableName="rows">
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1765624240061-22" author="disable">
+        <addNotNullConstraint columnName="created_at" tableName="rows"/>
+    </changeSet>
+    <changeSet id="1765624240061-23" author="disable">
+        <addColumn tableName="tables">
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1765624240061-24" author="disable">
+        <addNotNullConstraint columnName="created_at" tableName="tables"/>
+    </changeSet>
+    <changeSet id="1765624240061-25" author="disable">
+        <addColumn tableName="users">
+            <column name="created_at" type="DATETIME"/>
+            <column name="updated_at" type="DATETIME"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1765624240061-26" author="disable">
+        <addNotNullConstraint columnName="created_at" tableName="users"/>
+    </changeSet>
+    <changeSet id="1765624240061-40" author="disable">
+        <dropColumn columnName="created_date" tableName="cells"/>
+
+        <dropColumn columnName="last_modified_date" tableName="cells"/>
+    </changeSet>
+    <changeSet id="1765624240061-41" author="disable">
+        <dropColumn columnName="created_date" tableName="coefficient_rules"/>
+
+        <dropColumn columnName="last_modified_date" tableName="coefficient_rules"/>
+    </changeSet>
+    <changeSet id="1765624240061-42" author="disable">
+        <dropColumn columnName="created_date" tableName="coefficients"/>
+
+        <dropColumn columnName="last_modified_date" tableName="coefficients"/>
+    </changeSet>
+    <changeSet id="1765624240061-43" author="disable">
+        <dropColumn columnName="created_date" tableName="columns"/>
+
+        <dropColumn columnName="last_modified_date" tableName="columns"/>
+    </changeSet>
+    <changeSet id="1765624240061-44" author="disable">
+        <dropColumn columnName="created_date" tableName="employees"/>
+
+        <dropColumn columnName="last_modified_date" tableName="employees"/>
+    </changeSet>
+    <changeSet id="1765624240061-45" author="disable">
+        <dropColumn columnName="created_date" tableName="experiences"/>
+
+        <dropColumn columnName="last_modified_date" tableName="experiences"/>
+    </changeSet>
+    <changeSet id="1765624240061-46" author="disable">
+        <dropColumn columnName="created_date" tableName="permissions"/>
+
+        <dropColumn columnName="last_modified_date" tableName="permissions"/>
+    </changeSet>
+    <changeSet id="1765624240061-47" author="disable">
+        <dropColumn columnName="created_date" tableName="positions"/>
+
+        <dropColumn columnName="last_modified_date" tableName="positions"/>
+    </changeSet>
+    <changeSet id="1765624240061-48" author="disable">
+        <dropColumn columnName="created_date" tableName="qualifications"/>
+
+        <dropColumn columnName="last_modified_date" tableName="qualifications"/>
+    </changeSet>
+    <changeSet id="1765624240061-49" author="disable">
+        <dropColumn columnName="created_date" tableName="roles"/>
+
+        <dropColumn columnName="last_modified_date" tableName="roles"/>
+    </changeSet>
+    <changeSet id="1765624240061-50" author="disable">
+        <dropColumn columnName="created_date" tableName="rows"/>
+
+        <dropColumn columnName="last_modified_date" tableName="rows"/>
+    </changeSet>
+    <changeSet id="1765624240061-51" author="disable">
+        <dropColumn columnName="created_date" tableName="tables"/>
+
+        <dropColumn columnName="last_modified_date" tableName="tables"/>
+    </changeSet>
+    <changeSet id="1765624240061-52" author="disable">
+        <dropColumn columnName="created_date" tableName="users"/>
+
+        <dropColumn columnName="last_modified_date" tableName="users"/>
+    </changeSet>
+
+</databaseChangeLog>
