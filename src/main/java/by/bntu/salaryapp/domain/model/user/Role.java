@@ -9,8 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @Entity
@@ -27,15 +25,6 @@ public class Role extends BaseAuditingEntity implements GrantedAuthority {
     public String getAuthority() {
         return name;
     }
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "role_permissions",
-            joinColumns = @JoinColumn(name = "role_id"),
-            inverseJoinColumns = @JoinColumn(name = "permission_id")
-    )
-    private Set<Permission> permissions = new HashSet<>();
-
 
     @Override
     public boolean equals(Object o) {

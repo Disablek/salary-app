@@ -2,11 +2,9 @@ package by.bntu.salaryapp.application.service.implementations.user;
 
 import by.bntu.salaryapp.application.dto.user.role.RoleDto;
 import by.bntu.salaryapp.application.service.interfaces.user.RoleService;
-import by.bntu.salaryapp.domain.model.user.Permission;
 import by.bntu.salaryapp.domain.model.user.Role;
 import by.bntu.salaryapp.infrastructure.mapper.user.role.RoleListMapper;
 import by.bntu.salaryapp.infrastructure.mapper.user.role.RoleMapper;
-import by.bntu.salaryapp.infrastructure.persistence.repository.user.PermissionRepository;
 import by.bntu.salaryapp.infrastructure.persistence.repository.user.RoleRepository;
 import by.bntu.salaryapp.infrastructure.persistence.repository.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -15,17 +13,15 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly=true)
 public class RoleServiceImpl implements RoleService {
+
     private final RoleRepository roleRepository;
-    private final PermissionRepository permissionRepository;
     private final RoleMapper roleMapper;
     private final UserRepository userRepository;
     private final RoleListMapper roleListMapper;
@@ -42,8 +38,6 @@ public class RoleServiceImpl implements RoleService {
 
         Role role = roleMapper.toEntity(dto);
         role.setName(name);
-
-        assignPermissions(role, dto.getPermissionIds());
 
         Role savedRole = roleRepository.save(role);
         return roleMapper.toDto(savedRole);
@@ -66,8 +60,6 @@ public class RoleServiceImpl implements RoleService {
 
         existingRole.setName(newName);
 
-        assignPermissions(existingRole, roleDto.getPermissionIds());
-
         Role savedRole = roleRepository.save(existingRole);
         return roleMapper.toDto(savedRole);
     }
@@ -85,18 +77,6 @@ public class RoleServiceImpl implements RoleService {
         }
 
         roleRepository.deleteById(id);
-    }
-
-    private void assignPermissions(Role role, Set<UUID> permissionIds) {
-        if (permissionIds == null || permissionIds.isEmpty()) {
-            role.setPermissions(new HashSet<>());
-        } else {
-            List<Permission> permissions = permissionRepository.findAllById(permissionIds);
-            if (permissions.size() != permissionIds.size()) {
-                throw new EntityNotFoundException("One or more permissions not found");
-            }
-            role.setPermissions(new HashSet<>(permissions));
-        }
     }
 
     private String normalizeRoleName(String rawName) {
