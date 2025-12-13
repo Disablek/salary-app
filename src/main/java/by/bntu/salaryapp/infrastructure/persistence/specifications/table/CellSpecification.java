@@ -1,10 +1,10 @@
 package by.bntu.salaryapp.infrastructure.persistence.specifications.table;
 
-import by.bntu.salaryapp.application.dto.table.cell.CellFilterDto;
+import by.bntu.salaryapp.application.dto.dataTable.cell.CellFilterDto;
 import by.bntu.salaryapp.domain.model.employee.Employee;
-import by.bntu.salaryapp.domain.model.table.Cell;
-import by.bntu.salaryapp.domain.model.table.Column;
-import by.bntu.salaryapp.domain.model.table.Row;
+import by.bntu.salaryapp.domain.model.dataTable.Cell;
+import by.bntu.salaryapp.domain.model.dataTable.Column;
+import by.bntu.salaryapp.domain.model.dataTable.Row;
 import by.bntu.salaryapp.domain.model.user.User;
 import jakarta.persistence.criteria.*;
 import org.jspecify.annotations.NonNull;

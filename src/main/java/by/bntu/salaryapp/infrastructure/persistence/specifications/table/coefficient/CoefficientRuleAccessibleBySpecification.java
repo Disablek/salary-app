@@ -1,6 +1,6 @@
 package by.bntu.salaryapp.infrastructure.persistence.specifications.table.coefficient;
 
-import by.bntu.salaryapp.domain.model.table.coefficient.CoefficientRule;
+import by.bntu.salaryapp.domain.model.dataTable.coefficient.CoefficientRule;
 import by.bntu.salaryapp.domain.model.user.User;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;

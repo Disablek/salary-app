@@ -1,8 +1,8 @@
 package by.bntu.salaryapp.infrastructure.persistence.specifications.table.coefficient;
 
-import by.bntu.salaryapp.application.dto.table.coefficient.coefficientRule.CoefficientRuleFilterDto;
-import by.bntu.salaryapp.domain.model.table.coefficient.Coefficient;
-import by.bntu.salaryapp.domain.model.table.coefficient.CoefficientRule;
+import by.bntu.salaryapp.application.dto.dataTable.coefficient.coefficientRule.CoefficientRuleFilterDto;
+import by.bntu.salaryapp.domain.model.dataTable.coefficient.Coefficient;
+import by.bntu.salaryapp.domain.model.dataTable.coefficient.CoefficientRule;
 import by.bntu.salaryapp.domain.model.user.User;
 import jakarta.persistence.criteria.*;
 import org.jspecify.annotations.NonNull;
