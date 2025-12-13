@@ -34,7 +34,7 @@ public class UserFilterDto {
 
     private String username;
 
-    private Set<UUID> rolesId = new HashSet<>();
+    private UUID roleId;
 
     @CreatedBy
     private UUID createdBy;

@@ -37,9 +37,9 @@ public record UserFilterBySpecification(UserFilterDto filter) implements Specifi
         if (filter.getLastName() != null) {
             predicates.add(criteriaBuilder.like(root.get("lastName"), "%" + filter.getLastName() + "%"));
         }
-        if (filter.getRolesId() != null && !filter.getRolesId().isEmpty()) {
-            Join<User, Role> join = root.join("roles", JoinType.INNER);
-            predicates.add(join.get("id").in(filter.getRolesId()));
+        if (filter.getRoleId() != null) {
+            Join<User, Role> join = root.join("role", JoinType.INNER);
+            predicates.add(criteriaBuilder.equal(join.get("id"), filter.getRoleId()));
         }
         if (filter .getUpdatedBy() != null) {
             predicates.add(criteriaBuilder.equal(root.get("updatedBy"), filter.getUpdatedBy()));

@@ -13,10 +13,6 @@ public interface UserMapper {
     UserDtoOutput toDto(User user);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdBy", ignore = true)
-    @Mapping(target = "updatedBy", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
     User toEntity(UserDtoInput userDtoInput);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

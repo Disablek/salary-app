@@ -48,21 +48,17 @@ public class User extends BaseAuditingEntity implements UserDetails {
                 '}';
     }
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private Set<Role> roles = new HashSet<>();
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id")
+    private Role role;
 
     @Override
     @Transient
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> auths = new HashSet<>();
-        if (roles != null) {
-            auths.addAll(roles);
-            for (Role role : roles) {
+        if (role != null) {
+            auths.add(role);
+            if (role.getPermissions() != null) {
                 auths.addAll(role.getPermissions());
             }
         }

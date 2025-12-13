@@ -1,5 +1,6 @@
 package by.bntu.salaryapp.application.dto.user.role;
 
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,9 +20,10 @@ import java.util.UUID;
 public class RoleDto {
     private UUID id;
 
+    @NotEmpty(message = "Role name cannot be empty")
     private String name;
 
-    private Set<UUID> permissions_id =  new HashSet<>();
+    private Set<UUID> permissionIds =  new HashSet<>();
 
     @CreatedBy
     private UUID createdBy;

@@ -2,7 +2,7 @@ package by.bntu.salaryapp.application.dto.user.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,8 +12,6 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -22,9 +20,11 @@ import java.util.UUID;
 public class UserDtoOutput {
     private UUID id;
 
+    @NotNull
     @NotEmpty(message = "First name cannot be empty")
     private String firstName;
 
+    @NotNull
     @NotEmpty(message = "Last name cannot be empty")
     private String lastName;
 
@@ -34,10 +34,11 @@ public class UserDtoOutput {
     @NotEmpty(message = "Email cannot be empty")
     private String email;
 
+    @NotNull
     @NotEmpty(message = "Username cannot be empty")
     private String username;
 
-    private Set<UUID> rolesId = new HashSet<>();
+    private UUID roleId;
 
     @CreatedBy
     private UUID createdBy;

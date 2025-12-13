@@ -1,4 +1,4 @@
-package by.bntu.salaryapp.infrastructure.persistence.specifications.table;
+package by.bntu.salaryapp.infrastructure.persistence.specifications.table.dataTable;
 
 import by.bntu.salaryapp.application.dto.table.dataTable.DataTableFilterDto;
 import by.bntu.salaryapp.domain.model.table.Column;
@@ -12,7 +12,7 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.ArrayList;
 import java.util.List;
 
-public record DataTableSpecification(DataTableFilterDto filter) implements Specification<DataTable> {
+public record DataTableFilterBySpecification(DataTableFilterDto filter) implements Specification<DataTable> {
     @Override
     public Predicate toPredicate(@NonNull Root<DataTable> root,
                                  CriteriaQuery<?> query,
