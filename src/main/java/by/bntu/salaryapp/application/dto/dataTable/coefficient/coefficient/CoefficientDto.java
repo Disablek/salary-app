@@ -19,26 +19,26 @@ import java.util.UUID;
 @AllArgsConstructor
 public class CoefficientDto {
     private UUID id;
-
     private String title;
-
     private String description;
-
     private Boolean isActive;
-
     private CoefficientType type;
 
     private Set<UUID> coefficientRulesIds = new HashSet<>();
 
+    private UUID targetColumnId;
+
+    private UUID sourceColumnId;
+
+    private UUID baseColumnId;
+
+
     @CreatedBy
     private UUID createdBy;
-
     @LastModifiedBy
     private UUID updatedBy;
-
     @CreatedDate
     private LocalDateTime createdAt;
-
     @LastModifiedDate
     private LocalDateTime updatedAt;
 }

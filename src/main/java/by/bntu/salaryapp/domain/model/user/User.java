@@ -8,8 +8,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 
 @Data
@@ -55,13 +53,6 @@ public class User extends BaseAuditingEntity implements UserDetails {
     @Override
     @Transient
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<GrantedAuthority> auths = new HashSet<>();
-        if (role != null) {
-            auths.add(role);
-            if (role.getPermissions() != null) {
-                auths.addAll(role.getPermissions());
-            }
-        }
-        return auths;
+        return null;
     }
 }

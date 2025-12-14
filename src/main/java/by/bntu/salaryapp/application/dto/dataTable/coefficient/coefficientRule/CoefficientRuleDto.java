@@ -1,5 +1,6 @@
 package by.bntu.salaryapp.application.dto.dataTable.coefficient.coefficientRule;
 
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,7 +22,6 @@ public class CoefficientRuleDto {
 
     private UUID coefficientId;
 
-    @Positive(message = "MatchValue must be positive number")
     private String matchValue;
 
     @Positive(message = "Multiplier must be a positive number")

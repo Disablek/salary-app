@@ -16,6 +16,10 @@ public interface CoefficientMapper {
     @Mapping(source = "updatedBy.id", target = "updatedBy")
     @Mapping(source = "createdDate", target = "createdAt")
     @Mapping(target = "coefficientRulesIds", expression = "java(mapRulesToIds(coefficient.getCoefficientRules()))")
+
+    @Mapping(source = "targetColumn.id", target = "targetColumnId")
+    @Mapping(source = "sourceColumn.id", target = "sourceColumnId")
+    @Mapping(source = "baseColumn.id", target = "baseColumnId")
     CoefficientDto toDto(Coefficient coefficient);
 
     @Mapping(target = "id", ignore = true)
@@ -24,6 +28,10 @@ public interface CoefficientMapper {
     @Mapping(target = "updatedBy", ignore = true)
     @Mapping(target = "createdDate", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
+
+    @Mapping(target = "targetColumn", ignore = true)
+    @Mapping(target = "sourceColumn", ignore = true)
+    @Mapping(target = "baseColumn", ignore = true)
     Coefficient toEntity(CoefficientDto dto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
@@ -33,15 +41,14 @@ public interface CoefficientMapper {
     @Mapping(target = "updatedBy", ignore = true)
     @Mapping(target = "createdDate", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
+
+    @Mapping(target = "targetColumn", ignore = true)
+    @Mapping(target = "sourceColumn", ignore = true)
+    @Mapping(target = "baseColumn", ignore = true)
     void updateFromDto(CoefficientDto dto, @MappingTarget Coefficient entity);
 
     default Set<UUID> mapRulesToIds(Set<CoefficientRule> rules) {
-        if (rules == null) {
-            return Set.of();
-        }
-        return rules.stream()
-                .map(BaseAuditingEntity::getId)
-                .collect(Collectors.toSet());
+        if (rules == null) return Set.of();
+        return rules.stream().map(BaseAuditingEntity::getId).collect(Collectors.toSet());
     }
 }
-

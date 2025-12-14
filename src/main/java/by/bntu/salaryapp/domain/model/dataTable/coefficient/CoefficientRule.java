@@ -21,7 +21,6 @@ public class CoefficientRule extends BaseAuditingEntity {
     @ToString.Exclude @EqualsAndHashCode.Exclude
     private Coefficient coefficient;
 
-    @NotNull
     private String matchValue;
 
     @NotNull

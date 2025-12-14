@@ -10,6 +10,8 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -24,10 +26,14 @@ public class ColumnFilterDto {
 
     private String title;
 
+    private Set<UUID> cellsId = new HashSet<>();
+
     @Enumerated(EnumType.STRING)
     private ColumnDataType dataType;
 
     private UUID coefficient_id;
+
+    private Short activeInPage;
 
     @CreatedBy
     private UUID createdBy;

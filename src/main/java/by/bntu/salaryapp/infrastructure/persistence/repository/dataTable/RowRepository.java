@@ -1,14 +1,13 @@
 package by.bntu.salaryapp.infrastructure.persistence.repository.dataTable;
 
-import by.bntu.salaryapp.domain.model.employee.Employee;
 import by.bntu.salaryapp.domain.model.dataTable.Row;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 
 public interface RowRepository extends JpaRepository<Row, UUID> {
-    Set<Row> findRowByTable(Row table);
+    List<Row> findAllByTableId(UUID tableId);
 
-    Set<Row> findRowByEmployee(Employee employee);
+    List<Row> findAllByEmployeeId(UUID employeeId);
 }

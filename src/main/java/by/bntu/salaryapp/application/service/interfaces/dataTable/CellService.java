@@ -20,4 +20,6 @@ public interface CellService {
     List<CellDto> findAllInRow(UUID rowId);
 
     List<CellDto> findAllInColumn(UUID columnId);
+
+    List<CellDto> findAllInDataTable(UUID dataTableId, Integer pageNumber);
 }

@@ -17,8 +17,6 @@ public class PositionFilterDto {
 
     private String title;
 
-    private Integer code;
-
     @CreatedBy
     private UUID createdBy;
 

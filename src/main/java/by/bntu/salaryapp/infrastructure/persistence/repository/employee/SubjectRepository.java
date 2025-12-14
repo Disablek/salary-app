@@ -9,6 +9,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface SubjectRepository extends JpaRepository<Experience, UUID> {
+public interface SubjectRepository extends JpaRepository<Subject, UUID> {
     Optional<Subject> findSubjectByTitle(String title);
+
+    boolean existsByTitle(String title);
 }

@@ -11,5 +11,7 @@ import java.util.UUID;
 @Repository
 public interface ExperienceRepository extends JpaRepository<Experience, UUID>,
         JpaSpecificationExecutor<Experience> {
-     Optional<Experience> findExperienceByTitle(String title);
+    Optional<Experience> findExperienceByTitle(String title);
+
+    boolean existsByTitle(String title);
 }

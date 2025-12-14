@@ -1,16 +1,15 @@
 package by.bntu.salaryapp.infrastructure.persistence.repository.dataTable.coefficient;
 
-import by.bntu.salaryapp.domain.model.dataTable.coefficient.Coefficient;
 import by.bntu.salaryapp.domain.model.dataTable.coefficient.CoefficientRule;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 
 public interface CoefficientRuleRepository extends JpaRepository<CoefficientRule, UUID> {
 
-    Set<CoefficientRule> findByCoefficient(Coefficient coefficient);
+    List<CoefficientRule> findAllByCoefficientId(UUID coefficientId);
 
-    Set<CoefficientRule> findByCoefficientId(UUID coefficientId);
+    List<CoefficientRule> findByCoefficientId(UUID coefficientId);
 
-    Set<CoefficientRule> findByMatchValue(String matchValue);}
+    List<CoefficientRule> findByMatchValue(String matchValue);}

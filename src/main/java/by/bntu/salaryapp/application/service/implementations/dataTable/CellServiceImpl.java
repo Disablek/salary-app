@@ -1,6 +1,7 @@
 package by.bntu.salaryapp.application.service.implementations.dataTable;
 
 import by.bntu.salaryapp.application.dto.dataTable.cell.CellDto;
+import by.bntu.salaryapp.application.service.interfaces.SalaryCalculationService;
 import by.bntu.salaryapp.application.service.interfaces.dataTable.CellService;
 import by.bntu.salaryapp.domain.model.dataTable.Cell;
 import by.bntu.salaryapp.domain.model.dataTable.Column;
@@ -17,7 +18,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import java.util.List;
 import java.util.UUID;
 
@@ -30,6 +30,8 @@ public class CellServiceImpl implements CellService {
     private final DataTableRepository dataTableRepository;
     private final RowRepository rowRepository;
     private final ColumnRepository columnRepository;
+    private final SalaryCalculationService calculationService;
+
 
     private final CellMapper cellMapper;
     private final CellListMapper cellListMapper;
@@ -53,7 +55,9 @@ public class CellServiceImpl implements CellService {
 
         Cell cell = cellMapper.toEntity(cellDto);
         cell.setRow(row);
+
         cell.setColumn(column);
+        column.getCells().add(cell);
 
         if (cellDto.getValue() != null) {
             cell.setValue(cellDto.getValue());
@@ -81,23 +85,36 @@ public class CellServiceImpl implements CellService {
         if (cellDto.getColumn_id() != null && !existingCell.getColumn().getId().equals(cellDto.getColumn_id())) {
             Column newColumn = columnRepository.findById(cellDto.getColumn_id())
                     .orElseThrow(() -> new EntityNotFoundException("Column not found with id: " + cellDto.getColumn_id()));
+
+            Column oldColumn = existingCell.getColumn();
+            if (oldColumn != null) {
+                oldColumn.getCells().remove(existingCell);
+            }
+
             existingCell.setColumn(newColumn);
+            newColumn.getCells().add(existingCell);
         }
 
         cellMapper.updateFromDto(cellDto, existingCell);
 
         Cell savedCell = cellRepository.save(existingCell);
+        calculationService.calculateRow(savedCell.getRow().getId());
         return cellMapper.toDto(savedCell);
     }
 
     @Override
     @Transactional
-    @PreAuthorize("hasAnyRole('SUPERUSER','ADMIN')")
+    @PreAuthorize("hasAnyRole('SUPERUSER','ADMIN', 'USER')")
     public void delete(UUID id) {
-        if (!cellRepository.existsById(id)) {
-            throw new EntityNotFoundException("Cell not found with id " + id);
+        Cell cell = cellRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Cell not found with id " + id));
+
+        Column column = cell.getColumn();
+        if (column != null) {
+            column.getCells().remove(cell);
         }
-        cellRepository.deleteById(id);
+
+        cellRepository.delete(cell);
     }
 
     @Override
@@ -105,9 +122,7 @@ public class CellServiceImpl implements CellService {
         if (!dataTableRepository.existsById(dataTableId)) {
             throw new EntityNotFoundException("DataTable not found with id " + dataTableId);
         }
-
-        List<Cell> cells = cellRepository.findByRow_DataTable_Id(dataTableId);
-
+        List<Cell> cells = cellRepository.findByRow_Table_Id(dataTableId);
         return cellListMapper.toDtoList(cells);
     }
 
@@ -116,9 +131,7 @@ public class CellServiceImpl implements CellService {
         if (!rowRepository.existsById(rowId)) {
             throw new EntityNotFoundException("Row not found with id " + rowId);
         }
-
         List<Cell> cells = cellRepository.findByRowId(rowId);
-
         return cellListMapper.toDtoList(cells);
     }
 
@@ -127,8 +140,27 @@ public class CellServiceImpl implements CellService {
         if (!columnRepository.existsById(columnId)) {
             throw new EntityNotFoundException("Column not found with id " + columnId);
         }
-
         List<Cell> cells = cellRepository.findByColumnId(columnId);
+        return cellListMapper.toDtoList(cells);
+    }
+
+    @Override
+    public List<CellDto> findAllInDataTable(UUID dataTableId, Integer pageNumber) {
+        if (!dataTableRepository.existsById(dataTableId)) {
+            throw new EntityNotFoundException("DataTable not found with id " + dataTableId);
+        }
+
+        List<Cell> cells;
+
+        if (pageNumber == null) {
+            cells = cellRepository. findByRow_Table_Id(dataTableId);
+        } else {
+            List<Short> allowedPages = (pageNumber == 1)
+                    ? List.of((short)0, (short)1)
+                    : List.of((short)0, (short)2);
+
+            cells = cellRepository.findByColumn_MainTable_IdAndColumn_ActiveInPageIn(dataTableId, allowedPages);
+        }
 
         return cellListMapper.toDtoList(cells);
     }

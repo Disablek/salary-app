@@ -21,9 +21,6 @@ public record PositionSpecification(PositionFilterDto filter) implements Specifi
         if (filter.getId() != null) {
             predicates.add(criteriaBuilder.equal(root.get("id"), filter.getId()));
         }
-        if (filter.getCode() != null) {
-            predicates.add(criteriaBuilder.equal(root.get("code"), filter.getCode()));
-        }
         if (filter.getTitle() != null) {
             predicates.add(criteriaBuilder.equal(root.get("title"), "%" + filter.getTitle().toLowerCase() + "%"));
         }

@@ -3,6 +3,8 @@ package by.bntu.salaryapp.application.dto.dataTable.column;
 import by.bntu.salaryapp.domain.common.enums.ColumnDataType;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,6 +14,8 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -25,6 +29,12 @@ public class ColumnDto {
     private String key;
 
     private String title;
+
+    private Set<UUID> cellsId = new HashSet<>();
+
+    @NotNull
+    @PositiveOrZero
+    private Short activeInPage;
 
     @Enumerated(EnumType.STRING)
     private ColumnDataType dataType;

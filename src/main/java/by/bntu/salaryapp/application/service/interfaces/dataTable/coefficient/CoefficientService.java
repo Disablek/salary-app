@@ -13,8 +13,6 @@ public interface CoefficientService {
 
     List<CoefficientDto> findAllByCoefficientType(CoefficientType coefficientType);
 
-    List<CoefficientDto> findAllActiveByCoefficientType(CoefficientType coefficientType);
-
     CoefficientDto create(CoefficientDto coefficient);
 
     CoefficientDto update(CoefficientDto coefficient);

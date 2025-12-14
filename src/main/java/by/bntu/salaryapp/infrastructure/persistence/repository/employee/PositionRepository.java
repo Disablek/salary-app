@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Repository
 public interface PositionRepository extends JpaRepository<Position, UUID> {
-    Optional<Position> findPositionByCode(int positionCode);
-
     Optional<Position> findPositionByTitle(String title);
+
+    boolean existsByTitle(String title);
 }

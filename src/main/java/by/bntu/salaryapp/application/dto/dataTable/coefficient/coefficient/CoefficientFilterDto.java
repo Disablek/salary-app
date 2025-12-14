@@ -28,6 +28,12 @@ public class CoefficientFilterDto {
 
     private Set<UUID> coefficientRulesIds = new HashSet<>();
 
+    private UUID targetColumnId;
+
+    private UUID sourceColumnId;
+
+    private UUID baseColumnId;
+
     @CreatedBy
     private UUID createdBy;
 

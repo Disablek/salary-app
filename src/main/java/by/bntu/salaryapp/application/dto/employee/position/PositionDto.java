@@ -22,9 +22,6 @@ public class PositionDto {
     @NotEmpty(message = "Название должности не должно быть пустым")
     private String title;
 
-    @Positive
-    private Integer code;
-
     @CreatedBy
     private UUID createdBy;
 
