@@ -15,7 +15,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ExperienceDTO {
+public class ExperienceDto {
     private UUID id;
 
     @NotEmpty(message = "Заголовок не может быть пустым")

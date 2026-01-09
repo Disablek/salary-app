@@ -1,4 +1,4 @@
-package by.bntu.salaryapp.infrastructure.persistence.specifications.table.coefficient;
+package by.bntu.salaryapp.infrastructure.persistence.specifications.dataTable.coefficient;
 
 import by.bntu.salaryapp.domain.model.dataTable.coefficient.CoefficientRule;
 import by.bntu.salaryapp.domain.model.user.User;

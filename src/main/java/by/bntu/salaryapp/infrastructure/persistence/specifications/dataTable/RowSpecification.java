@@ -1,8 +1,10 @@
-package by.bntu.salaryapp.infrastructure.persistence.specifications.table.coefficient;
+package by.bntu.salaryapp.infrastructure.persistence.specifications.dataTable;
 
-import by.bntu.salaryapp.application.dto.dataTable.coefficient.coefficientRule.CoefficientRuleFilterDto;
-import by.bntu.salaryapp.domain.model.dataTable.coefficient.Coefficient;
-import by.bntu.salaryapp.domain.model.dataTable.coefficient.CoefficientRule;
+import by.bntu.salaryapp.application.dto.dataTable.row.RowFilterDto;
+import by.bntu.salaryapp.domain.model.employee.Employee;
+import by.bntu.salaryapp.domain.model.dataTable.Cell;
+import by.bntu.salaryapp.domain.model.dataTable.DataTable;
+import by.bntu.salaryapp.domain.model.dataTable.Row;
 import by.bntu.salaryapp.domain.model.user.User;
 import jakarta.persistence.criteria.*;
 import org.jspecify.annotations.NonNull;
@@ -11,35 +13,36 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.ArrayList;
 import java.util.List;
 
-public record CoefficientRuleFilterBySpecification(CoefficientRuleFilterDto filter)
-        implements Specification<Coefficient> {
+public record RowSpecification(RowFilterDto filter) implements Specification<Row> {
     @Override
-    public Predicate toPredicate(@NonNull Root<Coefficient> root,
+    public Predicate toPredicate(@NonNull Root<Row> root,
                                  CriteriaQuery<?> query,
                                  @NonNull CriteriaBuilder criteriaBuilder) {
-        if (filter == null) { return criteriaBuilder.conjunction(); }
+        if (filter == null) { return criteriaBuilder.conjunction();}
 
         List<Predicate> predicates = new ArrayList<>();
 
         if (filter.getId() != null) {
             predicates.add(criteriaBuilder.equal(root.get("id"), filter.getId()));
         }
-        if (filter.getCoefficientId() != null) {
-            Join<CoefficientRule, Coefficient> join = root.join("coefficient", JoinType.INNER);
-            predicates.add(criteriaBuilder.equal(join.get("id"), filter.getCoefficientId()));
+        if (filter.getTableId() != null) {
+            Join<Row, DataTable> join = root.join("tables", JoinType.LEFT);
+            predicates.add(criteriaBuilder.equal(join.get("id"), filter.getTableId()));
         }
-        if (filter.getMatchValue() != null) {
-            predicates.add(criteriaBuilder.equal(root.get("matchValue"), filter.getMatchValue()));
+        if (filter.getEmployeeId() != null) {
+            Join<Row, Employee> join = root.join("employees", JoinType.LEFT);
+            predicates.add(criteriaBuilder.equal(join.get("id"), filter.getEmployeeId()));
         }
-        if (filter.getMultiplier() != null) {
-            predicates.add(criteriaBuilder.equal(root.get("multiplier"), filter.getMultiplier()));
+        if (filter.getCellsId() != null && !filter.getCellsId().isEmpty()) {
+            Join<Row, Cell> join = root.join("cells", JoinType.LEFT);
+            predicates.add(join.get("id").in(filter.getCellsId()));
         }
         if (filter .getUpdatedBy() != null) {
-            Join<CoefficientRule, User> join = root.join("updatedBy", JoinType.INNER);
+            Join<Row, User> join = root.join("updatedBy", JoinType.INNER);
             predicates.add(criteriaBuilder.equal(join.get("updatedBy"), filter.getUpdatedBy()));
         }
         if (filter.getCreatedBy() != null) {
-            Join<CoefficientRule, User> join = root.join("createdBy", JoinType.INNER);
+            Join<Row, User> join = root.join("createdBy", JoinType.INNER);
             predicates.add(criteriaBuilder.equal(join.get("createdBy"), filter.getCreatedBy()));
         }
         if (filter.getCreatedAtFrom() != null) {

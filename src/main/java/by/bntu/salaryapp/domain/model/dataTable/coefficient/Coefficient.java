@@ -30,27 +30,28 @@ public class Coefficient extends BaseAuditingEntity {
     @Enumerated(EnumType.STRING)
     private CoefficientType type;
 
-    // 3-й столбец: Столбец, который мы считаем
+    // --- MULTIPLIER ---
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "target_column_id")
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     private Column targetColumn;
 
-    // 2-й столбец: Столбец со строковым значением для сравнения (Source / Matcher)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "source_column_id")
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     private Column sourceColumn;
 
-    // 1-й столбец: Столбец с базовым значением, к которому применяем множитель
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "base_column_id")
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     private Column baseColumn;
 
-    @OneToMany(mappedBy = "coefficient", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "coefficient", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CoefficientRule> coefficientRules = new HashSet<>();
+
+    // --- SUMMATION ---
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "coefficient_summation_columns",
+            joinColumns = @JoinColumn(name = "coefficient_id"),
+            inverseJoinColumns = @JoinColumn(name = "column_id")
+    )
+    private Set<Column> summationColumns = new HashSet<>();
 }

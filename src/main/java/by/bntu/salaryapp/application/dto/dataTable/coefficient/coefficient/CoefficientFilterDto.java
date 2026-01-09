@@ -34,9 +34,10 @@ public class CoefficientFilterDto {
 
     private UUID baseColumnId;
 
+    private Set<UUID> summationColumnsIds = new HashSet<>();
+
     @CreatedBy
     private UUID createdBy;
-
     @LastModifiedBy
     private UUID updatedBy;
 

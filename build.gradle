@@ -50,7 +50,6 @@ dependencies {
 
 }
 
-// Для корректной работы Spring Boot плагина
 tasks.named('test') {
     useJUnitPlatform()
 }

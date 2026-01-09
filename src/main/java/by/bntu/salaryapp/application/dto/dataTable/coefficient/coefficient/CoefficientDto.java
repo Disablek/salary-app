@@ -32,6 +32,7 @@ public class CoefficientDto {
 
     private UUID baseColumnId;
 
+    private Set<UUID> summationColumnsIds = new HashSet<>();
 
     @CreatedBy
     private UUID createdBy;

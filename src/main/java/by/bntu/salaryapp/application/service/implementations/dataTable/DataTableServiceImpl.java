@@ -2,6 +2,8 @@ package by.bntu.salaryapp.application.service.implementations.dataTable;
 
 import by.bntu.salaryapp.application.dto.dataTable.dataTable.DataTableDto;
 import by.bntu.salaryapp.application.service.interfaces.dataTable.DataTableService;
+import by.bntu.salaryapp.domain.common.enums.ColumnDataType;
+import by.bntu.salaryapp.domain.model.dataTable.Column;
 import by.bntu.salaryapp.domain.model.dataTable.DataTable;
 import by.bntu.salaryapp.infrastructure.mapper.dataTable.dataTable.DataTableListMapper;
 import by.bntu.salaryapp.infrastructure.mapper.dataTable.dataTable.DataTableMapper;
@@ -29,11 +31,25 @@ public class DataTableServiceImpl implements DataTableService {
     @PreAuthorize("hasAnyRole('SUPERUSER', 'ADMIN')")
     public DataTableDto create(DataTableDto dto) {
         DataTable dataTable = dataTableMapper.toEntity(dto);
-
         if (dataTable.getColumns() != null) dataTable.getColumns().clear();
         if (dataTable.getRows() != null) dataTable.getRows().clear();
 
         DataTable savedTable = dataTableRepository.save(dataTable);
+
+        Column idColumn = Column.builder()
+                .mainTable(savedTable)
+                .title("№")
+                .key("sys_row_number")
+                .activeInPage((short) 0)
+                .dataType(ColumnDataType.Integer)
+                .build();
+
+
+        savedTable.getColumns().add(idColumn);
+        dataTableRepository.save(savedTable);
+
+        //TODO:
+        // Для надежности лучше использовать ColumnRepository напрямую здесь
         return dataTableMapper.toDto(savedTable);
     }
 

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.31.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1765810215780-1" author="disable">
+        <createTable tableName="coefficient_summation_columns">
+            <column name="coefficient_id" type="uuid">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_coefficient_summation_columns"/>
+            </column>
+            <column name="column_id" type="uuid">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_coefficient_summation_columns"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1765810215780-2" author="disable">
+        <addForeignKeyConstraint baseColumnNames="coefficient_id" baseTableName="coefficient_summation_columns"
+                                 constraintName="fk_coesumcol_on_coefficient" referencedColumnNames="id"
+                                 referencedTableName="coefficients"/>
+    </changeSet>
+    <changeSet id="1765810215780-3" author="disable">
+        <addForeignKeyConstraint baseColumnNames="column_id" baseTableName="coefficient_summation_columns"
+                                 constraintName="fk_coesumcol_on_column" referencedColumnNames="id"
+                                 referencedTableName="columns"/>
+    </changeSet>
+
+</databaseChangeLog>

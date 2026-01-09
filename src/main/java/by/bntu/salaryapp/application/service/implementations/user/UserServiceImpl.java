@@ -2,6 +2,7 @@ package by.bntu.salaryapp.application.service.implementations.user;
 
 import by.bntu.salaryapp.application.dto.user.user.UserDtoInput;
 import by.bntu.salaryapp.application.dto.user.user.UserDtoOutput;
+import by.bntu.salaryapp.application.dto.user.user.UserFilterDto;
 import by.bntu.salaryapp.application.service.interfaces.user.UserService;
 import by.bntu.salaryapp.domain.model.user.Role;
 import by.bntu.salaryapp.domain.model.user.User;
@@ -9,8 +10,11 @@ import by.bntu.salaryapp.infrastructure.mapper.user.user.UserListMapper;
 import by.bntu.salaryapp.infrastructure.mapper.user.user.UserMapper;
 import by.bntu.salaryapp.infrastructure.persistence.repository.user.RoleRepository;
 import by.bntu.salaryapp.infrastructure.persistence.repository.user.UserRepository;
+import by.bntu.salaryapp.infrastructure.persistence.specifications.user.user.UserAccessibleBySpecification;
+import by.bntu.salaryapp.infrastructure.persistence.specifications.user.user.UserFilterBySpecification;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -153,6 +157,63 @@ public class UserServiceImpl implements UserService {
         List<User> users = userRepository.findAll();
         return userListMapper.toDtoList(users);
     }
+
+    @Override
+    public List<UserDtoOutput> getUsersByFilter(UserFilterDto filter) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = null;
+        if (auth != null && auth.getPrincipal() instanceof User) {
+            currentUser = (User) auth.getPrincipal();
+        }
+
+        Specification<User> accessSpec = new UserAccessibleBySpecification(currentUser);
+
+        Specification<User> filterSpec = (filter != null) ? new UserFilterBySpecification(filter) : null;
+
+        Specification<User> finalSpec = (filterSpec != null) ? accessSpec.and(filterSpec) : accessSpec;
+
+        List<User> users = userRepository.findAll(finalSpec);
+        return userListMapper.toDtoList(users);
+    }
+
+    @Override
+    @Transactional
+    public UserDtoOutput changePassword(UUID userId, String oldPassword, String newPassword) {
+        if (newPassword == null || newPassword.isBlank() || newPassword.length() < 8) {
+            throw new IllegalArgumentException("New password must be at least 8 characters long");
+        }
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || auth.getName() == null) {
+            throw new AccessDeniedException("Unauthenticated");
+        }
+
+        boolean isSuperUser = auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_SUPERUSER"));
+
+        String currentUsername = auth.getName();
+
+        if (!isSuperUser) {
+            if (!user.getUsername().equals(currentUsername)) {
+                throw new AccessDeniedException("You can only change your own password");
+            }
+            if (oldPassword == null || oldPassword.isBlank()) {
+                throw new IllegalArgumentException("Old password is required");
+            }
+            if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+                throw new AccessDeniedException("Old password is incorrect");
+            }
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        User saved = userRepository.save(user);
+        return userMapper.toDto(saved);
+    }
+
 
     private void assignSingleRoleToUser(User user, Role role) {
         user.setRole(role);

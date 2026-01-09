@@ -14,8 +14,8 @@ public interface CellMapper {
     CellDto toDto(Cell cell);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "row", ignore = true)      // задаётся в сервисе
-    @Mapping(target = "column", ignore = true)   // задаётся в сервисе
+    @Mapping(target = "row", ignore = true)
+    @Mapping(target = "column", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
     @Mapping(target = "createdDate", ignore = true)

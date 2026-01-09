@@ -1,4 +1,4 @@
-package by.bntu.salaryapp.infrastructure.persistence.specifications.table.dataTable;
+package by.bntu.salaryapp.infrastructure.persistence.specifications.dataTable.dataTable;
 
 import by.bntu.salaryapp.domain.model.dataTable.DataTable;
 import by.bntu.salaryapp.domain.model.user.User;

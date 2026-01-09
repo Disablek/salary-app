@@ -14,7 +14,7 @@ public record UserAccessibleBySpecification(User currentUser) implements Specifi
                                  CriteriaQuery<?> query,
                                  @NonNull CriteriaBuilder criteriaBuilder) {
         if (currentUser == null) {
-            return criteriaBuilder.isTrue(criteriaBuilder.literal(false));
+            return criteriaBuilder.conjunction();
         }
 
         Predicate predicate = criteriaBuilder.conjunction();
@@ -27,7 +27,7 @@ public record UserAccessibleBySpecification(User currentUser) implements Specifi
             return predicate;
         }
         else {
-            return criteriaBuilder.isTrue(criteriaBuilder.literal(false));
+            return criteriaBuilder.conjunction();
         }
     }
 }
