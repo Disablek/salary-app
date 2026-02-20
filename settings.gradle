@@ -1,0 +1,5 @@
+rootProject.name = 'salary-app'
+
+include 'api-gateway'
+include 'service-registry'
+include 'user-service'

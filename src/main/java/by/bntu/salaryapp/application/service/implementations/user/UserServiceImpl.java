@@ -43,7 +43,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserDtoOutput create(UserDtoInput dto) {
         String email = dto.getEmail() != null ? dto.getEmail().trim() : null;
-        String username = dto.getUsername() != null ? dto.getUsername().trim() : null;
+        String user
+
+        name = dto.getUsername() != null ? dto.getUsername().trim() : null;
 
         checkEmailUnique(email);
         checkUsernameUnique(username);
