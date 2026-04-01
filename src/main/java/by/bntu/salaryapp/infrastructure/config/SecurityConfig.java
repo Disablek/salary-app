@@ -27,6 +27,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @EnableWebSecurity
 @EnableMethodSecurity
 @RequiredArgsConstructor
+@SuppressWarnings("deprecation")
 public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -49,7 +50,7 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/**").hasAnyRole("ADMIN", "CLIENT")
+                        .requestMatchers("/api/**").hasAnyRole("ADMIN", "CLIENT", "SUPERUSER")
                         .requestMatchers("/swagger-ui/**", "/swagger-resources/*", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))

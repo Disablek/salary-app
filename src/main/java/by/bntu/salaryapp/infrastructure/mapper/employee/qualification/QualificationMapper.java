@@ -1,10 +1,11 @@
 package by.bntu.salaryapp.infrastructure.mapper.employee.qualification;
 
+import by.bntu.salaryapp.infrastructure.mapper.MapStructConfig;
 import by.bntu.salaryapp.application.dto.employee.qualification.QualificationDto;
 import by.bntu.salaryapp.domain.model.employee.Qualification;
 import org.mapstruct.*;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
+@Mapper(config = MapStructConfig.class)
 public interface QualificationMapper {
     @Mapping(source = "createdBy.id", target = "createdBy")
     @Mapping(source = "updatedBy.id", target = "updatedBy")

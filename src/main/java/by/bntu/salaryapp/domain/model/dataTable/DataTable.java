@@ -22,9 +22,11 @@ public class DataTable extends BaseAuditingEntity {
     @NotEmpty
     private String description;
 
-    @OneToMany(mappedBy = "table", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "mainTable", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Builder.Default
     private Set<Column> columns = new HashSet<>();
 
-    @OneToMany(mappedBy = "mainTable", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "table", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Builder.Default
     private Set<Row> rows = new HashSet<>();
 }

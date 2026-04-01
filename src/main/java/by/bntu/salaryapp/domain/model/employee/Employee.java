@@ -39,6 +39,7 @@ public class Employee extends BaseAuditingEntity
             joinColumns = @JoinColumn(name = "employee_id"),
             inverseJoinColumns = @JoinColumn(name = "subject_id")
     )
+    @Builder.Default
     private Set<Subject> subjects = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)

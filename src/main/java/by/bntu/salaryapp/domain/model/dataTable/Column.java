@@ -40,5 +40,6 @@ public class Column extends BaseAuditingEntity {
     private Coefficient coefficient;
 
     @OneToMany(mappedBy = "column", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private Set<Cell> cells = new HashSet<>();
 }

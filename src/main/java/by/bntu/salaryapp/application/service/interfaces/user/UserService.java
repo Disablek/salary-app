@@ -22,4 +22,8 @@ public interface UserService {
     List<UserDtoOutput> getUsersByFilter(UserFilterDto filter);
 
     UserDtoOutput changePassword(UUID userId, String oldPassword, String newPassword);
+
+    UserDtoOutput getByEmailAsDto(String email);
+
+    UserDtoOutput getByUsernameAsDto(String username);
 }

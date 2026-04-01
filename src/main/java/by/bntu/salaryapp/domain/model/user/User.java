@@ -53,6 +53,33 @@ public class User extends BaseAuditingEntity implements UserDetails {
     @Override
     @Transient
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        if (role != null) {
+            return java.util.Collections.singletonList(role);
+        }
+        return java.util.Collections.emptyList();
+    }
+
+    @Override
+    @Transient
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    @Transient
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    @Transient
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    @Transient
+    public boolean isEnabled() {
+        return true;
     }
 }

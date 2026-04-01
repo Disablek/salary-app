@@ -24,7 +24,7 @@ export default function Navbar() {
                     <>
                         <Link to="/profile">Профиль</Link>
                         <Link to="/datatables">Таблицы</Link>
-                        {user.role === 'ROLE_SUPERUSER' && <Link to="/admin">Админка</Link>}
+                        {user.roleName === 'ROLE_SUPERUSER' && <Link to="/admin">Админка</Link>}
                         <button onClick={handleLogout} className="nav-btn" style={{ marginLeft: '20px' }}>
                             Выход
                         </button>

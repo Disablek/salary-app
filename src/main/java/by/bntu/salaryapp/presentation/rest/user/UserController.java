@@ -8,6 +8,8 @@ import by.bntu.salaryapp.application.dto.user.user.UserFilterDto;
 import by.bntu.salaryapp.application.service.interfaces.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,6 +23,8 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 public class UserController implements UserEndpoint {
+
+    private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
     private final UserService userService;
 
@@ -81,30 +85,29 @@ public class UserController implements UserEndpoint {
         userService.delete(userId);
     }
 
-    // ----------------- get by id -----------------
-    @Override
-    @GetMapping(ApiEndpoints.User.BY_ID)
-    public UserDtoOutput getUserById(@PathVariable UUID userId) {
-        return userService.getById(userId);
-    }
-
     // ----------------- get current user -----------------
     @Override
     @GetMapping(ApiEndpoints.User.CURRENT_USER)
     public UserDtoOutput getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication.getName() == null) {
+            log.warn("No authenticated user in SecurityContext");
             throw new IllegalStateException("No authenticated user");
         }
         String username = authentication.getName();
+        log.info("Getting current user: {}", username);
+        log.debug("User authorities: {}", authentication.getAuthorities());
 
-        // Recommended to add userService.getByUsername(username) for efficient lookup.
-        // Temporary fallback: linear search (works but inefficient)
-        List<UserDtoOutput> all = userService.getAll();
-        return all.stream()
-                .filter(u -> username.equals(u.getUsername()) || username.equals(u.getEmail()))
-                .findFirst()
-                .orElseThrow(() -> new IllegalStateException("Current user not found"));
+        UserDtoOutput user = userService.getByUsernameAsDto(username);
+        log.info("Current user retrieved: {} with roleName: {}", user.getUsername(), user.getRoleName());
+        return user;
+    }
+
+    // ----------------- get by id -----------------
+    @Override
+    @GetMapping(ApiEndpoints.User.BY_ID)
+    public UserDtoOutput getUserById(@PathVariable UUID userId) {
+        return userService.getById(userId);
     }
 
     // ----------------- helpers -----------------

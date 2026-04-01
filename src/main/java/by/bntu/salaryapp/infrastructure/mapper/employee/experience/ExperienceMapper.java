@@ -1,10 +1,11 @@
 package by.bntu.salaryapp.infrastructure.mapper.employee.experience;
 
+import by.bntu.salaryapp.infrastructure.mapper.MapStructConfig;
 import by.bntu.salaryapp.application.dto.employee.experience.ExperienceDto;
 import by.bntu.salaryapp.domain.model.employee.Experience;
 import org.mapstruct.*;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
+@Mapper(config = MapStructConfig.class)
 public interface ExperienceMapper {
     @Mapping(source = "createdBy.id", target = "createdBy")
     @Mapping(source = "updatedBy.id", target = "updatedBy")

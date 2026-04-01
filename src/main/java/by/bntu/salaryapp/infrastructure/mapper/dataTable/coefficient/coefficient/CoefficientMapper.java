@@ -1,5 +1,6 @@
 package by.bntu.salaryapp.infrastructure.mapper.dataTable.coefficient.coefficient;
 
+import by.bntu.salaryapp.infrastructure.mapper.MapStructConfig;
 import by.bntu.salaryapp.application.dto.dataTable.coefficient.coefficient.CoefficientDto;
 import by.bntu.salaryapp.domain.model.BaseAuditingEntity;
 import by.bntu.salaryapp.domain.model.dataTable.Column; // Импорт Column
@@ -11,7 +12,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
+@Mapper(config = MapStructConfig.class)
 public interface CoefficientMapper {
     @Mapping(source = "createdBy.id", target = "createdBy")
     @Mapping(source = "updatedBy.id", target = "updatedBy")

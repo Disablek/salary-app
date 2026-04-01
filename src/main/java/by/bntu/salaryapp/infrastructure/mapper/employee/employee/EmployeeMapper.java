@@ -1,10 +1,11 @@
 package by.bntu.salaryapp.infrastructure.mapper.employee.employee;
 
+import by.bntu.salaryapp.infrastructure.mapper.MapStructConfig;
 import by.bntu.salaryapp.application.dto.employee.employee.EmployeeDto;
 import by.bntu.salaryapp.domain.model.employee.Employee;
 import org.mapstruct.*;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
+@Mapper(config = MapStructConfig.class)
 public interface EmployeeMapper {
 
     @Mapping(
@@ -14,6 +15,7 @@ public interface EmployeeMapper {
     @Mapping(source = "position.id", target = "position_id")
     @Mapping(source = "qualification.id", target = "qualification_id")
     @Mapping(source = "experience.id", target = "experience_id")
+    @Mapping(target = "subjects_id", ignore = true)
     @Mapping(source = "createdBy.id", target = "createdBy")
     @Mapping(source = "updatedBy.id", target = "updatedBy")
     @Mapping(source = "createdDate", target = "createdAt")
@@ -35,6 +37,9 @@ public interface EmployeeMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "firstName", ignore = true)
+    @Mapping(target = "lastName", ignore = true)
+    @Mapping(target = "surName", ignore = true)
     @Mapping(target = "position", ignore = true)
     @Mapping(target = "qualification", ignore = true)
     @Mapping(target = "experience", ignore = true)

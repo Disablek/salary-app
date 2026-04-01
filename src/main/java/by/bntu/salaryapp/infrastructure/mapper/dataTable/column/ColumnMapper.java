@@ -1,5 +1,6 @@
 package by.bntu.salaryapp.infrastructure.mapper.dataTable.column;
 
+import by.bntu.salaryapp.infrastructure.mapper.MapStructConfig;
 import by.bntu.salaryapp.application.dto.dataTable.column.ColumnDto;
 import by.bntu.salaryapp.domain.model.dataTable.Cell;
 import by.bntu.salaryapp.domain.model.dataTable.Column;
@@ -9,7 +10,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
+@Mapper(config = MapStructConfig.class)
 public interface ColumnMapper {
     @Mapping(source = "mainTable.id", target = "dataTable_id")
     @Mapping(source = "coefficient.id", target = "coefficient_id")

@@ -25,5 +25,6 @@ public class Row extends BaseAuditingEntity {
     private Employee employee;
 
     @OneToMany(mappedBy = "row", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private Set<Cell> cells = new HashSet<>();
 }

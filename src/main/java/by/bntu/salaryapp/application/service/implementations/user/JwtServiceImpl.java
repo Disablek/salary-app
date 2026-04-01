@@ -32,7 +32,9 @@ public class JwtServiceImpl {
             claims.put("email", customUserDetails.getEmail());
             claims.put("fname", customUserDetails.getFirstName());
             claims.put("sname", customUserDetails.getSurname());
-            claims.put("role", customUserDetails.getRole());
+            if (customUserDetails.getRole() != null) {
+                claims.put("role", customUserDetails.getRole().getName());
+            }
         }
         return generateToken(claims, userDetails);
     }

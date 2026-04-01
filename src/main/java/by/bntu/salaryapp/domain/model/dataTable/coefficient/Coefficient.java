@@ -44,6 +44,7 @@ public class Coefficient extends BaseAuditingEntity {
     private Column baseColumn;
 
     @OneToMany(mappedBy = "coefficient", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private Set<CoefficientRule> coefficientRules = new HashSet<>();
 
     // --- SUMMATION ---
@@ -53,5 +54,6 @@ public class Coefficient extends BaseAuditingEntity {
             joinColumns = @JoinColumn(name = "coefficient_id"),
             inverseJoinColumns = @JoinColumn(name = "column_id")
     )
+    @Builder.Default
     private Set<Column> summationColumns = new HashSet<>();
 }

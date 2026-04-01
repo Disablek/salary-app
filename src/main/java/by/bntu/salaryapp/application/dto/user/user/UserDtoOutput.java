@@ -40,6 +40,8 @@ public class UserDtoOutput {
 
     private UUID roleId;
 
+    private String roleName;
+
     @CreatedBy
     private UUID createdBy;
 

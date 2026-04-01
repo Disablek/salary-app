@@ -17,5 +17,5 @@ public interface EmployeeRepository extends JpaRepository<Employee, UUID>,
 
     Set<Employee> findEmployeeByExperience(Experience experience);
 
-    Set<Employee> findEmployeeBySubject(Set<Subject> subject);
+    // Set<Employee> findEmployeeBySubject(Set<Subject> subject);
 }

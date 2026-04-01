@@ -1,10 +1,11 @@
 package by.bntu.salaryapp.infrastructure.mapper.employee.position;
 
+import by.bntu.salaryapp.infrastructure.mapper.MapStructConfig;
 import by.bntu.salaryapp.application.dto.employee.position.PositionDto;
 import by.bntu.salaryapp.domain.model.employee.Position;
 import org.mapstruct.*;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
+@Mapper(config = MapStructConfig.class)
 public interface PositionMapper {
     @Mapping(source = "createdBy.id", target = "createdBy")
     @Mapping(source = "updatedBy.id", target = "updatedBy")

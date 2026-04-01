@@ -9,7 +9,7 @@ export default function ProtectedRoute({ children, roleRequired }) {
         return <Navigate to="/login" replace />;
     }
 
-    if (roleRequired && user.role !== roleRequired) {
+    if (roleRequired && user.roleName !== roleRequired) {
         return <div className="container"><h3>Access Denied (403)</h3></div>;
     }
 

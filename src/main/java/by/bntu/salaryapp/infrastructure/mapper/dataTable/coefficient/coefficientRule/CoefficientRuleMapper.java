@@ -1,10 +1,11 @@
 package by.bntu.salaryapp.infrastructure.mapper.dataTable.coefficient.coefficientRule;
 
+import by.bntu.salaryapp.infrastructure.mapper.MapStructConfig;
 import by.bntu.salaryapp.application.dto.dataTable.coefficient.coefficientRule.CoefficientRuleDto;
 import by.bntu.salaryapp.domain.model.dataTable.coefficient.CoefficientRule;
 import org.mapstruct.*;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
+@Mapper(config = MapStructConfig.class)
 public interface CoefficientRuleMapper {
     @Mapping(source = "coefficient.id", target = "coefficientId")
     @Mapping(source = "createdBy.id", target = "createdBy")

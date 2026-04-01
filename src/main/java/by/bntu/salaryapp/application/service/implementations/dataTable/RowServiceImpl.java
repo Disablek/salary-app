@@ -31,12 +31,15 @@ public class RowServiceImpl implements RowService {
     private final RowMapper rowMapper;
     private final RowListMapper rowListMapper;
 
+
+
     @Override
     @Transactional
     @PreAuthorize("hasAnyRole('SUPERUSER', 'ADMIN','USER')")
     public RowDto create(RowDto dto) {
         DataTable table = dataTableRepository.findById(dto.getTableId())
                 .orElseThrow(() -> new EntityNotFoundException("DataTable not found with id: " + dto.getTableId()));
+
 
         Employee employee = null;
         if (dto.getEmployeeId() != null) {

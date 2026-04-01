@@ -21,9 +21,11 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (email, password) => {
         try {
-            const { user } = await mockApi.login(email, password);
-            localStorage.setItem('currentUser', JSON.stringify(user)); // Сохраняем сессию
-            setUser(user);
+            const response = await mockApi.login(email, password);
+            // Бэкенд может вернуть { user, token } или просто { ...userData, token }
+            const userData = response.user || response;
+            localStorage.setItem('currentUser', JSON.stringify(userData));
+            setUser(userData);
             return true;
         } catch (error) {
             alert(error);

@@ -14,6 +14,8 @@ import by.bntu.salaryapp.infrastructure.persistence.specifications.user.user.Use
 import by.bntu.salaryapp.infrastructure.persistence.specifications.user.user.UserFilterBySpecification;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,6 +35,8 @@ import java.util.UUID;
 @Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
+    private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
+
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final UserMapper userMapper;
@@ -42,6 +46,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDtoOutput create(UserDtoInput dto) {
+        log.info("Creating new user with username: {}", dto.getUsername());
         String email = dto.getEmail() != null ? dto.getEmail().trim() : null;
         String username = dto.getUsername() != null ? dto.getUsername().trim() : null;
 
@@ -53,6 +58,7 @@ public class UserServiceImpl implements UserService {
         user.setUsername(username);
 
         if (dto.getPassword() == null || dto.getPassword().isBlank()) {
+            log.warn("Password is required for user creation");
             throw new IllegalArgumentException("Password is required");
         }
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
@@ -70,12 +76,14 @@ public class UserServiceImpl implements UserService {
         }
 
         User savedUser = userRepository.save(user);
+        log.info("User created successfully with id: {} and username: {}", savedUser.getId(), savedUser.getUsername());
         return userMapper.toDto(savedUser);
     }
 
     @Override
     @Transactional
     public UserDtoOutput update(UUID id, UserDtoInput dto) {
+        log.info("Updating user with id: {}", id);
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
 
@@ -86,6 +94,7 @@ public class UserServiceImpl implements UserService {
                 .anyMatch(a -> a.getAuthority().equals("ROLE_SUPERUSER"));
 
         if (!isSuperUser && !existingUser.getUsername().equals(currentUsername)) {
+            log.warn("Access denied: user {} attempted to update user {}", currentUsername, existingUser.getUsername());
             throw new AccessDeniedException("You can only update your own profile");
         }
 
@@ -97,9 +106,6 @@ public class UserServiceImpl implements UserService {
             existingUser.setEmail(newEmail);
         }
 
-        // TODO: изменять JWT токен
-        // Важный момент: если пользователь меняет себе username, то при следующем запросе
-        // токен может стать невалидным (зависит от реализации JWT), но в базе менять надо.
         if (newUsername != null && !newUsername.equals(existingUser.getUsername())) {
             checkUsernameUnique(newUsername);
             existingUser.setUsername(newUsername);
@@ -114,6 +120,7 @@ public class UserServiceImpl implements UserService {
         UUID roleId = dto.getRoleId();
         if (roleId != null) {
             if (!isSuperUser) {
+                log.warn("Access denied: only superuser can change roles");
                 throw new AccessDeniedException("Only SUPERUSER can change roles");
             } else {
                 Role role = roleRepository.findById(dto.getRoleId())
@@ -123,12 +130,14 @@ public class UserServiceImpl implements UserService {
         }
 
         User updatedUser = userRepository.save(existingUser);
+        log.info("User updated successfully with id: {}", updatedUser.getId());
         return userMapper.toDto(updatedUser);
     }
 
     @Override
     @Transactional
     public void delete(UUID id) {
+        log.info("Deleting user with id: {}", id);
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
 
@@ -139,9 +148,11 @@ public class UserServiceImpl implements UserService {
                 .anyMatch(a -> a.getAuthority().equals("ROLE_SUPERUSER"));
 
         if (!isSuperUser && !existingUser.getUsername().equals(currentUsername)) {
+            log.warn("Access denied: user {} attempted to delete user {}", currentUsername, existingUser.getUsername());
             throw new AccessDeniedException("You can only delete your own profile");
         }
         userRepository.deleteById(id);
+        log.info("User deleted successfully with id: {}", id);
     }
 
     @Override
@@ -180,7 +191,9 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDtoOutput changePassword(UUID userId, String oldPassword, String newPassword) {
+        log.info("Changing password for user with id: {}", userId);
         if (newPassword == null || newPassword.isBlank() || newPassword.length() < 8) {
+            log.warn("Invalid password: too short");
             throw new IllegalArgumentException("New password must be at least 8 characters long");
         }
 
@@ -189,6 +202,7 @@ public class UserServiceImpl implements UserService {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null || auth.getName() == null) {
+            log.warn("Unauthenticated access attempt");
             throw new AccessDeniedException("Unauthenticated");
         }
 
@@ -199,45 +213,86 @@ public class UserServiceImpl implements UserService {
 
         if (!isSuperUser) {
             if (!user.getUsername().equals(currentUsername)) {
+                log.warn("Access denied: user {} attempted to change password for user {}", currentUsername, user.getUsername());
                 throw new AccessDeniedException("You can only change your own password");
             }
             if (oldPassword == null || oldPassword.isBlank()) {
+                log.warn("Old password is required");
                 throw new IllegalArgumentException("Old password is required");
             }
             if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+                log.warn("Incorrect old password for user: {}", user.getUsername());
                 throw new AccessDeniedException("Old password is incorrect");
             }
         }
 
         user.setPassword(passwordEncoder.encode(newPassword));
         User saved = userRepository.save(user);
+        log.info("Password changed successfully for user: {}", saved.getUsername());
         return userMapper.toDto(saved);
     }
 
 
     private void assignSingleRoleToUser(User user, Role role) {
         user.setRole(role);
+        log.debug("Role {} assigned to user: {}", role.getName(), user.getUsername());
     }
 
     private void checkEmailUnique(String email) {
         if (email != null && userRepository.existsByEmail(email)) {
+            log.warn("Email already exists: {}", email);
             throw new IllegalArgumentException("User with email '" + email + "' already exists");
         }
     }
 
     private void checkUsernameUnique(String username) {
         if (username != null && userRepository.existsByUsername(username)) {
+            log.warn("Username already exists: {}", username);
             throw new IllegalArgumentException("User with username '" + username + "' already exists");
         }
     }
 
     public UserDetailsService userDetailsService() {
-        return this::getByEmail;
+        return username -> {
+            log.debug("Loading user details for: {}", username);
+            User user = userRepository.findByUsername(username)
+                    .orElseGet(() -> {
+                        log.debug("User not found by username, trying email: {}", username);
+                        return userRepository.findByEmail(username)
+                                .orElseThrow(() -> new IllegalArgumentException("User not found: " + username));
+                    });
+            log.debug("User loaded: {} with role: {}", user.getUsername(), user.getRole() != null ? user.getRole().getName() : "NO_ROLE");
+            return user;
+        };
     }
 
     public User getByEmail(String email) {
         return userRepository.findByEmail(email).
                 orElseThrow(() -> new IllegalArgumentException("User not found with email: " + email));
 
+    }
+
+    public User getByUsername(String username) {
+        log.debug("Fetching user by username: {}", username);
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with username: " + username));
+        log.debug("User fetched: {} with role: {}", user.getUsername(), user.getRole() != null ? user.getRole().getName() : "NO_ROLE");
+        return user;
+    }
+
+    public UserDtoOutput getByEmailAsDto(String email) {
+        log.debug("Fetching user by email: {}", email);
+        User user = getByEmail(email);
+        UserDtoOutput dto = userMapper.toDto(user);
+        log.debug("User fetched: {} with role: {}", dto.getUsername(), dto.getRoleId());
+        return dto;
+
+    }
+    public UserDtoOutput getByUsernameAsDto(String username) {
+        log.debug("Fetching user by username: {}", username);
+        User user = getByUsername(username);
+        UserDtoOutput dto = userMapper.toDto(user);
+        log.debug("User fetched: {} with role: {}", dto.getUsername(), dto.getRoleId());
+        return dto;
     }
 }
