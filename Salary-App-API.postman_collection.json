@@ -1,0 +1,887 @@
+{
+  "info": {
+    "_postman_id": "salary-app-api-collection",
+    "name": "Salary App API",
+    "description": "REST API endpoints for Salary-App microservices",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@salary-app.local\",\n  \"password\": \"Admin@123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/users",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/users/{{user_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "{{user_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"newuser@salary-app.local\",\n  \"password\": \"SecurePass@123\",\n  \"firstName\": \"Jane\",\n  \"lastName\": \"Smith\",\n  \"role\": \"USER\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/users",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"updated@salary-app.local\",\n  \"firstName\": \"Jane\",\n  \"lastName\": \"Smith-Updated\",\n  \"role\": \"USER\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/users/{{user_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "{{user_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/users/{{user_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "{{user_id}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Employees",
+      "item": [
+        {
+          "name": "Get All Employees",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/employees",
+              "host": ["{{base_url}}"],
+              "path": ["api", "employees"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Employee by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/employees/{{employee_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "employees", "{{employee_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Employees",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Иван\",\n  \"positionId\": null\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/employees/search",
+              "host": ["{{base_url}}"],
+              "path": ["api", "employees", "search"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Employee",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Петр\",\n  \"lastName\": \"Иванов\",\n  \"patronymic\": \"Сергеевич\",\n  \"email\": \"petr.ivanov@company.com\",\n  \"phoneNumber\": \"+375297654321\",\n  \"positionId\": null,\n  \"subjectIds\": [],\n  \"qualificationIds\": [],\n  \"yearsOfExperience\": 5,\n  \"hireDate\": \"2024-01-15\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/employees",
+              "host": ["{{base_url}}"],
+              "path": ["api", "employees"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Employee",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Петр\",\n  \"lastName\": \"Иванов\",\n  \"email\": \"petr.updated@company.com\",\n  \"phoneNumber\": \"+375299999999\",\n  \"positionId\": null,\n  \"subjectIds\": [],\n  \"qualificationIds\": [],\n  \"yearsOfExperience\": 6,\n  \"hireDate\": \"2024-01-15\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/employees/{{employee_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "employees", "{{employee_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Employee",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/employees/{{employee_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "employees", "{{employee_id}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Positions",
+      "item": [
+        {
+          "name": "Get All Positions",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/positions",
+              "host": ["{{base_url}}"],
+              "path": ["api", "positions"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Position by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/positions/{{position_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "positions", "{{position_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Position",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Менеджер проектов\",\n  \"description\": \"Project Manager\",\n  \"salaryBase\": 1800.00\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/positions",
+              "host": ["{{base_url}}"],
+              "path": ["api", "positions"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Position",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Менеджер проектов\",\n  \"description\": \"Senior Project Manager\",\n  \"salaryBase\": 2000.00\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/positions/{{position_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "positions", "{{position_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Position",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/positions/{{position_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "positions", "{{position_id}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Subjects",
+      "item": [
+        {
+          "name": "Get All Subjects",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/subjects",
+              "host": ["{{base_url}}"],
+              "path": ["api", "subjects"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Subject by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/subjects/{{subject_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "subjects", "{{subject_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Subject",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"DevOps\",\n  \"description\": \"DevOps и инфраструктура\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/subjects",
+              "host": ["{{base_url}}"],
+              "path": ["api", "subjects"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Subject",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"DevOps\",\n  \"description\": \"DevOps и облачная инфраструктура\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/subjects/{{subject_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "subjects", "{{subject_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Subject",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/subjects/{{subject_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "subjects", "{{subject_id}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Qualifications",
+      "item": [
+        {
+          "name": "Get All Qualifications",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/qualifications",
+              "host": ["{{base_url}}"],
+              "path": ["api", "qualifications"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Qualification by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/qualifications/{{qualification_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "qualifications", "{{qualification_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Qualification",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Middle Developer\",\n  \"level\": \"2\",\n  \"description\": \"Опыт 2-5 лет\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/qualifications",
+              "host": ["{{base_url}}"],
+              "path": ["api", "qualifications"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Qualification",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Middle Developer\",\n  \"level\": \"2\",\n  \"description\": \"Опыт 2-5 лет (обновлено)\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/qualifications/{{qualification_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "qualifications", "{{qualification_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Qualification",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/qualifications/{{qualification_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "qualifications", "{{qualification_id}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Experiences",
+      "item": [
+        {
+          "name": "Get All Experiences",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/experiences",
+              "host": ["{{base_url}}"],
+              "path": ["api", "experiences"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Experience by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/experiences/{{experience_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "experiences", "{{experience_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Experience",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"yearsOfExperience\": 5,\n  \"startDate\": \"2019-06-01\",\n  \"endDate\": null,\n  \"description\": \"Текущая работа\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/experiences",
+              "host": ["{{base_url}}"],
+              "path": ["api", "experiences"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Experience",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"yearsOfExperience\": 6,\n  \"startDate\": \"2019-06-01\",\n  \"endDate\": null,\n  \"description\": \"Текущая работа (обновлено)\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/experiences/{{experience_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "experiences", "{{experience_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Experience",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/experiences/{{experience_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "experiences", "{{experience_id}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "DataTables",
+      "item": [
+        {
+          "name": "Get All DataTables",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/datatables",
+              "host": ["{{base_url}}"],
+              "path": ["api", "datatables"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get DataTable by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/datatables/{{datatable_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "datatables", "{{datatable_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create DataTable",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Зарплата за февраль 2024\",\n  \"description\": \"Расчет зарплаты за февраль\",\n  \"columns\": [\n    {\n      \"name\": \"ФИО\",\n      \"type\": \"STRING\",\n      \"order\": 1\n    },\n    {\n      \"name\": \"Должность\",\n      \"type\": \"STRING\",\n      \"order\": 2\n    },\n    {\n      \"name\": \"Оклад\",\n      \"type\": \"DECIMAL\",\n      \"order\": 3\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/datatables",
+              "host": ["{{base_url}}"],
+              "path": ["api", "datatables"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update DataTable",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Зарплата за февраль 2024 (обновленная)\",\n  \"description\": \"Расчет зарплаты за февраль - обновленная версия\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/datatables/{{datatable_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "datatables", "{{datatable_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete DataTable",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/datatables/{{datatable_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "datatables", "{{datatable_id}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "user_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "employee_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "position_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "subject_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "qualification_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "experience_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "datatable_id",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

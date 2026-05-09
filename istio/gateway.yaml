@@ -1,0 +1,51 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: salary-app-gateway
+  namespace: default
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: salary-app-vs
+  namespace: default
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - salary-app-gateway
+  http:
+  - match:
+    - uri:
+        prefix: "/api/auth"
+    route:
+    - destination:
+        host: auth-service
+        port:
+          number: 8081
+  - match:
+    - uri:
+        prefix: "/api/users"
+    route:
+    - destination:
+        host: user-service
+        port:
+          number: 8082
+  - match:
+    - uri:
+        prefix: "/api/datatables"
+    route:
+    - destination:
+        host: datatable-service
+        port:
+          number: 8084

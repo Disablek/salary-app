@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "salary-app.fullname" . }}-auth
+  labels:
+    app: auth-service
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: auth-service
+  template:
+    metadata:
+      labels:
+        app: auth-service
+    spec:
+      containers:
+      - name: auth-service
+        image: {{ .Values.image.registry }}/auth-service:{{ .Values.image.tag }}
+        ports:
+        - containerPort: {{ .Values.services.auth.port }}
+        env:
+        - name: JWT_SIGNING_KEY
+          value: {{ .Values.config.jwtSigningKey | quote }}
+        - name: DB_USERNAME
+          value: {{ .Values.config.dbUsername | quote }}
+        - name: DB_PASSWORD
+          value: {{ .Values.config.dbPassword | quote }}
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"

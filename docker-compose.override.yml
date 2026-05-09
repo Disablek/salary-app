@@ -1,0 +1,65 @@
+#services:
+#  auth-service:
+#    environment:
+#      SPRING_PROFILES_ACTIVE: docker
+#      EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE: http://eureka-server:8761/eureka/
+#      SPRING_ZIPKIN_BASE_URL: http://zipkin:9411/
+#      SPRING_RABBITMQ_HOST: rabbitmq
+#      CONFIG_SERVER_URL: http://config-server:8888
+#      EUREKA_URL: http://eureka-server:8761/eureka/
+#      ZIPKIN_URL: http://zipkin:9411/api/v2/spans
+#      SPRING_CONFIG_IMPORT: optional:configserver:http://config-server:8888
+#      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
+#      MANAGEMENT_TRACING_SAMPLING_PROBABILITY: '1'
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/user_db
+#      SPRING_DATASOURCE_USERNAME: postgres
+#      SPRING_DATASOURCE_PASSWORD: 2580
+#      DB_USERNAME: postgres
+#      DB_PASSWORD: 2580
+#      TOKEN_SIGNING_KEY: mySecretKey
+#
+#  user-service:
+#    environment:
+#      SPRING_MVC_PATHMATCH_MATCHING_STRATEGY: ant_path_matcher
+#      SPRING_PROFILES_ACTIVE: docker
+#      EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE: http://eureka-server:8761/eureka/
+#      SPRING_ZIPKIN_BASE_URL: http://zipkin:9411/
+#      SPRING_RABBITMQ_HOST: rabbitmq
+#      CONFIG_SERVER_URL: http://config-server:8888
+#      EUREKA_URL: http://eureka-server:8761/eureka/
+#      ZIPKIN_URL: http://zipkin:9411/api/v2/spans
+#      SPRING_CONFIG_IMPORT: configserver:http://config-server:8888
+#      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
+#      MANAGEMENT_TRACING_SAMPLING_PROBABILITY: '1'
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/user_db
+#      SPRING_DATASOURCE_USERNAME: postgres
+#      SPRING_DATASOURCE_PASSWORD: 2580
+#      DB_USERNAME: postgres
+#      DB_PASSWORD: 2580
+#
+#  datatable-service:
+#    environment:
+#      SPRING_PROFILES_ACTIVE: docker
+#      EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE: http://eureka-server:8761/eureka/
+#      SPRING_ZIPKIN_BASE_URL: http://zipkin:9411/
+#      SPRING_RABBITMQ_HOST: rabbitmq
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/datatable_db
+#      DB_USERNAME: postgres
+#      DB_PASSWORD: 2580
+#
+#  employee-service:
+#    environment:
+#      SPRING_PROFILES_ACTIVE: docker
+#      EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE: http://eureka-server:8761/eureka/
+#      SPRING_ZIPKIN_BASE_URL: http://zipkin:9411/
+#      SPRING_RABBITMQ_HOST: rabbitmq
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/employee_db
+#      DB_USERNAME: postgres
+#      DB_PASSWORD: 2580
+#
+#  api-gateway:
+#    environment:
+#      SPRING_PROFILES_ACTIVE: docker
+#      EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE: http://eureka-server:8761/eureka/
+#      SPRING_ZIPKIN_BASE_URL: http://zipkin:9411/
+#      TOKEN_SIGNING_KEY: mySecretKey
