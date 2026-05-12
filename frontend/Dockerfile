@@ -1,13 +1,13 @@
 # Build stage
-FROM node:18-alpine as build
+FROM node:18-alpine AS build
 
 WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
 
-# Install all dependencies (including dev dependencies for build)
-RUN npm ci
+# Install dependencies exactly as locked for reproducible Docker builds
+RUN npm ci --legacy-peer-deps
 
 # Copy source code
 COPY . .

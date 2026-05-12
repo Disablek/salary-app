@@ -25,7 +25,7 @@ import {
   Box,
   Alert
 } from '@mui/material';
-import { Edit, Delete } from '@mui/icons-material';
+import { Edit, Delete, Add } from '@mui/icons-material';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { usersApi } from '../services/api';
@@ -108,6 +108,9 @@ const UserManagementPage: React.FC = () => {
       if (editingUser) {
         await usersApi.updateUser(editingUser.id, formData);
         toast.success('Пользователь обновлен');
+      } else {
+        await usersApi.createUser(formData);
+        toast.success('Пользователь создан');
       }
       handleCloseDialog();
       loadUsers();
@@ -142,6 +145,13 @@ const UserManagementPage: React.FC = () => {
         <Typography variant="h4" component="h1">
           Управление пользователями
         </Typography>
+        <Button
+          variant="contained"
+          startIcon={<Add />}
+          onClick={() => handleOpenDialog()}
+        >
+          Добавить пользователя
+        </Button>
       </Box>
 
       {error && (

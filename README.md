@@ -113,10 +113,10 @@ cd services/dataTable-service
 
 ### Запуск frontend
 ```bash
-cd frontend
-npm install
-npm start
+cd front
+python -m http.server 3000
 ```
+> Вариант для Docker: `docker-compose up --build`.
 ## Production Deployment
 
 ### Docker Containerization
@@ -198,7 +198,8 @@ salary-app/
 ├── k8s/                         # Kubernetes manifests
 ├── helm/                        # Helm charts
 │   └── salary-app/
-├── frontend/                    # React приложение
+├── front/                       # Скомпилированный статический frontend
+├── frontend/                    # Исходный код React frontend (неактивен)
 ├── docker-compose.yml           # Локальная разработка
 ├── .github/workflows/           # CI/CD pipelines
 └── README.md
@@ -399,7 +400,10 @@ salary-app/
 │   ├── application.properties           # Конфигурация приложения
 │   └── db/                              # Миграции Liquibase
 ├── src/test/                            # Тесты backend
-├── frontend/                            # Исходный код frontend
+├── front/                               # Скомпилированный статический frontend
+│   ├── assets/                          # Сборка фронтенда
+│   └── index.html
+├── frontend/                            # Исходный код React frontend (неактивен)
 │   ├── src/
 │   │   ├── components/                  # React компоненты
 │   │   ├── pages/                       # Страницы приложения

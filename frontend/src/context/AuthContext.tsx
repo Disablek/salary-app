@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext, ReactNode } from 'react';
-import { User, LoginRequest, RegisterRequest } from '../types';
+import { User, RegisterRequest } from '../types';
 import { authApi } from '../services/api';
 
 interface AuthContextType {
@@ -24,7 +24,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     const initAuth = async () => {
       const storedUser = localStorage.getItem('currentUser');
-      if (storedUser) {
+      if (storedUser && storedUser !== 'undefined' && storedUser !== 'null') {
         try {
           const parsedUser = JSON.parse(storedUser);
           setUser(parsedUser);
@@ -32,6 +32,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           console.error('Error parsing stored user:', error);
           localStorage.removeItem('currentUser');
         }
+      } else {
+        localStorage.removeItem('currentUser');
       }
       setLoading(false);
     };

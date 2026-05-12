@@ -24,7 +24,7 @@ import {
 import { Add, Edit, Delete } from '@mui/icons-material';
 import { toast } from 'react-toastify';
 import { coefficientsApi, rulesApi } from '../services/api';
-import { Coefficient, Rule, CreateCoefficientRequest, UpdateCoefficientRequest, CreateRuleRequest } from '../types';
+import { Coefficient, Rule } from '../types';
 
 const CoefficientsPage: React.FC = () => {
   const [coefficients, setCoefficients] = useState<Coefficient[]>([]);
@@ -48,6 +48,8 @@ const CoefficientsPage: React.FC = () => {
     multiplier: 1,
     description: ''
   });
+
+  const [editingRule, setEditingRule] = useState<Rule | null>(null);
 
   useEffect(() => {
     loadCoefficients();
@@ -146,16 +148,53 @@ const CoefficientsPage: React.FC = () => {
     if (!selectedCoeff) return;
 
     try {
-      await rulesApi.createRule({
-        ...ruleFormData,
-        coefficientId: selectedCoeff.id
-      });
-      toast.success('Правило добавлено');
+      if (editingRule) {
+        await rulesApi.updateRule(editingRule.id, {
+          ...ruleFormData,
+          coefficientId: selectedCoeff.id
+        });
+        toast.success('Правило обновлено');
+        setEditingRule(null);
+      } else {
+        await rulesApi.createRule({
+          ...ruleFormData,
+          coefficientId: selectedCoeff.id
+        });
+        toast.success('Правило добавлено');
+      }
       setRuleFormData({ condition: '', multiplier: 1, description: '' });
       loadRules(selectedCoeff.id);
     } catch (err) {
-      toast.error('Ошибка добавления правила');
+      toast.error('Ошибка сохранения правила');
     }
+  };
+
+  const handleEditRule = (rule: Rule) => {
+    setEditingRule(rule);
+    setRuleFormData({
+      condition: rule.condition,
+      multiplier: rule.multiplier,
+      description: rule.description || ''
+    });
+  };
+
+  const handleDeleteRule = async (ruleId: number) => {
+    if (window.confirm('Вы уверены, что хотите удалить это правило?')) {
+      try {
+        await rulesApi.deleteRule(ruleId);
+        toast.success('Правило удалено');
+        if (selectedCoeff) {
+          loadRules(selectedCoeff.id);
+        }
+      } catch (err) {
+        toast.error('Ошибка удаления правила');
+      }
+    }
+  };
+
+  const handleCancelEditRule = () => {
+    setEditingRule(null);
+    setRuleFormData({ condition: '', multiplier: 1, description: '' });
   };
 
   if (loading) {
@@ -277,7 +316,9 @@ const CoefficientsPage: React.FC = () => {
         </DialogTitle>
         <DialogContent>
           <Box sx={{ mb: 3 }}>
-            <Typography variant="h6" sx={{ mb: 2 }}>Добавить правило</Typography>
+            <Typography variant="h6" sx={{ mb: 2 }}>
+              {editingRule ? 'Редактировать правило' : 'Добавить новое правило'}
+            </Typography>
             <TextField
               fullWidth
               label="Условие"
@@ -300,19 +341,40 @@ const CoefficientsPage: React.FC = () => {
               onChange={(e) => setRuleFormData({ ...ruleFormData, description: e.target.value })}
               sx={{ mb: 2 }}
             />
-            <Button onClick={handleAddRule} variant="contained">
-              Добавить правило
-            </Button>
+            <Box sx={{ display: 'flex', gap: 1 }}>
+              <Button onClick={handleAddRule} variant="contained">
+                {editingRule ? 'Сохранить правило' : 'Добавить правило'}
+              </Button>
+              {editingRule && (
+                <Button onClick={handleCancelEditRule} variant="outlined">
+                  Отмена
+                </Button>
+              )}
+            </Box>
           </Box>
 
           <Typography variant="h6" sx={{ mb: 2 }}>Существующие правила</Typography>
-          {rules.map((rule) => (
-            <Box key={rule.id} sx={{ p: 2, border: '1px solid #ddd', borderRadius: 1, mb: 1 }}>
-              <Typography><strong>Условие:</strong> {rule.condition}</Typography>
-              <Typography><strong>Множитель:</strong> {rule.multiplier}</Typography>
-              <Typography><strong>Описание:</strong> {rule.description}</Typography>
-            </Box>
-          ))}
+          {rules.length === 0 ? (
+            <Typography color="text.secondary">Нет правил</Typography>
+          ) : (
+            rules.map((rule) => (
+              <Box key={rule.id} sx={{ p: 2, border: '1px solid #ddd', borderRadius: 1, mb: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                <Box>
+                  <Typography><strong>Условие:</strong> {rule.condition}</Typography>
+                  <Typography><strong>Множитель:</strong> {rule.multiplier}</Typography>
+                  <Typography><strong>Описание:</strong> {rule.description}</Typography>
+                </Box>
+                <Box sx={{ display: 'flex', gap: 1 }}>
+                  <IconButton size="small" onClick={() => handleEditRule(rule)} color="primary">
+                    <Edit fontSize="small" />
+                  </IconButton>
+                  <IconButton size="small" onClick={() => handleDeleteRule(rule.id)} color="error">
+                    <Delete fontSize="small" />
+                  </IconButton>
+                </Box>
+              </Box>
+            ))
+          )}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseRulesDialog}>Закрыть</Button>

@@ -8,9 +8,9 @@ import org.mapstruct.*;
 @Mapper(config = MapStructConfig.class)
 public interface CoefficientRuleMapper {
     @Mapping(source = "coefficient.id", target = "coefficientId")
-    @Mapping(source = "createdBy.id", target = "createdBy")
-    @Mapping(source = "updatedBy.id", target = "updatedBy")
-    @Mapping(source = "createdDate", target = "createdAt")
+    @Mapping(target = "createdBy", expression = "java(entity.getCreatedBy() != null ? entity.getCreatedBy().getId() : null)")
+    @Mapping(target = "updatedBy", expression = "java(entity.getUpdatedBy() != null ? entity.getUpdatedBy().getId() : null)")
+    @Mapping(target = "createdAt", expression = "java(entity.getCreatedDate())")
     CoefficientRuleDto toDto(CoefficientRule entity);
 
     @Mapping(target = "id", ignore = true)

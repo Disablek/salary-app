@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
 
 @Mapper(config = MapStructConfig.class)
 public interface CoefficientMapper {
-    @Mapping(source = "createdBy.id", target = "createdBy")
-    @Mapping(source = "updatedBy.id", target = "updatedBy")
-    @Mapping(source = "createdDate", target = "createdAt")
+    @Mapping(target = "createdBy", expression = "java(coefficient.getCreatedBy() != null ? coefficient.getCreatedBy().getId() : null)")
+    @Mapping(target = "updatedBy", expression = "java(coefficient.getUpdatedBy() != null ? coefficient.getUpdatedBy().getId() : null)")
+    @Mapping(target = "createdAt", expression = "java(coefficient.getCreatedDate())")
     // Rules
     @Mapping(target = "coefficientRulesIds", expression = "java(mapRulesToIds(coefficient.getCoefficientRules()))")
     // Summation Columns

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,7 +48,7 @@ public class UserService {
         return mapToDto(saved);
     }
 
-    public UserDto getUserById(UUID id) {
+    public UserDto getUserById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         return mapToDto(user);
@@ -61,7 +60,7 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public UserDto updateUser(UUID id, CreateUserRequest request) {
+    public UserDto updateUser(Long id, CreateUserRequest request) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -83,7 +82,7 @@ public class UserService {
         return mapToDto(saved);
     }
 
-    public void deleteUser(UUID id) {
+    public void deleteUser(Long id) {
         if (!userRepository.existsById(id)) {
             throw new RuntimeException("User not found");
         }

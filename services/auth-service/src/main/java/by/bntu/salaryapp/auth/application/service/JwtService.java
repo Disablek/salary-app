@@ -10,7 +10,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -74,7 +77,24 @@ public class JwtService {
     }
 
     private Key getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(jwtSigningKey);
+        byte[] keyBytes;
+        try {
+            keyBytes = Decoders.BASE64.decode(jwtSigningKey);
+        } catch (IllegalArgumentException e) {
+            try {
+                keyBytes = Decoders.BASE64URL.decode(jwtSigningKey);
+            } catch (IllegalArgumentException ignored) {
+                keyBytes = jwtSigningKey.getBytes(StandardCharsets.UTF_8);
+            }
+        }
+        if (keyBytes.length < 32) {
+            try {
+                MessageDigest digest = MessageDigest.getInstance("SHA-256");
+                keyBytes = digest.digest(keyBytes);
+            } catch (NoSuchAlgorithmException e) {
+                throw new IllegalStateException("Unable to initialize JWT signing key", e);
+            }
+        }
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }

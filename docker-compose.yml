@@ -158,6 +158,8 @@ services:
       - "8080:8080"
     environment:
       - SPRING_BOOT_DEBUG=true
+      - SPRING_CLOUD_CONFIG_IMPORT_CHECK_ENABLED=false
+      - SPRING_APPLICATION_NAME=api-gateway
     depends_on:
       eureka-server:
         condition: service_healthy

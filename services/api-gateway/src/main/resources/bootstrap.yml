@@ -1,7 +1,14 @@
 spring:
+  application:
+    name: api-gateway
+  config:
+    import: optional:configserver:http://config-server:8888
   cloud:
     config:
       enabled: true
+      uri: http://config-server:8888
+      import-check:
+        enabled: false
       fail-fast: false
       retry:
         initial-interval: 1000

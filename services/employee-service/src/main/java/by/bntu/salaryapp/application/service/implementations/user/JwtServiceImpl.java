@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -18,11 +19,34 @@ import java.util.function.Function;
 
 @Service
 public class JwtServiceImpl {
-    @Value("${token.signing.key}")
+    @Value("${token.signing.key:wQrd5gfnUzAHa9Woqf3KgkI5r0VYFhv5u2ZpFjS6m7U=}")
     private String jwtSigningKey;
 
     public String extractUserName(String token) {
         return extractClaim(token, Claims::getSubject);
+    }
+
+    public String extractUserId(String token) {
+        return extractClaim(token, claims -> {
+            Object idClaim = claims.get("id");
+            return idClaim != null ? idClaim.toString() : null;
+        });
+    }
+
+    public String extractEmail(String token) {
+        return extractClaim(token, claims -> claims.get("email", String.class));
+    }
+
+    public String extractRole(String token) {
+        return extractClaim(token, claims -> claims.get("role", String.class));
+    }
+
+    public String extractFirstName(String token) {
+        return extractClaim(token, claims -> claims.get("fname", String.class));
+    }
+
+    public String extractSurname(String token) {
+        return extractClaim(token, claims -> claims.get("sname", String.class));
     }
 
     public String generateToken(UserDetails userDetails) {
@@ -73,7 +97,12 @@ public class JwtServiceImpl {
     }
 
     private Key getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(jwtSigningKey);
+        byte[] keyBytes;
+        try {
+            keyBytes = Decoders.BASE64.decode(jwtSigningKey);
+        } catch (IllegalArgumentException e) {
+            keyBytes = jwtSigningKey.getBytes(StandardCharsets.UTF_8);
+        }
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }

@@ -10,7 +10,7 @@ import {
   Menu,
   MenuItem
 } from '@mui/material';
-import { AccountCircle, Menu as MenuIcon } from '@mui/icons-material';
+import { AccountCircle } from '@mui/icons-material';
 import { useAuth } from '../context/AuthContext';
 import { UserRole } from '../types';
 

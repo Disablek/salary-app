@@ -1,6 +1,4 @@
 spring:
-  application:
-    name: api-gateway
   config:
     import: optional:configserver:http://config-server:8888
   cloud:
@@ -8,11 +6,6 @@ spring:
       filter:
         weight-calculator:
           enabled: false
-      routes:
-        - id: auth-service
-          uri: lb://auth-service
-          predicates:
-            - Path=/api/auth/**
       globalcors:
         add-to-simple-url-handler-mapping: true
         cors-configurations:
@@ -34,7 +27,7 @@ spring:
 
 token:
   signing:
-    key: ${TOKEN_SIGNING_KEY:mySecretKey}
+    key: ${TOKEN_SIGNING_KEY:wQrd5gfnUzAHa9Woqf3KgkI5r0VYFhv5u2ZpFjS6m7U=}
 
 eureka:
   client:

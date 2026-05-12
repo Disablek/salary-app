@@ -1,7 +1,9 @@
 :root {
-    --primary: #4f46e5;
-    --primary-hover: #4338ca;
-    --bg: #f3f4f6;
+    --primary: #006b3f;
+    --primary-hover: #004d2e;
+    --primary-soft: #e5f3eb;
+    --accent: #d6a11f;
+    --bg: #f3f7f1;
     --white: #ffffff;
     --text: #1f2937;
     --danger: #ef4444;
@@ -22,9 +24,9 @@ body {
 
 /* Navbar */
 .navbar {
-    background: var(--white);
+    background: linear-gradient(90deg, #004d2e 0%, var(--primary) 58%, #168a58 100%);
     padding: 1rem 2rem;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0, 77, 46, 0.18);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -32,10 +34,10 @@ body {
 .nav-links a {
     margin-left: 20px;
     text-decoration: none;
-    color: var(--text);
+    color: var(--white);
     font-weight: 500;
 }
-.nav-links a:hover { color: var(--primary); }
+.nav-links a:hover { color: var(--accent); }
 .nav-btn {
     background: none;
     border: none;
@@ -49,7 +51,8 @@ body {
     background: var(--white);
     padding: 2rem;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border-top: 4px solid var(--primary);
+    box-shadow: 0 4px 14px rgba(0, 77, 46, 0.12);
     max-width: 400px;
     margin: 40px auto;
 }
@@ -88,7 +91,7 @@ table {
     margin-top: 20px;
 }
 th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #eee; }
-th { background-color: #f9fafb; font-weight: 600; }
+th { background-color: var(--primary-soft); font-weight: 600; }
 
 .modal-overlay {
     position: fixed;

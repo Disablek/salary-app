@@ -24,6 +24,88 @@ import {
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080/api';
 
+type JwtPayload = {
+  id?: number;
+  sub?: string;
+  role?: string;
+};
+
+type RawUser = Omit<Partial<User>, 'role'> & {
+  roleName?: string;
+  role?: string;
+  username?: string;
+  enabled?: boolean;
+};
+
+const normalizeRole = (role?: string): User['role'] => {
+  if (role === 'ROLE_SUPERUSER' || role === 'SUPERUSER') {
+    return 'ROLE_SUPERUSER' as User['role'];
+  }
+  return 'ROLE_USER' as User['role'];
+};
+
+const normalizeUser = (raw: RawUser): User => {
+  const email = raw.email || raw.username || '';
+  const now = new Date().toISOString();
+
+  return {
+    id: Number(raw.id || 0),
+    email,
+    firstName: raw.firstName || email.split('@')[0] || 'User',
+    lastName: raw.lastName || '',
+    role: normalizeRole(raw.role || raw.roleName),
+    isActivated: raw.isActivated ?? raw.enabled ?? true,
+    createdAt: raw.createdAt || now,
+    updatedAt: raw.updatedAt || now,
+  };
+};
+
+const decodeJwtPayload = (token: string): JwtPayload => {
+  const payload = token.split('.')[1];
+  if (!payload) {
+    return {};
+  }
+
+  const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
+  const padded = base64.padEnd(base64.length + ((4 - base64.length % 4) % 4), '=');
+  return JSON.parse(atob(padded));
+};
+
+const getCurrentUserAfterLogin = async (token: string): Promise<User> => {
+  const authHeaders = { Authorization: `Bearer ${token}` };
+
+  try {
+    const response: AxiosResponse<RawUser> = await axios.get(`${API_BASE_URL}/users/me`, {
+      headers: authHeaders,
+    });
+    return normalizeUser(response.data);
+  } catch {
+    // Some deployed backends expose only /users, not /users/me.
+  }
+
+  try {
+    const jwtUser = normalizeUser({
+      id: decodeJwtPayload(token).id,
+      email: decodeJwtPayload(token).sub,
+      role: decodeJwtPayload(token).role,
+    });
+    const response: AxiosResponse<RawUser[]> = await axios.get(`${API_BASE_URL}/users`, {
+      headers: authHeaders,
+    });
+    const matchedUser = response.data.find((candidate) => (
+      candidate.email === jwtUser.email || candidate.username === jwtUser.email
+    ));
+    return normalizeUser(matchedUser || jwtUser);
+  } catch {
+    const payload = decodeJwtPayload(token);
+    return normalizeUser({
+      id: payload.id,
+      email: payload.sub,
+      role: payload.role,
+    });
+  }
+};
+
 // Create axios instance with default config
 const api: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
@@ -61,9 +143,15 @@ export const authApi = {
   login: async (data: LoginRequest): Promise<User> => {
     const response: AxiosResponse<AuthResponse> = await api.post('/auth/login', data);
     const { token, user } = response.data;
+    if (!token) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('currentUser');
+      throw new Error('Login response does not contain token');
+    }
     localStorage.setItem('token', token);
-    localStorage.setItem('currentUser', JSON.stringify(user));
-    return user;
+    const currentUser = user ? normalizeUser(user) : await getCurrentUserAfterLogin(token);
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+    return currentUser;
   },
 
   register: async (data: RegisterRequest): Promise<void> => {
@@ -72,8 +160,8 @@ export const authApi = {
 
   getCurrentUser: async (): Promise<User | null> => {
     try {
-      const response: AxiosResponse<User> = await api.get('/users/me');
-      return response.data;
+      const response: AxiosResponse<RawUser> = await api.get('/users/me');
+      return normalizeUser(response.data);
     } catch {
       return null;
     }
@@ -82,13 +170,18 @@ export const authApi = {
 
 export const usersApi = {
   getAllUsers: async (): Promise<User[]> => {
-    const response: AxiosResponse<User[]> = await api.get('/users');
-    return response.data;
+    const response: AxiosResponse<RawUser[]> = await api.get('/users');
+    return response.data.map(normalizeUser);
+  },
+
+  createUser: async (data: Partial<User>): Promise<User> => {
+    const response: AxiosResponse<RawUser> = await api.post('/users', data);
+    return normalizeUser(response.data);
   },
 
   updateUser: async (id: number, data: Partial<User>): Promise<User> => {
-    const response: AxiosResponse<User> = await api.put(`/users/${id}`, data);
-    return response.data;
+    const response: AxiosResponse<RawUser> = await api.put(`/users/${id}`, data);
+    return normalizeUser(response.data);
   },
 
   changePassword: async (userId: number, oldPassword: string, newPassword: string): Promise<void> => {
@@ -221,5 +314,14 @@ export const rulesApi = {
   createRule: async (data: CreateRuleRequest): Promise<Rule> => {
     const response: AxiosResponse<Rule> = await api.post('/rules', data);
     return response.data;
+  },
+
+  updateRule: async (id: number, data: CreateRuleRequest): Promise<Rule> => {
+    const response: AxiosResponse<Rule> = await api.put(`/rules/${id}`, data);
+    return response.data;
+  },
+
+  deleteRule: async (id: number): Promise<void> => {
+    await api.delete(`/rules/${id}`);
   },
 };

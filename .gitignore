@@ -58,4 +58,5 @@ test-results/
 data-model-snapshot.json
 
 package-lock.json
+!frontend/package-lock.json
 yarn.lock

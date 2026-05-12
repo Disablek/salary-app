@@ -7,9 +7,9 @@ import org.mapstruct.*;
 
 @Mapper(config = MapStructConfig.class)
 public interface ExperienceMapper {
-    @Mapping(source = "createdBy.id", target = "createdBy")
-    @Mapping(source = "updatedBy.id", target = "updatedBy")
-    @Mapping(source = "createdDate", target = "createdAt")
+    @Mapping(target = "createdBy", expression = "java(experience.getCreatedBy() != null ? experience.getCreatedBy().getId() : null)")
+    @Mapping(target = "updatedBy", expression = "java(experience.getUpdatedBy() != null ? experience.getUpdatedBy().getId() : null)")
+    @Mapping(target = "createdAt", expression = "java(experience.getCreatedDate())")
     ExperienceDto toDto(Experience experience);
 
     @Mapping(target = "id", ignore = true)

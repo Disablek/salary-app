@@ -24,14 +24,51 @@ import './styles/App.css';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#1976d2',
+      main: '#006b3f',
+      light: '#168a58',
+      dark: '#004d2e',
+      contrastText: '#ffffff',
     },
     secondary: {
-      main: '#dc004e',
+      main: '#d6a11f',
+      light: '#f0c45a',
+      dark: '#9b7412',
+      contrastText: '#1f2933',
+    },
+    background: {
+      default: '#f3f7f1',
+      paper: '#ffffff',
+    },
+    success: {
+      main: '#168a58',
     },
   },
   typography: {
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+  },
+  components: {
+    MuiAppBar: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#006b3f',
+          backgroundImage: 'linear-gradient(90deg, #004d2e 0%, #006b3f 58%, #168a58 100%)',
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: 'none',
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          borderColor: 'rgba(0, 107, 63, 0.12)',
+        },
+      },
+    },
   },
 });
 

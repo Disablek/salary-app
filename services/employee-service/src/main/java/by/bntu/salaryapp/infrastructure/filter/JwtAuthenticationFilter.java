@@ -4,6 +4,8 @@ package by.bntu.salaryapp.infrastructure.filter;
 import by.bntu.salaryapp.application.service.implementations.user.JwtServiceImpl;
 import by.bntu.salaryapp.application.service.implementations.user.UserServiceImpl;
 import by.bntu.salaryapp.application.service.interfaces.user.UserService;
+import by.bntu.salaryapp.domain.model.user.Role;
+import by.bntu.salaryapp.domain.model.user.User;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -43,6 +45,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         var authHeader = request.getHeader(HEADER_NAME);
         if (StringUtils.isEmpty(authHeader) || !StringUtils.startsWith(authHeader, BEARER_PREFIX)) {
+            // Check for headers from gateway
+            String userIdHeader = request.getHeader("X-User-Id");
+            if (StringUtils.isNotEmpty(userIdHeader)) {
+                UserDetails userDetails = createUserDetailsFromHeaders(request);
+                SecurityContext context = SecurityContextHolder.createEmptyContext();
+
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        userDetails.getAuthorities()
+                );
+
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                context.setAuthentication(authToken);
+                SecurityContextHolder.setContext(context);
+                filterChain.doFilter(request, response);
+                return;
+            }
             filterChain.doFilter(request, response);
             return;
         }
@@ -54,11 +74,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             log.debug("Extracted username from JWT: {}", username);
 
             if (StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
-                log.debug("Loading user details for: {}", username);
-                UserDetails userDetails = userService
-                        .userDetailsService()
-                        .loadUserByUsername(username);
-                log.debug("User details loaded: {} with authorities: {}", userDetails.getUsername(), userDetails.getAuthorities());
+                log.debug("Creating user details from JWT claims for: {}", username);
+                
+                // Create UserDetails from JWT claims instead of loading from database
+                UserDetails userDetails = createUserDetailsFromJwt(jwt);
+                log.debug("User details created: {} with authorities: {}", userDetails.getUsername(), userDetails.getAuthorities());
 
                 if (jwtService.isTokenValid(jwt, userDetails)) {
                     log.debug("JWT token is valid for user: {}", username);
@@ -89,5 +109,51 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             log.error("Error processing JWT token", e);
             filterChain.doFilter(request, response);
         }
+    }
+
+    private UserDetails createUserDetailsFromJwt(String jwt) {
+        String username = jwtService.extractUserName(jwt);
+        String userId = jwtService.extractUserId(jwt);
+        String email = jwtService.extractEmail(jwt);
+        String roleName = jwtService.extractRole(jwt);
+        String firstName = jwtService.extractFirstName(jwt);
+        String surname = jwtService.extractSurname(jwt);
+
+        // Create role from JWT claim
+        Role role = null;
+        if (roleName != null) {
+            role = Role.builder()
+                    .name(roleName)
+                    .build();
+        }
+
+        // Create User object from JWT claims
+        return User.builder()
+                .username(username)
+                .email(email)
+                .firstName(firstName != null ? firstName : "")
+                .lastName("") // Not available in JWT
+                .surname(surname != null ? surname : "")
+                .role(role)
+                .build();
+    }
+
+    private UserDetails createUserDetailsFromHeaders(HttpServletRequest request) {
+        String userId = request.getHeader("X-User-Id");
+        String email = request.getHeader("X-User-Email");
+        String roleName = request.getHeader("X-User-Role");
+
+        Role role = null;
+        if (roleName != null) {
+            role = Role.builder()
+                    .name(roleName)
+                    .build();
+        }
+
+        return User.builder()
+                .username(email != null ? email : userId)
+                .email(email)
+                .role(role)
+                .build();
     }
 }

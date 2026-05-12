@@ -2,6 +2,7 @@ package by.bntu.salaryapp.gateway.config;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -15,6 +16,8 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import javax.crypto.SecretKey;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 @Component
@@ -59,8 +62,13 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
                     .getBody();
 
                 // Add user info to request headers for downstream services
-                ServerHttpRequest modifiedRequest = request.mutate()
-                    .header("X-User-Id", claims.get("id", String.class))
+                ServerHttpRequest.Builder modifiedRequestBuilder = request.mutate();
+                Object idClaim = claims.get("id");
+                if (idClaim != null) {
+                    modifiedRequestBuilder.header("X-User-Id", String.valueOf(idClaim));
+                }
+
+                ServerHttpRequest modifiedRequest = modifiedRequestBuilder
                     .header("X-User-Email", claims.getSubject())
                     .header("X-User-Role", claims.get("role", String.class))
                     .build();
@@ -74,7 +82,25 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
     }
 
     private SecretKey getSigningKey() {
-        return Keys.hmacShaKeyFor(jwtSigningKey.getBytes());
+        byte[] keyBytes;
+        try {
+            keyBytes = Decoders.BASE64.decode(jwtSigningKey);
+        } catch (IllegalArgumentException e) {
+            try {
+                keyBytes = Decoders.BASE64URL.decode(jwtSigningKey);
+            } catch (IllegalArgumentException ignored) {
+                keyBytes = jwtSigningKey.getBytes();
+            }
+        }
+        if (keyBytes.length < 32) {
+            try {
+                MessageDigest digest = MessageDigest.getInstance("SHA-256");
+                keyBytes = digest.digest(keyBytes);
+            } catch (NoSuchAlgorithmException e) {
+                throw new IllegalStateException("Unable to initialize JWT signing key", e);
+            }
+        }
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
     private Mono<Void> onError(ServerWebExchange exchange, String error, HttpStatus status) {

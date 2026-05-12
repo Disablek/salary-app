@@ -7,9 +7,9 @@ import org.mapstruct.*;
 
 @Mapper(config = MapStructConfig.class)
 public interface QualificationMapper {
-    @Mapping(source = "createdBy.id", target = "createdBy")
-    @Mapping(source = "updatedBy.id", target = "updatedBy")
-    @Mapping(source = "createdDate", target = "createdAt")
+    @Mapping(target = "createdBy", expression = "java(qualification.getCreatedBy() != null ? qualification.getCreatedBy().getId() : null)")
+    @Mapping(target = "updatedBy", expression = "java(qualification.getUpdatedBy() != null ? qualification.getUpdatedBy().getId() : null)")
+    @Mapping(target = "createdAt", expression = "java(qualification.getCreatedDate())")
     QualificationDto toDto(Qualification qualification);
 
     @Mapping(target = "id", ignore = true)

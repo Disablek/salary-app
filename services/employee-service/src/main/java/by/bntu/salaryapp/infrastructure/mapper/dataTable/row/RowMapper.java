@@ -15,9 +15,9 @@ public interface RowMapper {
     @Mapping(source = "table.id", target = "tableId")
     @Mapping(source = "employee.id", target = "employeeId")
     @Mapping(source = "cells", target = "cellsId")
-    @Mapping(source = "createdBy.id", target = "createdBy")
-    @Mapping(source = "updatedBy.id", target = "updatedBy")
-    @Mapping(source = "createdDate", target = "createdAt")
+    @Mapping(target = "createdBy", expression = "java(row.getCreatedBy() != null ? row.getCreatedBy().getId() : null)")
+    @Mapping(target = "updatedBy", expression = "java(row.getUpdatedBy() != null ? row.getUpdatedBy().getId() : null)")
+    @Mapping(target = "createdAt", expression = "java(row.getCreatedDate())")
     RowDto toDto(Row row);
 
 
