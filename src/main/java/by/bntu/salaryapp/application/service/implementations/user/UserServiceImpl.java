@@ -66,8 +66,8 @@ public class UserServiceImpl implements UserService {
         UUID roleId = dto.getRoleId();
 
         if (roleId == null) {
-            Role defaultRole = roleRepository.findByName("ROLE_NONE")
-                    .orElseThrow(() -> new EntityNotFoundException("Default role ROLE_NONE not found"));
+            Role defaultRole = roleRepository.findByName("ROLE_USER")
+                    .orElseThrow(() -> new EntityNotFoundException("Default role ROLE_USER not found"));
             assignSingleRoleToUser(user, defaultRole);
         } else {
             Role role = roleRepository.findById(roleId)
@@ -82,21 +82,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole('SUPERUSER')")
     public UserDtoOutput update(UUID id, UserDtoInput dto) {
         log.info("Updating user with id: {}", id);
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = auth.getName();
-
-        boolean isSuperUser = auth.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_SUPERUSER"));
-
-        if (!isSuperUser && !existingUser.getUsername().equals(currentUsername)) {
-            log.warn("Access denied: user {} attempted to update user {}", currentUsername, existingUser.getUsername());
-            throw new AccessDeniedException("You can only update your own profile");
-        }
 
         String newEmail = dto.getEmail() != null ? dto.getEmail().trim() : null;
         String newUsername = dto.getUsername() != null ? dto.getUsername().trim() : null;
@@ -119,14 +109,9 @@ public class UserServiceImpl implements UserService {
 
         UUID roleId = dto.getRoleId();
         if (roleId != null) {
-            if (!isSuperUser) {
-                log.warn("Access denied: only superuser can change roles");
-                throw new AccessDeniedException("Only SUPERUSER can change roles");
-            } else {
-                Role role = roleRepository.findById(dto.getRoleId())
-                        .orElseThrow(() -> new EntityNotFoundException("Role not found"));
-                assignSingleRoleToUser(existingUser, role);
-            }
+            Role role = roleRepository.findById(dto.getRoleId())
+                    .orElseThrow(() -> new EntityNotFoundException("Role not found"));
+            assignSingleRoleToUser(existingUser, role);
         }
 
         User updatedUser = userRepository.save(existingUser);

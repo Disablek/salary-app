@@ -18,6 +18,8 @@ import org.springframework.boot.CommandLineRunner;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
@@ -51,16 +53,19 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) {
-        createRoleIfMissing("ROLE_NONE");
         createRoleIfMissing("ROLE_USER");
         createRoleIfMissing("ROLE_ADMIN");
         createRoleIfMissing("ROLE_SUPERUSER");
 
+        Role userRole = roleRepository.findByName("ROLE_USER").orElse(null);
+        Role adminRole = roleRepository.findByName("ROLE_ADMIN").orElse(null);
         Role superRole = roleRepository.findByName("ROLE_SUPERUSER").orElse(null);
-        if (superRole == null) {
-            log.warn("ROLE_SUPERUSER not found after creation attempt");
+        if (userRole == null || adminRole == null || superRole == null) {
+            log.warn("Required roles not found after creation attempt");
             return;
         }
+
+        migrateLegacyRoles(userRole, adminRole);
 
         boolean anySuper = userRepository.existsByRoleId(superRole.getId());
         if (!anySuper) {
@@ -78,6 +83,25 @@ public class DataInitializer implements CommandLineRunner {
         } else {
             log.info("Superuser already exists, skipping creation.");
         }
+    }
+
+    private void migrateLegacyRoles(Role userRole, Role adminRole) {
+        migrateUsersFromRole("ROLE_NONE", userRole);
+        migrateUsersFromRole("ROLE_CLIENT", userRole);
+        migrateUsersFromRole("ROLE_PAYROLL_SPECIALIST", adminRole);
+    }
+
+    private void migrateUsersFromRole(String legacyRoleName, Role targetRole) {
+        roleRepository.findByName(legacyRoleName).ifPresent(legacyRole -> {
+            Set<User> users = userRepository.findByRole(legacyRole);
+            if (users.isEmpty()) {
+                return;
+            }
+
+            users.forEach(user -> user.setRole(targetRole));
+            userRepository.saveAll(users);
+            log.info("Migrated {} users from {} to {}", users.size(), legacyRoleName, targetRole.getName());
+        });
     }
 
     private void createRoleIfMissing(String name) {

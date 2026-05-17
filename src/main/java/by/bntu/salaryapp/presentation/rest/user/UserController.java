@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,12 +31,14 @@ public class UserController implements UserEndpoint {
 
     @Override
     @GetMapping(ApiEndpoints.User.BASE)
+    @PreAuthorize("hasRole('SUPERUSER')")
     public List<UserDtoOutput> getUsers(String search, Integer page, Integer size) {
         return userService.getAll();
     }
 
     @Override
     @PostMapping(ApiEndpoints.User.SEARCH)
+    @PreAuthorize("hasRole('SUPERUSER')")
     public List<UserDtoOutput> searchUsers(@RequestBody(required = false) UserFilterDto filter) {
         return userService.getUsersByFilter(filter);
     }
@@ -55,18 +58,15 @@ public class UserController implements UserEndpoint {
 
     @Override
     @PostMapping(ApiEndpoints.User.BASE)
+    @PreAuthorize("hasRole('SUPERUSER')")
     public UserDtoOutput createUser(@Valid @RequestBody UserDtoInput user) {
         return userService.create(user);
     }
 
     @Override
     @PutMapping(ApiEndpoints.User.BY_ID)
+    @PreAuthorize("hasRole('SUPERUSER')")
     public UserDtoOutput updateUser(@PathVariable UUID userId, @Valid @RequestBody UserDtoInput user) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        boolean isSuper = isSuperUser(authentication);
-        if (!isSuper) {
-            user.setRoleId(null);
-        }
         return userService.update(userId, user);
     }
 
@@ -81,6 +81,7 @@ public class UserController implements UserEndpoint {
 
     @Override
     @DeleteMapping(ApiEndpoints.User.BY_ID)
+    @PreAuthorize("hasRole('SUPERUSER')")
     public void deleteUser(@PathVariable UUID userId) {
         userService.delete(userId);
     }
@@ -106,15 +107,8 @@ public class UserController implements UserEndpoint {
     // ----------------- get by id -----------------
     @Override
     @GetMapping(ApiEndpoints.User.BY_ID)
+    @PreAuthorize("hasRole('SUPERUSER')")
     public UserDtoOutput getUserById(@PathVariable UUID userId) {
         return userService.getById(userId);
-    }
-
-    // ----------------- helpers -----------------
-    private boolean isSuperUser(Authentication authentication) {
-        if (authentication == null) return false;
-        return authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .anyMatch(a -> a.equals("ROLE_SUPERUSER"));
     }
 }

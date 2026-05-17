@@ -37,7 +37,7 @@ public class UserService {
                 .email(request.getEmail())
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(User.Role.valueOf(request.getRole() != null ? request.getRole() : "CLIENT"))
+                .role(resolveRole(request.getRole()))
                 .build();
 
         User saved = userRepository.save(user);
@@ -63,6 +63,7 @@ public class UserService {
     public UserDto updateUser(Long id, CreateUserRequest request) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+        String previousEmail = user.getEmail();
 
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
@@ -75,18 +76,32 @@ public class UserService {
         }
 
         if (request.getRole() != null) {
-            user.setRole(User.Role.valueOf(request.getRole()));
+            user.setRole(resolveRole(request.getRole()));
         }
 
         User saved = userRepository.save(user);
+        sagaOrchestrator.publishUserUpdated(saved, previousEmail);
         return mapToDto(saved);
     }
 
     public void deleteUser(Long id) {
-        if (!userRepository.existsById(id)) {
-            throw new RuntimeException("User not found");
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        sagaOrchestrator.publishUserDeleted(user);
+        userRepository.delete(user);
+    }
+
+    private User.Role resolveRole(String requestedRole) {
+        if (requestedRole == null || requestedRole.isBlank()) {
+            return User.Role.USER;
         }
-        userRepository.deleteById(id);
+
+        return switch (requestedRole.trim().toUpperCase()) {
+            case "USER", "CLIENT" -> User.Role.USER;
+            case "ADMIN", "PAYROLL_SPECIALIST", "SPECIALIST" -> User.Role.ADMIN;
+            case "SUPERUSER", "ADMINISTRATOR" -> User.Role.SUPERUSER;
+            default -> throw new RuntimeException("Unsupported role: " + requestedRole);
+        };
     }
 
     private UserDto mapToDto(User user) {

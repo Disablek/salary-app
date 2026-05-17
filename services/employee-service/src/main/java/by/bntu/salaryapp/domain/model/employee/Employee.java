@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 import org.springframework.lang.Nullable;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,6 +29,14 @@ public class Employee extends BaseAuditingEntity
 
     @Nullable
     private String surName;
+
+    private String email;
+
+    private String phoneNumber;
+
+    private LocalDate hireDate;
+
+    private Integer yearsOfExperience;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "position_id")

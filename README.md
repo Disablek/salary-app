@@ -199,7 +199,6 @@ salary-app/
 ├── helm/                        # Helm charts
 │   └── salary-app/
 ├── front/                       # Скомпилированный статический frontend
-├── frontend/                    # Исходный код React frontend (неактивен)
 ├── docker-compose.yml           # Локальная разработка
 ├── .github/workflows/           # CI/CD pipelines
 └── README.md
@@ -380,16 +379,8 @@ istioctl dashboard kiali
 4. Swagger UI доступен по адресу `http://localhost:8080/swagger-ui`
 
 ### Запуск frontend
-1. Перейдите в директорию `frontend`
-2. Установите зависимости:
-   ```bash
-   npm install
-   ```
-3. Запустите приложение:
-   ```bash
-   npm start
-   ```
-4. Frontend будет доступен на `http://localhost:3000`
+1. Запустите статический фронтенд из директории `newFront`
+2. Или используйте Docker Compose, где `newFront` уже подключён к nginx на `http://localhost:3000`
 
 ## Структура проекта
 
@@ -403,13 +394,6 @@ salary-app/
 ├── front/                               # Скомпилированный статический frontend
 │   ├── assets/                          # Сборка фронтенда
 │   └── index.html
-├── frontend/                            # Исходный код React frontend (неактивен)
-│   ├── src/
-│   │   ├── components/                  # React компоненты
-│   │   ├── pages/                       # Страницы приложения
-│   │   ├── services/                    # Сервисы для API
-│   │   └── context/                     # React контекст
-│   └── public/                          # Статические файлы
 ├── build.gradle                         # Конфигурация Gradle
 ├── settings.gradle                      # Настройки Gradle
 └── package.json                         # Зависимости frontend (корень)
@@ -426,11 +410,6 @@ salary-app/
 ./gradlew test
 ```
 
-### Frontend тесты
-```bash
-cd frontend
-npm test
-```
 
 ## Сборка для продакшена
 
@@ -439,16 +418,10 @@ npm test
 ./gradlew build
 ```
 
-### Frontend
-```bash
-cd frontend
-npm run build
-```
 
 ## Разработка
 
 - Используйте IDE с поддержкой Java (IntelliJ IDEA, Eclipse) для backend
-- Используйте VS Code или другую IDE для frontend
 - Для отладки backend используйте встроенные инструменты Spring Boot
 - Для отладки frontend используйте React DevTools
 

@@ -7,9 +7,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication(scanBasePackages = "by.bntu.salaryapp")
 @EnableDiscoveryClient
+@EnableJpaAuditing
 @EnableJpaRepositories(basePackages = "by.bntu.salaryapp.infrastructure.persistence.repository")
 @EntityScan(basePackages = "by.bntu.salaryapp.domain.model")
 public class EmployeeServiceApplication {

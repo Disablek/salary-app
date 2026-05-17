@@ -6,6 +6,51 @@ spring:
       filter:
         weight-calculator:
           enabled: false
+      routes:
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/api/auth/**
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/users,/api/users/**
+        - id: employee-service
+          uri: lb://employee-service
+          predicates:
+            - Path=/api/employees,/api/employees/**
+          filters:
+            - JwtAuthenticationFilter
+        - id: position-service
+          uri: lb://employee-service
+          predicates:
+            - Path=/api/positions,/api/positions/**
+          filters:
+            - JwtAuthenticationFilter
+        - id: qualification-service
+          uri: lb://employee-service
+          predicates:
+            - Path=/api/qualifications,/api/qualifications/**
+          filters:
+            - JwtAuthenticationFilter
+        - id: subject-service
+          uri: lb://employee-service
+          predicates:
+            - Path=/api/subjects,/api/subjects/**
+          filters:
+            - JwtAuthenticationFilter
+        - id: experience-service
+          uri: lb://employee-service
+          predicates:
+            - Path=/api/experiences,/api/experiences/**
+          filters:
+            - JwtAuthenticationFilter
+        - id: datatable-service
+          uri: lb://datatable-service
+          predicates:
+            - Path=/api/datatables,/api/datatables/**
+          filters:
+            - JwtAuthenticationFilter
       globalcors:
         add-to-simple-url-handler-mapping: true
         cors-configurations:

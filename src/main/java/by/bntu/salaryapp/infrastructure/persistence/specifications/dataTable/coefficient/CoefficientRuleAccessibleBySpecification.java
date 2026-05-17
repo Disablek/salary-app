@@ -22,14 +22,12 @@ public record CoefficientRuleAccessibleBySpecification(User currentUser) impleme
 
         var authorities = currentUser.getAuthorities();
 
-        boolean isSuperUser = authorities.stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_SUPERUSER"));
+        boolean hasBusinessAccess = authorities.stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_SUPERUSER")
+                        || a.getAuthority().equals("ROLE_ADMIN")
+                        || a.getAuthority().equals("ROLE_USER"));
 
-        boolean isAdmin = authorities.stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
-
-
-        if (isSuperUser && isAdmin) {
+        if (hasBusinessAccess) {
             return predicate;
         }
         else {

@@ -20,9 +20,11 @@ public record DataTableAccessibleBySpecification(User currentUser) implements Sp
 
         var authorities = currentUser.getAuthorities();
 
-        boolean isNone = authorities.stream()
-                .anyMatch(authority -> authority.getAuthority().equals("ROLE_NONE"));
-        if (!isNone) {
+        boolean hasBusinessAccess = authorities.stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ROLE_SUPERUSER")
+                        || authority.getAuthority().equals("ROLE_ADMIN")
+                        || authority.getAuthority().equals("ROLE_USER"));
+        if (hasBusinessAccess) {
             return predicate;
         }
         else {

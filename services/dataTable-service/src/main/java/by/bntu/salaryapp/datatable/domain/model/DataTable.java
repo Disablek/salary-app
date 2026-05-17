@@ -27,6 +27,14 @@ public class DataTable {
     private String name;
     private String description;
 
+    @Lob
+    @Column(name = "columns_json")
+    private String columnsJson;
+
+    @Lob
+    @Column(name = "rows_json")
+    private String rowsJson;
+
     @CreatedDate
     private LocalDateTime createdAt;
 

@@ -45,7 +45,7 @@ public class CellServiceImpl implements CellService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasAnyRole('SUPERUSER','ADMIN', 'USER')")
+    @PreAuthorize("hasAnyRole('SUPERUSER', 'ADMIN')")
     public CellDto create(CellDto cellDto) {
         Row row = rowRepository.findById(cellDto.getRow_id())
                 .orElseThrow(() -> new EntityNotFoundException("Row not found with id: " + cellDto.getRow_id()));
@@ -69,7 +69,7 @@ public class CellServiceImpl implements CellService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasAnyRole('SUPERUSER','ADMIN', 'USER')")
+    @PreAuthorize("hasAnyRole('SUPERUSER', 'ADMIN')")
     public CellDto update(CellDto cellDto) {
         Cell existingCell = cellRepository.findById(cellDto.getId())
                 .orElseThrow(() -> new EntityNotFoundException("Cell not found with id " + cellDto.getId()));
@@ -104,7 +104,7 @@ public class CellServiceImpl implements CellService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasAnyRole('SUPERUSER','ADMIN', 'USER')")
+    @PreAuthorize("hasAnyRole('SUPERUSER', 'ADMIN')")
     public void delete(UUID id) {
         Cell cell = cellRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Cell not found with id " + id));

@@ -35,7 +35,7 @@ public class RowServiceImpl implements RowService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasAnyRole('SUPERUSER', 'ADMIN','USER')")
+    @PreAuthorize("hasAnyRole('SUPERUSER', 'ADMIN')")
     public RowDto create(RowDto dto) {
         DataTable table = dataTableRepository.findById(dto.getTableId())
                 .orElseThrow(() -> new EntityNotFoundException("DataTable not found with id: " + dto.getTableId()));
@@ -57,7 +57,7 @@ public class RowServiceImpl implements RowService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasAnyRole('SUPERUSER', 'ADMIN','USER')")
+    @PreAuthorize("hasAnyRole('SUPERUSER', 'ADMIN')")
     public RowDto update(RowDto dto) {
         Row existingRow = rowRepository.findById(dto.getId())
                 .orElseThrow(() -> new EntityNotFoundException("Row not found with id: " + dto.getId()));
@@ -86,7 +86,7 @@ public class RowServiceImpl implements RowService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasAnyRole('SUPERUSER', 'ADMIN','USER')")
+    @PreAuthorize("hasAnyRole('SUPERUSER', 'ADMIN')")
     public void delete(UUID id) {
         if (!rowRepository.existsById(id)) {
             throw new EntityNotFoundException("Row not found with id: " + id);

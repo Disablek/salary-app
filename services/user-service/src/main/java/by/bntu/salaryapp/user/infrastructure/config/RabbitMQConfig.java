@@ -17,6 +17,16 @@ public class RabbitMQConfig {
     }
 
     @Bean
+    public Queue userUpdatedQueue() {
+        return new Queue(UserSagaOrchestrator.USER_UPDATED_QUEUE, true);
+    }
+
+    @Bean
+    public Queue userDeletedQueue() {
+        return new Queue(UserSagaOrchestrator.USER_DELETED_QUEUE, true);
+    }
+
+    @Bean
     public Queue userCreationFailedQueue() {
         return new Queue(UserSagaOrchestrator.USER_CREATION_FAILED_QUEUE, true);
     }
