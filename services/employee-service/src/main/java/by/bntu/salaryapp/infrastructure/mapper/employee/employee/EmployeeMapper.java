@@ -3,12 +3,7 @@ package by.bntu.salaryapp.infrastructure.mapper.employee.employee;
 import by.bntu.salaryapp.infrastructure.mapper.MapStructConfig;
 import by.bntu.salaryapp.application.dto.employee.employee.EmployeeDto;
 import by.bntu.salaryapp.domain.model.employee.Employee;
-import by.bntu.salaryapp.domain.model.employee.Subject;
 import org.mapstruct.*;
-
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Mapper(config = MapStructConfig.class)
 public interface EmployeeMapper {
@@ -23,7 +18,6 @@ public interface EmployeeMapper {
     @Mapping(source = "qualification.id", target = "qualification_id")
     @Mapping(source = "qualification.title", target = "qualificationName")
     @Mapping(source = "experience.id", target = "experience_id")
-    @Mapping(expression = "java(mapSubjectIds(employee))", target = "subjects_id")
     @Mapping(source = "createdBy.id", target = "createdBy")
     @Mapping(source = "updatedBy.id", target = "updatedBy")
     @Mapping(source = "createdDate", target = "createdAt")
@@ -36,7 +30,6 @@ public interface EmployeeMapper {
     @Mapping(target = "position", ignore = true)
     @Mapping(target = "qualification", ignore = true)
     @Mapping(target = "experience", ignore = true)
-    @Mapping(target = "subjects", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
     @Mapping(target = "createdDate", ignore = true)
@@ -51,22 +44,11 @@ public interface EmployeeMapper {
     @Mapping(target = "position", ignore = true)
     @Mapping(target = "qualification", ignore = true)
     @Mapping(target = "experience", ignore = true)
-    @Mapping(target = "subjects", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
     @Mapping(target = "createdDate", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     void updateFromDto(EmployeeDto dto, @MappingTarget Employee entity);
-
-    default Set<UUID> mapSubjectIds(Employee employee) {
-        if (employee == null || employee.getSubjects() == null) {
-            return Set.of();
-        }
-
-        return employee.getSubjects().stream()
-                .map(Subject::getId)
-                .collect(Collectors.toSet());
-    }
 
     default String buildFullName(Employee employee) {
         if (employee == null) {
@@ -78,4 +60,3 @@ public interface EmployeeMapper {
                 : employee.getLastName() + " " + employee.getFirstName();
     }
 }
-

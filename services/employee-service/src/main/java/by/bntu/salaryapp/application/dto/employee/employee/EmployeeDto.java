@@ -11,7 +11,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -39,8 +38,6 @@ public class EmployeeDto {
     private UUID position_id;
 
     private String positionName;
-
-    private Set<UUID> subjects_id;
 
     private UUID qualification_id;
 

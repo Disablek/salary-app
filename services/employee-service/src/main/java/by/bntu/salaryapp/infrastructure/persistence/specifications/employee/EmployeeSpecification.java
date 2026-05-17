@@ -37,10 +37,6 @@ public record EmployeeSpecification(EmployeeFilterDto filter)
             Join<Employee, Position> join = root.join("position", JoinType.LEFT);
             predicates.add(criteriaBuilder.equal(join.get("id"), filter.getPosition_id()));
         }
-        if (filter.getSubjects_id()!= null && !filter.getSubjects_id().isEmpty()) {
-            Join<Employee, Subject> join = root.join("subjects", JoinType.INNER);
-            predicates.add(join.get("id").in(filter.getSubjects_id()));
-        }
         if (filter.getQualification_id() != null) {
             Join<Employee, Qualification> join = root.join("qualification", JoinType.LEFT);
             predicates.add(criteriaBuilder.equal(join.get("id"), filter.getQualification_id()));

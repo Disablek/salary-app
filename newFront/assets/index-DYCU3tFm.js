@@ -18735,6 +18735,7 @@ const Nu = {
     });
 }, Tu = {
     getAll: async () => (await ke.get("/api/users")).data,
+    getCurrent: async () => (await ke.get("/api/users/me")).data,
     getById: async e => (await ke.get(`/api/users/${e}`)).data,
     create: async e => (await ke.post("/api/users", e)).data,
     update: async (e, t) => (await ke.put(`/api/users/${e}`, t)).data,
@@ -18743,7 +18744,15 @@ const Nu = {
     }
 }, Fu = [ "users" ], Mh = () => Us({
     queryKey: Fu,
-    queryFn: Tu.getAll
+    queryFn: async () => {
+        try {
+            const e = await Tu.getAll();
+            return Array.isArray(e) ? e : e ? [ e ] : [];
+        } catch {
+            const e = await Tu.getCurrent();
+            return e ? [ e ] : [];
+        }
+    }
 }), iC = () => {
     const e = rt();
     return ct({
@@ -18785,7 +18794,7 @@ function ar({className: e, variant: t = "neutral", ...n}) {
 
 function lC() {
     var c, d, h, f, y;
-    const {displayName: e, isAdmin: t} = _n(), n = Ih(), r = Pu(), s = I0(), i = Mh(), a = (n.data ?? []).slice().sort((b, v) => (v.hireDate ?? "").localeCompare(b.hireDate ?? "")).slice(0, 5), o = {};
+    const {displayName: e, isAdmin: t, isSuperUser: m} = _n(), n = Ih(), r = Pu(), s = I0(), i = Mh(), a = (n.data ?? []).slice().sort((b, v) => (v.hireDate ?? "").localeCompare(b.hireDate ?? "")).slice(0, 5), o = {};
     for (const b of n.data ?? []) {
         const v = ((c = b.position) == null ? void 0 : c.name) ?? "—";
         o[v] = (o[v] ?? 0) + 1;
@@ -18827,7 +18836,7 @@ function lC() {
                 label: "Таблиц зарплат",
                 value: (f = s.data) == null ? void 0 : f.length,
                 loading: s.isLoading
-            }), t && l.jsx(qo, {
+            }), m && l.jsx(qo, {
                 icon: l.jsx(Xx, {
                     size: 20
                 }),
@@ -20458,7 +20467,7 @@ const YR = {
     xl: "max-w-4xl"
 };
 
-function eu({open: e, onOpenChange: t, title: n, description: r, children: s, footer: i, size: a = "md"}) {
+function eu({open: e, onOpenChange: t, title: n, description: r, children: s, footer: i, size: a = "md", contentStyle: dialogContentStyle}) {
     return l.jsx(fw, {
         open: e,
         onOpenChange: t,
@@ -20467,6 +20476,7 @@ function eu({open: e, onOpenChange: t, title: n, description: r, children: s, fo
                 className: "dialog-overlay"
             }), l.jsxs(mw, {
                 className: Te("dialog-content", YR[a]),
+                style: dialogContentStyle,
                 children: [ l.jsxs("div", {
                     className: "px-6 py-4 border-b border-divider flex items-start justify-between gap-4",
                     children: [ l.jsxs("div", {
@@ -20647,43 +20657,6 @@ function Ry({options: e, value: t, onChange: n, placeholder: r = "Выберит
         }) ]
     });
 }
-
-const Uu = {
-    getAll: async () => (await ke.get("/api/subjects")).data,
-    getById: async e => (await ke.get(`/api/subjects/${e}`)).data,
-    create: async e => (await ke.post("/api/subjects", e)).data,
-    update: async (e, t) => (await ke.put(`/api/subjects/${e}`, t)).data,
-    delete: async e => {
-        await ke.delete(`/api/subjects/${e}`);
-    }
-}, Vu = [ "subjects" ], xw = () => Us({
-    queryKey: Vu,
-    queryFn: Uu.getAll
-}), e2 = () => {
-    const e = rt();
-    return ct({
-        mutationFn: t => Uu.create(t),
-        onSuccess: () => e.invalidateQueries({
-            queryKey: Vu
-        })
-    });
-}, t2 = () => {
-    const e = rt();
-    return ct({
-        mutationFn: ({id: t, data: n}) => Uu.update(t, n),
-        onSuccess: () => e.invalidateQueries({
-            queryKey: Vu
-        })
-    });
-}, n2 = () => {
-    const e = rt();
-    return ct({
-        mutationFn: t => Uu.delete(t),
-        onSuccess: () => e.invalidateQueries({
-            queryKey: Vu
-        })
-    });
-};
 
 const salaryExperienceApi = {
     getAll: async () => (await ke.get("/api/experiences")).data,
@@ -21895,233 +21868,6 @@ function u2() {
     });
 }
 
-const c2 = ur({
-    name: Fe().min(1, "Введите название"),
-    description: Fe().optional().default("")
-});
-
-function Ty({subject: e, onSubmit: t, onCancel: n, submitting: r, onUnhandledError: s}) {
-    const {register: i, handleSubmit: a, setError: o, formState: {errors: u}, reset: c} = Gr({
-        resolver: Xr(c2),
-        defaultValues: {
-            name: "",
-            description: ""
-        }
-    });
-    x.useEffect(() => {
-        e && c({
-            name: e.name,
-            description: e.description ?? ""
-        });
-    }, [ e, c ]);
-    const d = a(async h => {
-        try {
-            await t({
-                name: h.name,
-                description: h.description ?? ""
-            });
-        } catch (f) {
-            Ls(f, o) || s == null || s(f);
-        }
-    });
-    return l.jsxs("form", {
-        onSubmit: d,
-        className: "space-y-4",
-        children: [ l.jsxs("div", {
-            children: [ l.jsx(je, {
-                htmlFor: "s-name",
-                children: "Название *"
-            }), l.jsx(Ae, {
-                id: "s-name",
-                placeholder: "Backend разработка",
-                ...i("name")
-            }), u.name && l.jsx("div", {
-                className: "form-error",
-                children: u.name.message
-            }) ]
-        }), l.jsxs("div", {
-            children: [ l.jsx(je, {
-                htmlFor: "s-desc",
-                children: "Описание"
-            }), l.jsx("textarea", {
-                id: "s-desc",
-                ...i("description"),
-                rows: 3,
-                placeholder: "Чем занимаются специалисты этого направления",
-                className: "w-full rounded-md border border-border bg-surface px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary resize-none"
-            }) ]
-        }), l.jsxs("div", {
-            className: "flex items-center justify-end gap-2 pt-3 border-t border-divider -mx-6 px-6 -mb-5 pb-4 bg-surface-2",
-            children: [ l.jsx(oe, {
-                type: "button",
-                variant: "outline",
-                onClick: n,
-                disabled: r,
-                children: "Отмена"
-            }), l.jsx(oe, {
-                type: "submit",
-                disabled: r,
-                children: r ? "Сохранение..." : "Сохранить"
-            }) ]
-        }) ]
-    });
-}
-
-function d2() {
-    const {isAdmin: e} = _n(), {toast: t} = rs(), n = xw(), r = e2(), s = t2(), i = n2(), [a, o] = x.useState(!1), [u, c] = x.useState(null), [d, h] = x.useState(null);
-    return l.jsxs("div", {
-        className: "space-y-5",
-        children: [ l.jsxs("div", {
-            className: "page-header",
-            children: [ l.jsxs("div", {
-                children: [ l.jsx("h1", {
-                    className: "page-title",
-                    children: "Направления"
-                }), l.jsx("p", {
-                    className: "page-subtitle",
-                    children: "Справочник направлений / специализаций сотрудников"
-                }) ]
-            }), e && l.jsxs(oe, {
-                onClick: () => o(!0),
-                children: [ l.jsx(Dn, {
-                    size: 16
-                }), " Добавить" ]
-            }) ]
-        }), l.jsx("div", {
-            className: "data-table-wrap",
-            children: l.jsxs("table", {
-                className: "data-table",
-                children: [ l.jsx("thead", {
-                    children: l.jsxs("tr", {
-                        children: [ l.jsx("th", {
-                            style: {
-                                width: 50
-                            },
-                            children: "#"
-                        }), l.jsx("th", {
-                            children: "Название"
-                        }), l.jsx("th", {
-                            children: "Описание"
-                        }), l.jsx("th", {
-                            style: {
-                                width: 110
-                            },
-                            children: "Статус"
-                        }), l.jsx("th", {
-                            style: {
-                                width: 100
-                            },
-                            children: "Действия"
-                        }) ]
-                    })
-                }), l.jsx("tbody", {
-                    children: n.isLoading ? l.jsx("tr", {
-                        children: l.jsxs("td", {
-                            colSpan: 5,
-                            className: "text-center py-8 text-muted",
-                            children: [ l.jsx(Sn, {
-                                size: 16,
-                                className: "animate-spin inline mr-2"
-                            }), "Загрузка..." ]
-                        })
-                    }) : n.isError ? l.jsx("tr", {
-                        children: l.jsx("td", {
-                            colSpan: 5,
-                            className: "text-center py-8 text-error",
-                            children: "Не удалось загрузить данные."
-                        })
-                    }) : (n.data ?? []).length === 0 ? l.jsx("tr", {
-                        children: l.jsx("td", {
-                            colSpan: 5,
-                            className: "text-center py-8 text-muted",
-                            children: "Направления не добавлены"
-                        })
-                    }) : (n.data ?? []).map((f, y) => l.jsxs("tr", {
-                        children: [ l.jsx("td", {
-                            className: "text-muted",
-                            children: y + 1
-                        }), l.jsx("td", {
-                            className: "font-medium",
-                            children: f.name
-                        }), l.jsx("td", {
-                            className: "text-muted",
-                            children: f.description
-                        }), l.jsx("td", {
-                            children: l.jsx(ar, {
-                                variant: f.active ? "success" : "neutral",
-                                children: f.active ? "Активно" : "Неактивно"
-                            })
-                        }), l.jsx("td", {
-                            children: e && l.jsxs("div", {
-                                className: "flex items-center gap-1",
-                                children: [ l.jsx(oe, {
-                                    size: "icon",
-                                    variant: "ghost",
-                                    onClick: () => c(f),
-                                    children: l.jsx(Ps, {
-                                        size: 14
-                                    })
-                                }), l.jsx(oe, {
-                                    size: "icon",
-                                    variant: "ghost",
-                                    onClick: () => h(f),
-                                    children: l.jsx(As, {
-                                        size: 14
-                                    })
-                                }) ]
-                            })
-                        }) ]
-                    }, f.id))
-                }) ]
-            })
-        }), l.jsx(jn, {
-            open: a,
-            onOpenChange: o,
-            entityNoun: "направление",
-            isEdit: !1,
-            children: l.jsx(Ty, {
-                onCancel: () => o(!1),
-                submitting: r.isPending,
-                onUnhandledError: f => t(Ge(f), "error"),
-                onSubmit: async f => {
-                    await r.mutateAsync(f), t("Направление добавлено", "success"), o(!1);
-                }
-            })
-        }), l.jsx(jn, {
-            open: !!u,
-            onOpenChange: f => !f && c(null),
-            entityNoun: "направление",
-            isEdit: !0,
-            children: l.jsx(Ty, {
-                subject: u,
-                onCancel: () => c(null),
-                submitting: s.isPending,
-                onUnhandledError: f => t(Ge(f), "error"),
-                onSubmit: async f => {
-                    u && (await s.mutateAsync({
-                        id: u.id,
-                        data: f
-                    }), t("Изменения сохранены", "success"), c(null));
-                }
-            })
-        }), l.jsx(ra, {
-            open: !!d,
-            onOpenChange: f => !f && h(null),
-            title: "Удалить направление?",
-            message: `Удалить "${(d == null ? void 0 : d.name) ?? ""}"?`,
-            confirmLabel: "Удалить",
-            loading: i.isPending,
-            onConfirm: async () => {
-                if (d) try {
-                    await i.mutateAsync(d.id), t("Направление удалено", "success"), h(null);
-                } catch (f) {
-                    t(Ge(f), "error");
-                }
-            }
-        }) ]
-    });
-}
-
 const ww = {
     email: Fe().email("Некорректный email"),
     firstName: Fe().min(1, "Введите имя"),
@@ -22706,8 +22452,21 @@ const Xs = () => `col-${++g2}`, x2 = [ {
     formula: "SUM(COLUMN_3, COLUMN_4)"
 } ];
 
+const EMPLOYEE_COLUMN_PRESETS = [
+    { name: "ФИО", type: "STRING" },
+    { name: "Фамилия", type: "STRING" },
+    { name: "Имя", type: "STRING" },
+    { name: "Отчество", type: "STRING" },
+    { name: "Должность", type: "STRING" },
+    { name: "Квалификация", type: "STRING" },
+    { name: "Стаж", type: "DECIMAL" },
+    { name: "Email", type: "STRING" },
+    { name: "Телефон", type: "STRING" },
+    { name: "Дата найма", type: "STRING" }
+];
+
 function w2({dataTable: e, onSubmit: t, onCancel: n, submitting: r}) {
-    const s = !!e, [i, a] = x.useState((e == null ? void 0 : e.name) ?? ""), [o, u] = x.useState((e == null ? void 0 : e.description) ?? ""), [c, d] = x.useState(x2), [h, f] = x.useState(null);
+    const s = !!e, [i, a] = x.useState((e == null ? void 0 : e.name) ?? ""), [o, u] = x.useState((e == null ? void 0 : e.description) ?? ""), [c, d] = x.useState(x2), [h, f] = x.useState(null), [builderForKey, setBuilderForKey] = x.useState(null), [addColOpen, setAddColOpen] = x.useState(false);
     x.useEffect(() => {
         e && (a(e.name ?? ""), u(e.description ?? ""));
     }, [ e == null ? void 0 : e.id ]);
@@ -22723,6 +22482,19 @@ function w2({dataTable: e, onSubmit: t, onCancel: n, submitting: r}) {
             type: "STRING",
             order: m.length + 1
         } ]);
+    }, addEmployeeColumn = (presetName) => {
+        const preset = EMPLOYEE_COLUMN_PRESETS.find(p => p.name === presetName);
+        if (!preset) return;
+        d(m => {
+            const exists = m.some(col => (col.name || "").trim().toLowerCase() === preset.name.toLowerCase());
+            if (exists) return m;
+            return [ ...m, {
+                key: Xs(),
+                name: preset.name,
+                type: preset.type,
+                order: m.length + 1
+            } ];
+        });
     }, v = m => {
         d(p => p.filter(g => g.key !== m).map((g, S) => ({
             ...g,
@@ -22770,7 +22542,7 @@ function w2({dataTable: e, onSubmit: t, onCancel: n, submitting: r}) {
         onSubmit: w,
         className: "space-y-5",
         children: [ l.jsxs("div", {
-            className: "grid grid-cols-1 gap-4",
+            className: "grid grid-cols-1 md:grid-cols-2 gap-4",
             children: [ l.jsxs("div", {
                 children: [ l.jsx(je, {
                     htmlFor: "dt-name",
@@ -22794,14 +22566,14 @@ function w2({dataTable: e, onSubmit: t, onCancel: n, submitting: r}) {
             }) ]
         }), !s && l.jsxs("div", {
             children: [ l.jsxs("div", {
-                className: "flex items-center justify-between mb-2",
+                className: "flex flex-wrap items-center justify-between mb-2 gap-2",
                 children: [ l.jsx(je, {
                     children: "Колонки таблицы"
                 }), l.jsxs(oe, {
                     type: "button",
                     variant: "outline",
                     size: "sm",
-                    onClick: b,
+                    onClick: () => setAddColOpen(true),
                     children: [ l.jsx(Dn, {
                         size: 14
                     }), " Добавить колонку" ]
@@ -22864,13 +22636,23 @@ function w2({dataTable: e, onSubmit: t, onCancel: n, submitting: r}) {
                                 })
                             }), l.jsx("td", {
                                 className: "px-3 py-2",
-                                children: m.type === "FORMULA" ? l.jsx(Ae, {
-                                    className: "font-mono text-xs",
-                                    value: m.formula ?? "",
-                                    onChange: g => y(m.key, {
-                                        formula: g.target.value
-                                    }),
-                                    placeholder: "SUM(COLUMN_3, COLUMN_4)"
+                                children: m.type === "FORMULA" ? l.jsxs("div", {
+                                    className: "flex items-stretch gap-2",
+                                    children: [ l.jsx(Ae, {
+                                        className: "font-mono text-xs",
+                                        value: m.formula ?? "",
+                                        onChange: g => y(m.key, {
+                                            formula: g.target.value
+                                        }),
+                                        placeholder: "IF([Стаж] >= 5, [Оклад] * (20 / 100), 0)"
+                                    }), l.jsx(oe, {
+                                        type: "button",
+                                        variant: "outline",
+                                        size: "sm",
+                                        onClick: () => setBuilderForKey(m.key),
+                                        title: "Открыть конструктор формулы",
+                                        children: "Конструктор"
+                                    }) ]
                                 }) : l.jsx("span", {
                                     className: "text-faint text-xs",
                                     children: "—"
@@ -22890,60 +22672,6 @@ function w2({dataTable: e, onSubmit: t, onCancel: n, submitting: r}) {
                         }, m.key))
                     }) ]
                 })
-            }), l.jsxs("div", {
-                className: "text-xs text-muted mt-2 leading-relaxed",
-                children: [ "Поддерживаемые формулы: ", l.jsx("span", {
-                    className: "font-mono",
-                    children: "SUM"
-                }), ",", " ", l.jsx("span", {
-                    className: "font-mono",
-                    children: "AVG"
-                }), ", ", l.jsx("span", {
-                    className: "font-mono",
-                    children: "MIN"
-                }), ",", " ", l.jsx("span", {
-                    className: "font-mono",
-                    children: "MAX"
-                }), ", ", l.jsx("span", {
-                    className: "font-mono",
-                    children: "ROUND"
-                }), ",", " ", l.jsx("span", {
-                    className: "font-mono",
-                    children: "ABS"
-                }), ", ", l.jsx("span", {
-                    className: "font-mono",
-                    children: "IF"
-                }), ", ", l.jsx("span", {
-                    className: "font-mono",
-                    children: "IFS"
-                }), ", ", l.jsx("span", {
-                    className: "font-mono",
-                    children: "AND/OR/NOT"
-                }), "; арифметика", " ", l.jsx("span", {
-                    className: "font-mono",
-                    children: "+ - * /"
-                }), ", сравнения ", l.jsx("span", {
-                    className: "font-mono",
-                    children: "> >= < <= == !="
-                }), " и скобки. Ссылки на колонки:", " ", l.jsx("span", {
-                    className: "font-mono",
-                    children: "COLUMN_3"
-                }), " или по имени", " ", l.jsx("span", {
-                    className: "font-mono",
-                    children: "[Оклад]"
-                }), ". Для стажа сотрудника используйте ", l.jsx("span", {
-                    className: "font-mono",
-                    children: "YEARS_OF_EXPERIENCE"
-                }), ", а в значениях ячеек доступны шаблоны ", l.jsx("span", {
-                    className: "font-mono",
-                    children: "{{employee.fullName}}"
-                }), ", ", l.jsx("span", {
-                    className: "font-mono",
-                    children: "{{employee.position.name}}"
-                }), ", ", l.jsx("span", {
-                    className: "font-mono",
-                    children: "{{employee.yearsOfExperience}}"
-                }), "." ]
             }) ]
         }), s && l.jsx("div", {
             className: "rounded-md p-3 text-xs leading-relaxed",
@@ -22974,7 +22702,766 @@ function w2({dataTable: e, onSubmit: t, onCancel: n, submitting: r}) {
                 disabled: r,
                 children: r ? "Сохранение..." : s ? "Сохранить" : "Создать таблицу"
             }) ]
+        }), l.jsx(T2, {
+            open: !!builderForKey,
+            onOpenChange: o2 => { if (!o2) setBuilderForKey(null); },
+            columns: c,
+            onApply: f2 => {
+                if (builderForKey) y(builderForKey, { formula: f2 });
+                setBuilderForKey(null);
+            }
+        }), l.jsx(AddColumnDialog, {
+            open: addColOpen,
+            onOpenChange: setAddColOpen,
+            existingNames: c.map(col => col.name),
+            onAdd: ({name: nm, type: tp}) => {
+                d(m => [...m, {
+                    key: Xs(),
+                    name: nm,
+                    type: tp,
+                    order: m.length + 1
+                }]);
+                setAddColOpen(false);
+            }
         }) ]
+    });
+}
+
+const _EMP_VIRTUAL = [
+    { name: "Стаж сотрудника", ident: "YEARS_OF_EXPERIENCE", numeric: true, key: "__emp_yoe" }
+];
+
+function AddColumnDialog({open: e, onOpenChange: t, existingNames: n, onAdd: r}) {
+    const [tab, setTab] = x.useState("preset");
+    const [presetSel, setPresetSel] = x.useState(EMPLOYEE_COLUMN_PRESETS[0].name);
+    const [customName, setCustomName] = x.useState("");
+    const [customType, setCustomType] = x.useState("STRING");
+    const [err, setErr] = x.useState(null);
+
+    x.useEffect(() => {
+        if (e) {
+            setTab("preset");
+            setPresetSel(EMPLOYEE_COLUMN_PRESETS[0].name);
+            setCustomName(""); setCustomType("STRING");
+            setErr(null);
+        }
+    }, [e]);
+
+    const existingLower = x.useMemo(() => new Set((n || []).map(s => String(s || "").trim().toLowerCase())), [n]);
+
+    const handleAddPreset = () => {
+        setErr(null);
+        const preset = EMPLOYEE_COLUMN_PRESETS.find(p => p.name === presetSel);
+        if (!preset) { setErr("Выберите поле из списка"); return; }
+        if (existingLower.has(preset.name.toLowerCase())) {
+            setErr(`Колонка «${preset.name}» уже добавлена`);
+            return;
+        }
+        r({ name: preset.name, type: preset.type });
+    };
+
+    const handleAddCustom = () => {
+        setErr(null);
+        const nm = customName.trim();
+        if (!nm) { setErr("Введите название колонки"); return; }
+        if (existingLower.has(nm.toLowerCase())) {
+            setErr(`Колонка «${nm}» уже существует`);
+            return;
+        }
+        r({ name: nm, type: customType });
+    };
+
+    const tabBtnCls = (active) => active
+        ? "flex-1 text-sm px-3 py-1.5 rounded-md font-medium"
+        : "flex-1 text-sm px-3 py-1.5 rounded-md text-muted hover:text-text";
+    const tabBtnStyle = (active) => active
+        ? { background: "var(--color-surface)", color: "var(--color-text)", boxShadow: "0 1px 2px rgba(0,0,0,0.05)" }
+        : {};
+
+    return l.jsx(eu, {
+        open: e,
+        onOpenChange: t,
+        title: "Новая колонка",
+        description: "Добавьте колонку из данных сотрудника или создайте свою",
+        size: "md",
+        children: l.jsxs("div", {
+            className: "space-y-4",
+            children: [
+                l.jsxs("div", {
+                    className: "flex border border-divider rounded-md p-1 bg-surface-2 gap-1",
+                    children: [
+                        l.jsx("button", {
+                            type: "button",
+                            onClick: () => setTab("preset"),
+                            className: tabBtnCls(tab === "preset"),
+                            style: tabBtnStyle(tab === "preset"),
+                            children: "Из данных сотрудника"
+                        }),
+                        l.jsx("button", {
+                            type: "button",
+                            onClick: () => setTab("custom"),
+                            className: tabBtnCls(tab === "custom"),
+                            style: tabBtnStyle(tab === "custom"),
+                            children: "Своя колонка"
+                        })
+                    ]
+                }),
+                tab === "preset" && l.jsxs("div", {
+                    className: "space-y-3",
+                    children: [
+                        l.jsxs("div", {
+                            children: [
+                                l.jsx(je, { className: "text-xs", children: "Поле сотрудника" }),
+                                l.jsx(Hi, {
+                                    value: presetSel,
+                                    onChange: ev => setPresetSel(ev.target.value),
+                                    children: EMPLOYEE_COLUMN_PRESETS.map(p => l.jsx("option", {
+                                        value: p.name,
+                                        children: `${p.name} — ${p.type === "DECIMAL" ? "число" : "текст"}`
+                                    }, p.name))
+                                })
+                            ]
+                        }),
+                        l.jsx("p", {
+                            className: "text-xs text-muted leading-relaxed",
+                            children: "Значение колонки будет автоматически подтягиваться из карточки выбранного сотрудника, когда вы будете добавлять строки таблицы."
+                        }),
+                        l.jsx("div", {
+                            className: "flex justify-end",
+                            children: l.jsx(oe, {
+                                type: "button",
+                                onClick: handleAddPreset,
+                                children: "Добавить колонку"
+                            })
+                        })
+                    ]
+                }),
+                tab === "custom" && l.jsxs("div", {
+                    className: "space-y-3",
+                    children: [
+                        l.jsxs("div", {
+                            children: [
+                                l.jsx(je, { className: "text-xs", children: "Название" }),
+                                l.jsx(Ae, {
+                                    value: customName,
+                                    onChange: ev => setCustomName(ev.target.value),
+                                    placeholder: "напр. Оклад",
+                                    autoFocus: true
+                                })
+                            ]
+                        }),
+                        l.jsxs("div", {
+                            children: [
+                                l.jsx(je, { className: "text-xs", children: "Тип" }),
+                                l.jsxs(Hi, {
+                                    value: customType,
+                                    onChange: ev => setCustomType(ev.target.value),
+                                    children: [
+                                        l.jsx("option", { value: "STRING", children: "STRING — текст" }, "ts"),
+                                        l.jsx("option", { value: "DECIMAL", children: "DECIMAL — число" }, "td"),
+                                        l.jsx("option", { value: "FORMULA", children: "FORMULA — вычисляемая" }, "tf")
+                                    ]
+                                })
+                            ]
+                        }),
+                        l.jsx("p", {
+                            className: "text-xs text-muted leading-relaxed",
+                            children: "Для типа FORMULA после создания колонки откройте «Конструктор» — он соберёт корректную формулу."
+                        }),
+                        l.jsx("div", {
+                            className: "flex justify-end",
+                            children: l.jsx(oe, {
+                                type: "button",
+                                onClick: handleAddCustom,
+                                children: "Добавить колонку"
+                            })
+                        })
+                    ]
+                }),
+                err && l.jsx("div", {
+                    className: "rounded-md p-2 text-sm border",
+                    style: {
+                        background: "var(--color-error-light)",
+                        borderColor: "var(--color-error)",
+                        color: "var(--color-error)"
+                    },
+                    children: err
+                })
+            ]
+        })
+    });
+}
+
+function _newRule(firstRef, firstNum) {
+    return {
+        conditions: [{ colName: firstRef, op: "eq", value: "" }],
+        junction: "AND",
+        resultKind: "fixed",
+        resultCol: firstNum,
+        resultVal: "0"
+    };
+}
+
+function T2({open: e, onOpenChange: t, columns: n, onApply: r}) {
+    const cols = x.useMemo(() => [...(n || [])].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)), [n]);
+    const refCols = x.useMemo(() => [
+        ...cols.filter(c => c && c.type !== "FORMULA" && (c.name || "").trim() !== ""),
+        ..._EMP_VIRTUAL
+    ], [cols]);
+    const numCols = x.useMemo(() => [
+        ...cols.filter(c => c && (c.type === "DECIMAL" || c.type === "FORMULA") && (c.name || "").trim() !== ""),
+        ..._EMP_VIRTUAL.filter(v => v.numeric)
+    ], [cols]);
+    const firstRef = refCols[0] ? refCols[0].name : "";
+    const firstNum = numCols[0] ? numCols[0].name : (refCols[0] ? refCols[0].name : "");
+    const identByName = x.useMemo(() => {
+        const m = new Map();
+        for (const v of _EMP_VIRTUAL) m.set(v.name.trim().toLowerCase(), v.ident);
+        return m;
+    }, []);
+    const [rules, setRules] = x.useState(() => [_newRule(firstRef, firstNum)]);
+    const [fallbackKind, setFallbackKind] = x.useState("fixed");
+    const [fallbackCol, setFallbackCol] = x.useState(firstNum);
+    const [fallbackVal, setFallbackVal] = x.useState("0");
+    const [err, setErr] = x.useState(null);
+    const [templates, setTemplates] = x.useState(() => _loadSavedFormulas());
+    const [tplName, setTplName] = x.useState("");
+    const [tplToLoad, setTplToLoad] = x.useState("");
+
+    x.useEffect(() => {
+        if (e) {
+            setErr(null);
+            setRules([_newRule(firstRef, firstNum)]);
+            setFallbackKind("fixed"); setFallbackCol(firstNum); setFallbackVal("0");
+            setTemplates(_loadSavedFormulas());
+            setTplName(""); setTplToLoad("");
+        }
+    }, [e]);
+
+    const isNumStr = v => /^-?\d+(?:[.,]\d+)?$/.test(String(v).trim());
+    const escapeStr = v => String(v).replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+    const refOf = nm => {
+        const id = identByName.get(String(nm || "").trim().toLowerCase());
+        return id ? id : `[${nm}]`;
+    };
+
+    const buildCond = c => {
+        const ref = refOf(c.colName);
+        const v = String(c.value);
+        const numeric = isNumStr(v);
+        const numVal = numeric ? v.trim().replace(",", ".") : null;
+        const strVal = `"${escapeStr(v)}"`;
+        switch (c.op) {
+            case "eq": return numeric ? `${ref} == ${numVal}` : `${ref} == ${strVal}`;
+            case "neq": return numeric ? `${ref} != ${numVal}` : `${ref} != ${strVal}`;
+            case "contains": return `CONTAINS(${ref}, ${strVal})`;
+            case "notcontains": return `NOT(CONTAINS(${ref}, ${strVal}))`;
+            case "gt": return `${ref} > ${numeric ? numVal : strVal}`;
+            case "gte": return `${ref} >= ${numeric ? numVal : strVal}`;
+            case "lt": return `${ref} < ${numeric ? numVal : strVal}`;
+            case "lte": return `${ref} <= ${numeric ? numVal : strVal}`;
+        }
+        return "";
+    };
+    const buildExpr = (kind, col, val) => {
+        if (kind === "fixed") {
+            const v = String(val).trim().replace(",", ".");
+            return v === "" || !isNumStr(val) ? "0" : v;
+        }
+        if (kind === "column") return refOf(col);
+        if (kind === "percent") {
+            const v = String(val).trim().replace(",", ".");
+            const num = v === "" || !isNumStr(val) ? "0" : v;
+            return `${refOf(col)} * (${num} / 100)`;
+        }
+        return "0";
+    };
+
+    const build = () => {
+        if (rules.length === 0) { setErr("Добавьте хотя бы одно правило"); return null; }
+        const refNames = new Set(refCols.map(c => (c.name || "").trim().toLowerCase()));
+        const numNames = new Set(numCols.map(c => (c.name || "").trim().toLowerCase()));
+        const ruleParts = [];
+        for (let ri = 0; ri < rules.length; ri++) {
+            const rule = rules[ri];
+            if (!rule.conditions || rule.conditions.length === 0) { setErr(`Правило ${ri + 1}: добавьте условие`); return null; }
+            for (const c of rule.conditions) {
+                if (!c.colName) { setErr(`Правило ${ri + 1}: выберите колонку в условии`); return null; }
+                if (!refNames.has(c.colName.trim().toLowerCase())) { setErr(`Правило ${ri + 1}: колонка «${c.colName}» не найдена`); return null; }
+                if (c.value === "" || c.value == null) { setErr(`Правило ${ri + 1}: укажите значение для сравнения`); return null; }
+            }
+            if (rule.resultKind === "percent" || rule.resultKind === "column") {
+                if (!rule.resultCol) { setErr(`Правило ${ri + 1}: выберите колонку результата`); return null; }
+                if (!numNames.has(rule.resultCol.trim().toLowerCase())) { setErr(`Правило ${ri + 1}: колонка «${rule.resultCol}» недоступна для расчёта`); return null; }
+            }
+            if (rule.resultKind === "percent" || rule.resultKind === "fixed") {
+                if (!isNumStr(rule.resultVal)) { setErr(`Правило ${ri + 1}: укажите число в результате`); return null; }
+            }
+            const condParts = rule.conditions.map(buildCond).filter(Boolean);
+            const condExpr = condParts.length === 1 ? condParts[0] : `${rule.junction}(${condParts.join(", ")})`;
+            const resultExpr = buildExpr(rule.resultKind, rule.resultCol, rule.resultVal);
+            ruleParts.push([condExpr, resultExpr]);
+        }
+        if (fallbackKind !== "none") {
+            if (fallbackKind === "percent" || fallbackKind === "column") {
+                if (!fallbackCol) { setErr("Выберите колонку для блока «Иначе»"); return null; }
+                if (!numNames.has(fallbackCol.trim().toLowerCase())) { setErr(`Колонка «${fallbackCol}» недоступна для «Иначе»`); return null; }
+            }
+            if (fallbackKind === "percent" || fallbackKind === "fixed") {
+                if (!isNumStr(fallbackVal)) { setErr("Укажите число в блоке «Иначе»"); return null; }
+            }
+        }
+        const fallbackExpr = fallbackKind === "none" ? "0" : buildExpr(fallbackKind, fallbackCol, fallbackVal);
+        if (ruleParts.length === 1) {
+            return `IF(${ruleParts[0][0]}, ${ruleParts[0][1]}, ${fallbackExpr})`;
+        }
+        const flat = [];
+        for (const [c, res] of ruleParts) { flat.push(c); flat.push(res); }
+        flat.push(fallbackExpr);
+        return `IFS(${flat.join(", ")})`;
+    };
+
+    const apply = () => {
+        setErr(null);
+        const f = build();
+        if (f != null) { r(f); t(false); }
+    };
+
+    const addRule = () => setRules(rs => [...rs, _newRule(firstRef, firstNum)]);
+    const removeRule = i => setRules(rs => rs.length > 1 ? rs.filter((_, idx) => idx !== i) : rs);
+    const patchRule = (i, p) => setRules(rs => rs.map((r2, idx) => idx === i ? { ...r2, ...p } : r2));
+    const addCond = ri => setRules(rs => rs.map((r2, idx) => idx === ri ? { ...r2, conditions: [...r2.conditions, { colName: firstRef, op: "eq", value: "" }] } : r2));
+    const updateCond = (ri, ci, p) => setRules(rs => rs.map((r2, idx) => idx === ri ? { ...r2, conditions: r2.conditions.map((c2, j) => j === ci ? { ...c2, ...p } : c2) } : r2));
+    const removeCond = (ri, ci) => setRules(rs => rs.map((r2, idx) => idx === ri ? { ...r2, conditions: r2.conditions.length > 1 ? r2.conditions.filter((_, j) => j !== ci) : r2.conditions } : r2));
+
+    const saveTemplate = () => {
+        setErr(null);
+        const nm = (tplName || "").trim();
+        if (!nm) { setErr("Введите название шаблона перед сохранением"); return; }
+        const f = build();
+        if (f == null) return;
+        const id = _saveSavedFormula(nm, f);
+        setTemplates(_loadSavedFormulas());
+        setTplName("");
+        setTplToLoad(id);
+    };
+    const loadTemplate = () => {
+        if (!tplToLoad) { setErr("Выберите шаблон в списке"); return; }
+        const tpl = templates.find(p => p.id === tplToLoad);
+        if (!tpl) { setErr("Шаблон не найден"); return; }
+        r(tpl.formula); t(false);
+    };
+    const deleteTemplate = () => {
+        if (!tplToLoad) return;
+        _deleteSavedFormula(tplToLoad);
+        const next = _loadSavedFormulas();
+        setTemplates(next);
+        setTplToLoad("");
+    };
+
+    const preview = (() => {
+        try {
+            const parts = [];
+            for (const rule of rules) {
+                const cp = rule.conditions.map(buildCond).filter(Boolean);
+                if (cp.length === 0) continue;
+                const ce = cp.length === 1 ? cp[0] : `${rule.junction}(${cp.join(", ")})`;
+                const re = buildExpr(rule.resultKind, rule.resultCol, rule.resultVal);
+                parts.push([ce, re]);
+            }
+            if (parts.length === 0) return "—";
+            const fe = fallbackKind === "none" ? "0" : buildExpr(fallbackKind, fallbackCol, fallbackVal);
+            if (parts.length === 1) return `IF(${parts[0][0]}, ${parts[0][1]}, ${fe})`;
+            const flat = [];
+            for (const [c, res] of parts) { flat.push(c); flat.push(res); }
+            flat.push(fe);
+            return `IFS(${flat.join(", ")})`;
+        } catch (_) { return "—"; }
+    })();
+
+    const renderColSelect = (val, onChange, list) => l.jsxs(Hi, {
+        value: val,
+        onChange,
+        children: [
+            l.jsx("option", { value: "", children: "— выберите —" }, "__empty"),
+            ...list.map(c => l.jsx("option", {
+                value: c.name,
+                children: c.ident ? `${c.name} (данные сотрудника)` : c.name
+            }, c.key || c.id || c.name))
+        ]
+    });
+
+    return l.jsx(eu, {
+        open: e,
+        onOpenChange: t,
+        title: "Конструктор формулы",
+        description: "Соберите условную формулу без знания синтаксиса COLUMN_N",
+        size: "xl",
+        contentStyle: { maxWidth: "min(1280px, 95vw)", width: "95vw" },
+        footer: l.jsxs(l.Fragment, {
+            children: [
+                l.jsx(oe, { type: "button", variant: "outline", onClick: () => t(false), children: "Отмена" }),
+                l.jsx(oe, { type: "button", onClick: apply, children: "Применить формулу" })
+            ]
+        }),
+        children: l.jsxs("div", {
+            className: "space-y-3",
+            children: [
+                l.jsxs("div", {
+                    className: "rounded-md border border-divider p-3 bg-surface-2 flex flex-wrap items-end gap-2",
+                    children: [
+                        l.jsxs("div", {
+                            className: "flex-1 min-w-[220px]",
+                            children: [
+                                l.jsx(je, { className: "text-xs", children: "Сохранённые шаблоны" }),
+                                l.jsxs(Hi, {
+                                    value: tplToLoad,
+                                    onChange: ev => setTplToLoad(ev.target.value),
+                                    children: [
+                                        l.jsx("option", { value: "", children: templates.length ? "— выберите шаблон —" : "Нет сохранённых шаблонов" }, "__none"),
+                                        ...templates.map(tp => l.jsx("option", { value: tp.id, children: tp.name }, tp.id))
+                                    ]
+                                })
+                            ]
+                        }),
+                        l.jsx(oe, { type: "button", variant: "outline", size: "sm", onClick: loadTemplate, disabled: !tplToLoad, children: "Загрузить шаблон" }),
+                        l.jsx(oe, { type: "button", variant: "outline", size: "sm", onClick: deleteTemplate, disabled: !tplToLoad, children: "Удалить" })
+                    ]
+                }),
+                l.jsxs("div", {
+                    children: [
+                        l.jsxs("div", {
+                            className: "flex items-center justify-between gap-2 mb-2",
+                            children: [
+                                l.jsx(je, { children: "Правила" }),
+                                l.jsx("span", {
+                                    className: "text-xs text-muted",
+                                    children: "Каждое правило — свои условия и свой результат. Применяется первое подходящее."
+                                })
+                            ]
+                        }),
+                        l.jsx("div", {
+                            className: "space-y-3",
+                            children: rules.map((rule, ri) => l.jsxs("div", {
+                                className: "rounded-md border border-divider p-3 bg-surface-2",
+                                children: [
+                                    l.jsxs("div", {
+                                        className: "flex items-center justify-between gap-2 mb-2",
+                                        children: [
+                                            l.jsxs("div", {
+                                                className: "flex items-center gap-3",
+                                                children: [
+                                                    l.jsx("span", {
+                                                        className: "text-sm font-medium text-text",
+                                                        children: `Правило ${ri + 1}`
+                                                    }),
+                                                    rule.conditions.length > 1 && l.jsxs("div", {
+                                                        className: "flex items-center gap-1 text-xs text-muted",
+                                                        children: [
+                                                            l.jsx("span", { children: "Объединение:" }),
+                                                            l.jsxs(Hi, {
+                                                                value: rule.junction,
+                                                                onChange: ev => patchRule(ri, { junction: ev.target.value }),
+                                                                children: [
+                                                                    l.jsx("option", { value: "AND", children: "И" }, "and"),
+                                                                    l.jsx("option", { value: "OR", children: "ИЛИ" }, "or")
+                                                                ]
+                                                            })
+                                                        ]
+                                                    })
+                                                ]
+                                            }),
+                                            rules.length > 1 && l.jsx("button", {
+                                                type: "button",
+                                                onClick: () => removeRule(ri),
+                                                className: "text-muted hover:text-error text-xs",
+                                                title: "Удалить правило",
+                                                children: "✕ Удалить правило"
+                                            })
+                                        ]
+                                    }),
+                                    l.jsx("div", {
+                                        className: "space-y-2",
+                                        children: rule.conditions.map((c, ci) => l.jsxs("div", {
+                                            className: "rounded-md border border-divider p-2 flex flex-wrap items-end gap-2 bg-surface",
+                                            children: [
+                                                l.jsxs("div", {
+                                                    className: "flex-1 min-w-[180px]",
+                                                    children: [
+                                                        l.jsx(je, { className: "text-xs", children: "Колонка" }),
+                                                        renderColSelect(c.colName, ev => updateCond(ri, ci, { colName: ev.target.value }), refCols)
+                                                    ]
+                                                }),
+                                                l.jsxs("div", {
+                                                    className: "w-40",
+                                                    children: [
+                                                        l.jsx(je, { className: "text-xs", children: "Сравнение" }),
+                                                        l.jsxs(Hi, {
+                                                            value: c.op,
+                                                            onChange: ev => updateCond(ri, ci, { op: ev.target.value }),
+                                                            children: [
+                                                                l.jsx("option", { value: "eq", children: "равно" }, "eq"),
+                                                                l.jsx("option", { value: "neq", children: "не равно" }, "neq"),
+                                                                l.jsx("option", { value: "contains", children: "содержит" }, "ct"),
+                                                                l.jsx("option", { value: "notcontains", children: "не содержит" }, "nct"),
+                                                                l.jsx("option", { value: "gt", children: ">" }, "gt"),
+                                                                l.jsx("option", { value: "gte", children: "≥" }, "gte"),
+                                                                l.jsx("option", { value: "lt", children: "<" }, "lt"),
+                                                                l.jsx("option", { value: "lte", children: "≤" }, "lte")
+                                                            ]
+                                                        })
+                                                    ]
+                                                }),
+                                                l.jsxs("div", {
+                                                    className: "flex-1 min-w-[140px]",
+                                                    children: [
+                                                        l.jsx(je, { className: "text-xs", children: "Значение" }),
+                                                        l.jsx(Ae, {
+                                                            value: c.value,
+                                                            placeholder: "напр. в.к.к. или 5",
+                                                            onChange: ev => updateCond(ri, ci, { value: ev.target.value })
+                                                        })
+                                                    ]
+                                                }),
+                                                rule.conditions.length > 1 && l.jsx("button", {
+                                                    type: "button",
+                                                    onClick: () => removeCond(ri, ci),
+                                                    className: "text-muted hover:text-error p-2",
+                                                    title: "Удалить условие",
+                                                    "aria-label": "Удалить условие",
+                                                    children: "✕"
+                                                })
+                                            ]
+                                        }, ci))
+                                    }),
+                                    l.jsx("div", {
+                                        className: "mt-2",
+                                        children: l.jsx(oe, {
+                                            type: "button",
+                                            variant: "outline",
+                                            size: "sm",
+                                            onClick: () => addCond(ri),
+                                            children: "+ Доп. условие"
+                                        })
+                                    }),
+                                    l.jsxs("div", {
+                                        className: "mt-3 rounded-md border border-divider p-2 bg-surface",
+                                        children: [
+                                            l.jsxs("div", {
+                                                className: "flex items-center gap-2 mb-2",
+                                                children: [
+                                                    l.jsx("span", { className: "text-xs uppercase text-muted font-medium", children: "Тогда результат" })
+                                                ]
+                                            }),
+                                            l.jsxs("div", {
+                                                className: "flex flex-wrap items-end gap-2",
+                                                children: [
+                                                    l.jsxs("div", {
+                                                        className: "flex-1 min-w-[140px]",
+                                                        children: [
+                                                            l.jsx(je, { className: "text-xs", children: "Способ" }),
+                                                            l.jsxs(Hi, {
+                                                                value: rule.resultKind,
+                                                                onChange: ev => patchRule(ri, { resultKind: ev.target.value }),
+                                                                children: [
+                                                                    l.jsx("option", { value: "fixed", children: "Фиксированное число" }, "rf"),
+                                                                    l.jsx("option", { value: "percent", children: "Процент от колонки" }, "rp"),
+                                                                    l.jsx("option", { value: "column", children: "Значение колонки" }, "rc")
+                                                                ]
+                                                            })
+                                                        ]
+                                                    }),
+                                                    rule.resultKind !== "fixed" && l.jsxs("div", {
+                                                        className: "flex-1 min-w-[140px]",
+                                                        children: [
+                                                            l.jsx(je, { className: "text-xs", children: "Колонка" }),
+                                                            renderColSelect(rule.resultCol, ev => patchRule(ri, { resultCol: ev.target.value }), numCols)
+                                                        ]
+                                                    }),
+                                                    rule.resultKind !== "column" && l.jsxs("div", {
+                                                        className: "w-24",
+                                                        children: [
+                                                            l.jsx(je, { className: "text-xs", children: rule.resultKind === "percent" ? "Процент" : "Число" }),
+                                                            l.jsx(Ae, {
+                                                                value: rule.resultVal,
+                                                                placeholder: rule.resultKind === "percent" ? "20" : "0",
+                                                                onChange: ev => patchRule(ri, { resultVal: ev.target.value })
+                                                            })
+                                                        ]
+                                                    })
+                                                ]
+                                            })
+                                        ]
+                                    })
+                                ]
+                            }, ri))
+                        }),
+                        l.jsx("div", {
+                            className: "mt-3",
+                            children: l.jsx(oe, {
+                                type: "button",
+                                variant: "outline",
+                                size: "sm",
+                                onClick: addRule,
+                                children: "+ Добавить правило"
+                            })
+                        })
+                    ]
+                }),
+                l.jsxs("div", {
+                    className: "rounded-md border border-divider p-3",
+                    children: [
+                        l.jsx(je, { children: "Иначе (если ни одно правило не сработало)" }),
+                        l.jsxs("div", {
+                            className: "flex flex-wrap items-end gap-2 mt-2",
+                            children: [
+                                l.jsxs("div", {
+                                    className: "flex-1 min-w-[140px]",
+                                    children: [
+                                        l.jsx(je, { className: "text-xs", children: "Способ" }),
+                                        l.jsxs(Hi, {
+                                            value: fallbackKind,
+                                            onChange: ev => setFallbackKind(ev.target.value),
+                                            children: [
+                                                l.jsx("option", { value: "fixed", children: "Фиксированное число" }, "ff"),
+                                                l.jsx("option", { value: "percent", children: "Процент от колонки" }, "fp"),
+                                                l.jsx("option", { value: "column", children: "Значение колонки" }, "fc"),
+                                                l.jsx("option", { value: "none", children: "Ноль / нет" }, "fn")
+                                            ]
+                                        })
+                                    ]
+                                }),
+                                fallbackKind !== "fixed" && fallbackKind !== "none" && l.jsxs("div", {
+                                    className: "flex-1 min-w-[140px]",
+                                    children: [
+                                        l.jsx(je, { className: "text-xs", children: "Колонка" }),
+                                        renderColSelect(fallbackCol, ev => setFallbackCol(ev.target.value), numCols)
+                                    ]
+                                }),
+                                fallbackKind !== "column" && fallbackKind !== "none" && l.jsxs("div", {
+                                    className: "w-24",
+                                    children: [
+                                        l.jsx(je, { className: "text-xs", children: fallbackKind === "percent" ? "Процент" : "Число" }),
+                                        l.jsx(Ae, {
+                                            value: fallbackVal,
+                                            placeholder: fallbackKind === "percent" ? "0" : "0",
+                                            onChange: ev => setFallbackVal(ev.target.value)
+                                        })
+                                    ]
+                                })
+                            ]
+                        })
+                    ]
+                }),
+                l.jsxs("div", {
+                    className: "rounded-md p-2 text-xs font-mono bg-surface-2 border border-divider break-all",
+                    children: [
+                        l.jsx("span", { className: "text-muted mr-2", children: "Превью:" }),
+                        preview
+                    ]
+                }),
+                l.jsxs("details", {
+                    className: "rounded-md border border-divider p-2 bg-surface-2 text-xs",
+                    children: [
+                        l.jsx("summary", {
+                            className: "cursor-pointer text-muted hover:text-text select-none",
+                            children: "Справка по синтаксису формул"
+                        }),
+                        l.jsxs("div", {
+                            className: "mt-2 leading-relaxed text-muted space-y-1",
+                            children: [
+                                l.jsxs("div", {
+                                    children: [
+                                        "Функции: ",
+                                        l.jsx("span", { className: "font-mono", children: "SUM" }), ", ",
+                                        l.jsx("span", { className: "font-mono", children: "AVG" }), ", ",
+                                        l.jsx("span", { className: "font-mono", children: "MIN" }), ", ",
+                                        l.jsx("span", { className: "font-mono", children: "MAX" }), ", ",
+                                        l.jsx("span", { className: "font-mono", children: "ROUND" }), ", ",
+                                        l.jsx("span", { className: "font-mono", children: "ABS" }), ", ",
+                                        l.jsx("span", { className: "font-mono", children: "IF" }), ", ",
+                                        l.jsx("span", { className: "font-mono", children: "IFS" }), ", ",
+                                        l.jsx("span", { className: "font-mono", children: "AND/OR/NOT" }), "."
+                                    ]
+                                }),
+                                l.jsxs("div", {
+                                    children: [
+                                        "Арифметика ",
+                                        l.jsx("span", { className: "font-mono", children: "+ - * /" }),
+                                        ", сравнения ",
+                                        l.jsx("span", { className: "font-mono", children: "> >= < <= == !=" }),
+                                        ", скобки."
+                                    ]
+                                }),
+                                l.jsxs("div", {
+                                    children: [
+                                        "Ссылки на колонки: ",
+                                        l.jsx("span", { className: "font-mono", children: "[Оклад]" }),
+                                        " или ",
+                                        l.jsx("span", { className: "font-mono", children: "COLUMN_3" }),
+                                        ". Данные сотрудника: ",
+                                        l.jsx("span", { className: "font-mono", children: "YEARS_OF_EXPERIENCE" }),
+                                        "."
+                                    ]
+                                }),
+                                l.jsxs("div", {
+                                    children: [
+                                        "Строковые условия: ",
+                                        l.jsx("span", { className: "font-mono", children: "CONTAINS" }), ", ",
+                                        l.jsx("span", { className: "font-mono", children: "STARTSWITH" }), ", ",
+                                        l.jsx("span", { className: "font-mono", children: "ENDSWITH" }),
+                                        ". Диапазон: ",
+                                        l.jsx("span", { className: "font-mono", children: "BETWEEN(x, min, max)" }),
+                                        "."
+                                    ]
+                                }),
+                                l.jsxs("div", {
+                                    children: [
+                                        "В значениях ячеек доступны шаблоны: ",
+                                        l.jsx("span", { className: "font-mono", children: "{{employee.fullName}}" }), ", ",
+                                        l.jsx("span", { className: "font-mono", children: "{{employee.position.name}}" }), ", ",
+                                        l.jsx("span", { className: "font-mono", children: "{{employee.yearsOfExperience}}" }),
+                                        "."
+                                    ]
+                                })
+                            ]
+                        })
+                    ]
+                }),
+                l.jsxs("div", {
+                    className: "rounded-md border border-divider p-3 flex flex-wrap items-end gap-2 bg-surface-2",
+                    children: [
+                        l.jsxs("div", {
+                            className: "flex-1 min-w-[220px]",
+                            children: [
+                                l.jsx(je, { className: "text-xs", children: "Название нового шаблона" }),
+                                l.jsx(Ae, {
+                                    value: tplName,
+                                    placeholder: "напр. «Стаж 5-10 → 20% от Оклада»",
+                                    onChange: ev => setTplName(ev.target.value)
+                                })
+                            ]
+                        }),
+                        l.jsx(oe, {
+                            type: "button",
+                            variant: "outline",
+                            size: "sm",
+                            onClick: saveTemplate,
+                            children: "Сохранить как шаблон"
+                        })
+                    ]
+                }),
+                err && l.jsx("div", {
+                    className: "rounded-md p-2 text-sm border",
+                    style: {
+                        background: "var(--color-error-light)",
+                        borderColor: "var(--color-error)",
+                        color: "var(--color-error)"
+                    },
+                    children: err
+                })
+            ]
+        })
     });
 }
 
@@ -22992,11 +23479,66 @@ function b2(e, t, r) {
     };
 }
 
+function _toN(v) {
+    if (typeof v === "number") return Number.isFinite(v) ? v : 0;
+    if (v == null) return 0;
+    const s = String(v).trim().replace(",", ".");
+    if (s === "") return 0;
+    const x = parseFloat(s);
+    return Number.isFinite(x) ? x : 0;
+}
+
+function _cmpFn(a, b, op) {
+    const isNum = v => typeof v === "number";
+    if (isNum(a) && isNum(b)) {
+        if (op === "gt") return a > b ? 1 : 0;
+        if (op === "gte") return a >= b ? 1 : 0;
+        if (op === "lt") return a < b ? 1 : 0;
+        if (op === "lte") return a <= b ? 1 : 0;
+        if (op === "eq") return a === b ? 1 : 0;
+        if (op === "neq") return a !== b ? 1 : 0;
+        return 0;
+    }
+    const sa = String(a).trim().toLowerCase();
+    const sb = String(b).trim().toLowerCase();
+    if (op === "gt") return sa > sb ? 1 : 0;
+    if (op === "gte") return sa >= sb ? 1 : 0;
+    if (op === "lt") return sa < sb ? 1 : 0;
+    if (op === "lte") return sa <= sb ? 1 : 0;
+    if (op === "eq") return sa === sb ? 1 : 0;
+    if (op === "neq") return sa !== sb ? 1 : 0;
+    return 0;
+}
+
+const _SAVED_FORMULAS_KEY = "salary:saved-formulas";
+function _loadSavedFormulas() {
+    try {
+        const raw = typeof window !== "undefined" && window.localStorage ? window.localStorage.getItem(_SAVED_FORMULAS_KEY) : null;
+        const parsed = raw ? JSON.parse(raw) : [];
+        return Array.isArray(parsed) ? parsed.filter(x => x && typeof x.id === "string" && typeof x.name === "string" && typeof x.formula === "string") : [];
+    } catch (_e) { return []; }
+}
+function _saveSavedFormula(name, formula) {
+    const list = _loadSavedFormulas();
+    const id = `f-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    list.push({ id, name: String(name).trim(), formula: String(formula), createdAt: new Date().toISOString() });
+    try { if (typeof window !== "undefined" && window.localStorage) window.localStorage.setItem(_SAVED_FORMULAS_KEY, JSON.stringify(list)); } catch (_e) {}
+    return id;
+}
+function _deleteSavedFormula(id) {
+    const list = _loadSavedFormulas().filter(f => f.id !== id);
+    try { if (typeof window !== "undefined" && window.localStorage) window.localStorage.setItem(_SAVED_FORMULAS_KEY, JSON.stringify(list)); } catch (_e) {}
+}
+
 function Iy(e, t) {
     const n = salaryTableResolveEmployeeTemplate(e.byId.get(t.id), e.employee);
     if (n == null || n === "") return 0;
-    const r = parseFloat(String(n).replace(",", "."));
-    return Number.isFinite(r) ? r : 0;
+    const s = String(n).trim();
+    if (/^-?\d+(?:[.,]\d+)?(?:[eE][+-]?\d+)?$/.test(s)) {
+        const r = parseFloat(s.replace(",", "."));
+        if (Number.isFinite(r)) return r;
+    }
+    return String(n);
 }
 
 function S2(e) {
@@ -23012,7 +23554,7 @@ function S2(e) {
             const s = e.indexOf("]", n + 1);
             if (s === -1) throw new Error(`Не закрыта скобка [ на позиции ${n}`);
             t.push({
-                kind: "string",
+                kind: "colref",
                 value: e.slice(n + 1, s),
                 pos: n
             }), n = s + 1;
@@ -23022,7 +23564,7 @@ function S2(e) {
             const s = r, i = e.indexOf(s, n + 1);
             if (i === -1) throw new Error(`Не закрыта кавычка на позиции ${n}`);
             t.push({
-                kind: "string",
+                kind: "strlit",
                 value: e.slice(n + 1, i),
                 pos: n
             }), n = i + 1;
@@ -23198,31 +23740,7 @@ class k2 {
             if (n.kind === "gt" || n.kind === "gte" || n.kind === "lt" || n.kind === "lte" || n.kind === "eq" || n.kind === "neq") {
                 this.consume();
                 const r = this.expr();
-                switch (n.kind) {
-                  case "gt":
-                    t = t > r ? 1 : 0;
-                    break;
-
-                  case "gte":
-                    t = t >= r ? 1 : 0;
-                    break;
-
-                  case "lt":
-                    t = t < r ? 1 : 0;
-                    break;
-
-                  case "lte":
-                    t = t <= r ? 1 : 0;
-                    break;
-
-                  case "eq":
-                    t = t === r ? 1 : 0;
-                    break;
-
-                  case "neq":
-                    t = t !== r ? 1 : 0;
-                    break;
-                }
+                t = _cmpFn(t, r, n.kind);
             } else break;
         }
         return t;
@@ -23232,8 +23750,8 @@ class k2 {
         for (;;) {
             const n = this.peek();
             if (!n) break;
-            if (n.kind === "plus") this.consume(), t = t + this.term(); else if (n.kind === "minus") this.consume(), 
-            t = t - this.term(); else break;
+            if (n.kind === "plus") this.consume(), t = _toN(t) + _toN(this.term()); else if (n.kind === "minus") this.consume(),
+            t = _toN(t) - _toN(this.term()); else break;
         }
         return t;
     }
@@ -23242,11 +23760,11 @@ class k2 {
         for (;;) {
             const n = this.peek();
             if (!n) break;
-            if (n.kind === "star") this.consume(), t = t * this.unary(); else if (n.kind === "slash") {
+            if (n.kind === "star") this.consume(), t = _toN(t) * _toN(this.unary()); else if (n.kind === "slash") {
                 this.consume();
-                const r = this.unary();
+                const r = _toN(this.unary());
                 if (r === 0) throw new Error("Деление на ноль");
-                t = t / r;
+                t = _toN(t) / r;
             } else break;
         }
         return t;
@@ -23254,7 +23772,7 @@ class k2 {
     unary() {
         const t = this.peek();
         if (!t) throw new Error("Неожиданный конец формулы");
-        return t.kind === "minus" ? (this.consume(), -this.unary()) : t.kind === "plus" ? (this.consume(), 
+        return t.kind === "minus" ? (this.consume(), -_toN(this.unary())) : t.kind === "plus" ? (this.consume(),
         this.unary()) : this.primary();
     }
     primary() {
@@ -23265,7 +23783,8 @@ class k2 {
             if (r.kind !== "rparen") throw new Error(`Ожидалась ')' на позиции ${r.pos}`);
             return n;
         }
-        if (t.kind === "string") return this.resolveColumnByNameOrThrow(t.value);
+        if (t.kind === "colref") return this.resolveColumnByNameOrThrow(t.value);
+        if (t.kind === "strlit") return t.value;
         if (t.kind === "ident") {
             const n = this.peek();
             if (n && n.kind === "lparen") {
@@ -23308,30 +23827,49 @@ class k2 {
             return n[0] ? 0 : 1;
 
           case "SUM":
-            return n.reduce((s, i) => s + i, 0);
+            return n.reduce((s, i) => s + _toN(i), 0);
 
           case "AVG":
           case "AVERAGE":
-            return n.length === 0 ? 0 : n.reduce((s, i) => s + i, 0) / n.length;
+            return n.length === 0 ? 0 : n.reduce((s, i) => s + _toN(i), 0) / n.length;
 
           case "MIN":
             if (n.length === 0) throw new Error("MIN требует хотя бы один аргумент");
-            return Math.min(...n);
+            return Math.min(...n.map(_toN));
 
           case "MAX":
             if (n.length === 0) throw new Error("MAX требует хотя бы один аргумент");
-            return Math.max(...n);
+            return Math.max(...n.map(_toN));
 
           case "ROUND":
             {
                 if (n.length < 1 || n.length > 2) throw new Error("ROUND принимает 1 или 2 аргумента");
-                const s = n.length === 2 ? Math.max(0, Math.floor(n[1])) : 0, i = Math.pow(10, s);
-                return Math.round(n[0] * i) / i;
+                const s = n.length === 2 ? Math.max(0, Math.floor(_toN(n[1]))) : 0, i = Math.pow(10, s);
+                return Math.round(_toN(n[0]) * i) / i;
             }
 
           case "ABS":
             if (n.length !== 1) throw new Error("ABS принимает 1 аргумент");
-            return Math.abs(n[0]);
+            return Math.abs(_toN(n[0]));
+
+          case "CONTAINS":
+            if (n.length !== 2) throw new Error("CONTAINS принимает 2 аргумента");
+            return String(n[0] ?? "").toLowerCase().includes(String(n[1] ?? "").toLowerCase()) ? 1 : 0;
+
+          case "STARTSWITH":
+            if (n.length !== 2) throw new Error("STARTSWITH принимает 2 аргумента");
+            return String(n[0] ?? "").toLowerCase().startsWith(String(n[1] ?? "").toLowerCase()) ? 1 : 0;
+
+          case "ENDSWITH":
+            if (n.length !== 2) throw new Error("ENDSWITH принимает 2 аргумента");
+            return String(n[0] ?? "").toLowerCase().endsWith(String(n[1] ?? "").toLowerCase()) ? 1 : 0;
+
+          case "BETWEEN":
+            if (n.length !== 3) throw new Error("BETWEEN принимает 3 аргумента: значение, минимум, максимум");
+            {
+                const v = _toN(n[0]), lo = _toN(n[1]), hi = _toN(n[2]);
+                return v >= lo && v <= hi ? 1 : 0;
+            }
 
           default:
             throw new Error(`Неизвестная функция: ${t}`);
@@ -23374,8 +23912,13 @@ function j2(e, t, n, s) {
             error: "Пустая формула"
         };
         const i = b2(t, n, s), a = new k2(r, i).parse();
-        return Number.isFinite(a) ? {
+        if (Number.isFinite(a)) return {
             value: a,
+            error: null
+        };
+        const a2 = _toN(a);
+        return Number.isFinite(a2) ? {
+            value: a2,
             error: null
         } : {
             value: null,
@@ -24251,6 +24794,7 @@ function Ly() {
             onOpenChange: de,
             title: "Новая таблица",
             description: "Опишите структуру колонок. Изменить её позже нельзя — создайте новую.",
+            size: "xl",
             children: l.jsx(w2, {
                 onSubmit: Ue,
                 onCancel: () => de(!1),
@@ -24261,6 +24805,7 @@ function Ly() {
             onOpenChange: setTableEditOpen,
             title: "Редактировать таблицу",
             description: "Можно изменить название и описание таблицы.",
+            size: "lg",
             children: l.jsx(w2, {
                 dataTable: d,
                 onSubmit: saveTableInfo,

@@ -6,8 +6,6 @@ import lombok.*;
 import org.springframework.lang.Nullable;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 
 @EqualsAndHashCode(callSuper = true)
@@ -42,15 +40,6 @@ public class Employee extends BaseAuditingEntity
     @JoinColumn(name = "position_id")
     private Position position;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "employee_subject",
-            joinColumns = @JoinColumn(name = "employee_id"),
-            inverseJoinColumns = @JoinColumn(name = "subject_id")
-    )
-    @Builder.Default
-    private Set<Subject> subjects = new HashSet<>();
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "qualification_id")
     private Qualification qualification;
@@ -68,7 +57,6 @@ public class Employee extends BaseAuditingEntity
                 ", lastName='" + lastName + '\'' +
                 (surName != null ? ", surName='" + surName + '\'' : "") +
                 ", qualification='" + qualification.toString() +'\'' +
-                ", subject='" + subjects.toString() +'\'' +
                 ", position='" + position.toString() +'\'' +
                 ", experience='" + experience.toString() +'\'' +
                 '}';

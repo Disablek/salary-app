@@ -31,13 +31,6 @@ public final class ApiEndpoints {
         public static final String SEARCH = BASE + "/search";
     }
 
-    public static final class Subject {
-        private Subject() {}
-        public static final String BASE = "/api/subjects";
-        public static final String BY_ID = BASE + "/{subjectId}";
-        public static final String SEARCH = BASE + "/search";
-    }
-
     public static final class User {
         private User() {}
 

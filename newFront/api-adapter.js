@@ -105,7 +105,6 @@
     const nameParts = splitFullName(employee.fullName);
     const positionId = employee.positionId || employee.position_id || employee.position?.id || "";
     const qualificationId = employee.qualificationId || employee.qualification_id || employee.qualification?.id || "";
-    const subjectIds = employee.subjectIds || employee.subjects_id || employee.subjects?.map((subject) => subject.id) || [];
     return {
       ...employee,
       id: employee.id || employee.employeeId || employee.fullName,
@@ -121,8 +120,6 @@
       qualificationId,
       qualificationIds: employee.qualificationIds || (qualificationId ? [qualificationId] : []),
       qualifications: employee.qualifications || (qualificationId ? [{ id: qualificationId, name: employee.qualificationName || employee.qualificationTitle || "" }] : []),
-      subjectIds,
-      subjects: employee.subjects || subjectIds.map((id) => ({ id })),
       experience: employee.experience || { yearsOfExperience: employee.yearsOfExperience ?? 0 },
       active: employee.active ?? true,
     };
@@ -209,7 +206,7 @@
       return normalizeList(normalizeUser);
     }
 
-    if (path.startsWith("/api/positions") || path.startsWith("/api/qualifications") || path.startsWith("/api/subjects") || path.startsWith("/api/experiences")) {
+    if (path.startsWith("/api/positions") || path.startsWith("/api/qualifications") || path.startsWith("/api/experiences")) {
       return normalizeList(normalizeCatalogItem);
     }
 
@@ -253,7 +250,6 @@
       fullName,
       position_id: data.position_id || data.positionId || null,
       qualification_id: qualificationId,
-      subjects_id: data.subjects_id || data.subjectIds || [],
     };
   };
 
@@ -293,7 +289,7 @@
     let normalized = data;
     if (path.startsWith("/api/users")) {
       normalized = normalizeUserRequest(data, method);
-    } else if (path.startsWith("/api/positions") || path.startsWith("/api/qualifications") || path.startsWith("/api/subjects") || path.startsWith("/api/experiences")) {
+    } else if (path.startsWith("/api/positions") || path.startsWith("/api/qualifications") || path.startsWith("/api/experiences")) {
       normalized = normalizeCatalogRequest(data);
     } else if (path.startsWith("/api/employees")) {
       normalized = normalizeEmployeeRequest(data);

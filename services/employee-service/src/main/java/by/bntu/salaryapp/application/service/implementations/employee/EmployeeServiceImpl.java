@@ -10,7 +10,6 @@ import by.bntu.salaryapp.infrastructure.persistence.repository.employee.Experien
 import by.bntu.salaryapp.infrastructure.persistence.repository.employee.EmployeeRepository;
 import by.bntu.salaryapp.infrastructure.persistence.repository.employee.PositionRepository;
 import by.bntu.salaryapp.infrastructure.persistence.repository.employee.QualificationRepository;
-import by.bntu.salaryapp.infrastructure.persistence.repository.employee.SubjectRepository;
 import by.bntu.salaryapp.infrastructure.persistence.specifications.employee.EmployeeSpecification;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,7 +31,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeMapper mapper;
     private final EmployeeListMapper listMapper;
     private final PositionRepository positionRepository;
-    private final SubjectRepository subjectRepository;
     private final QualificationRepository qualificationRepository;
     private final ExperienceRepository experienceRepository;
 
@@ -105,9 +102,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         entity.setExperience(dto.getExperience_id() == null
                 ? null
                 : experienceRepository.getReferenceById(dto.getExperience_id()));
-        entity.setSubjects(dto.getSubjects_id() == null
-                ? new HashSet<>()
-                : new HashSet<>(subjectRepository.findAllById(dto.getSubjects_id())));
     }
 
     private String[] splitFullName(String fullName) {

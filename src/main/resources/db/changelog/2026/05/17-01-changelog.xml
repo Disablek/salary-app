@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.31.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <changeSet id="2026-05-17-01-1" author="disable">
+        <comment>Drop Subject entity: remove FKs from employee_subject join table</comment>
+        <dropForeignKeyConstraint baseTableName="employee_subject"
+                                  constraintName="fk_empsub_on_subject"/>
+        <dropForeignKeyConstraint baseTableName="employee_subject"
+                                  constraintName="fk_empsub_on_employee"/>
+    </changeSet>
+
+    <changeSet id="2026-05-17-01-2" author="disable">
+        <comment>Drop Subject entity: remove join table employee_subject</comment>
+        <dropTable tableName="employee_subject"/>
+    </changeSet>
+
+    <changeSet id="2026-05-17-01-3" author="disable">
+        <comment>Drop Subject entity: remove subjects table</comment>
+        <dropTable tableName="subjects"/>
+    </changeSet>
+
+</databaseChangeLog>

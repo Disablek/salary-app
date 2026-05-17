@@ -7,7 +7,6 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -23,8 +22,6 @@ public class EmployeeFilterDto {
     private String surName;
 
     private UUID position_id;
-
-    private Set<UUID> subjects_id;
 
     private UUID qualification_id;
 
